@@ -1,8 +1,15 @@
 /* =====================================================
    CENTRAL & STORES - PRODUCTS PAGE
+   104 PRODUCTS + UNIQUE PRODUCT IMAGES + CART
    ===================================================== */
 
-const categoryImages = {
+/* =====================================================
+   PRODUCT IMAGE SYSTEM
+   Each product-ku separate working default image.
+   Image load fail aana category fallback image varum.
+   ===================================================== */
+
+const categoryFallbackImages = {
   "Rice & Flours": "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80",
   "Pulses & Dals": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80",
   "Oils & Ghee": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80",
@@ -13,7 +20,136 @@ const categoryImages = {
   "Household": "https://images.unsplash.com/photo-1583947582886-f40ec95dd752?auto=format&fit=crop&w=700&q=80"
 };
 
-/* Product Name, Category, Pack Size */
+/* Product-specific image search keywords */
+const productImageKeywords = {
+  "Ponni Boiled Rice": "ponni boiled rice",
+  "Ponni Raw Rice": "raw rice",
+  "Basmati Rice": "basmati rice",
+  "Jeera Samba Rice": "jeera samba rice",
+  "Idli Rice": "idli rice",
+  "Sona Masoori Rice": "sona masoori rice",
+  "Brown Rice": "brown rice",
+  "Red Rice": "red rice",
+  "Wheat Flour": "wheat flour",
+  "Maida Flour": "maida flour",
+  "Ragi Flour": "ragi flour",
+  "Rice Flour": "rice flour",
+  "Gram Flour Besan": "besan flour",
+  "Corn Flour": "corn flour",
+  "Appalam Flour": "appalam papad",
+  "Aval Poha": "poha aval",
+
+  "Toor Dal": "toor dal",
+  "Urad Dal Whole": "urad dal",
+  "Urad Dal Split": "split urad dal",
+  "Moong Dal": "moong dal",
+  "Chana Dal": "chana dal",
+  "Masoor Dal": "masoor dal",
+  "Green Gram": "green gram",
+  "Black Chana": "black chana",
+  "White Chana": "white chickpeas",
+  "Rajma": "rajma kidney beans",
+  "Cowpeas": "cowpeas beans",
+  "Double Beans": "double beans",
+  "Horse Gram": "horse gram",
+  "Fried Gram": "fried gram dal",
+
+  "Sunflower Oil": "sunflower oil bottle",
+  "Groundnut Oil": "groundnut oil bottle",
+  "Gingelly Oil": "sesame oil bottle",
+  "Coconut Oil": "coconut oil bottle",
+  "Mustard Oil": "mustard oil bottle",
+  "Rice Bran Oil": "rice bran oil bottle",
+  "Palm Oil": "palm oil bottle",
+  "Cow Ghee": "cow ghee jar",
+  "Vanaspati Ghee": "vanaspati ghee",
+  "Butter": "butter pack",
+
+  "Turmeric Powder": "turmeric powder",
+  "Chilli Powder": "red chilli powder",
+  "Coriander Powder": "coriander powder",
+  "Garam Masala": "garam masala",
+  "Sambar Powder": "sambar powder",
+  "Rasam Powder": "rasam powder",
+  "Chicken Masala": "chicken masala powder",
+  "Mutton Masala": "mutton masala powder",
+  "Biryani Masala": "biryani masala powder",
+  "Cumin Seeds": "cumin seeds",
+  "Mustard Seeds": "mustard seeds",
+  "Fenugreek Seeds": "fenugreek seeds",
+  "Fennel Seeds": "fennel seeds",
+  "Black Pepper": "black pepper",
+  "Cardamom": "cardamom spice",
+  "Cloves": "cloves spice",
+  "Cinnamon": "cinnamon sticks",
+  "Asafoetida": "asafoetida hing",
+
+  "Iodised Salt": "iodised salt",
+  "Rock Salt": "rock salt",
+  "White Sugar": "white sugar",
+  "Brown Sugar": "brown sugar",
+  "Jaggery": "jaggery",
+  "Tamarind": "tamarind",
+  "Tea Powder": "tea powder",
+  "Coffee Powder": "coffee powder",
+  "Papad": "papad",
+  "Vermicelli": "vermicelli",
+  "Cooking Soda": "baking soda",
+  "Baking Powder": "baking powder",
+
+  "Marie Biscuits": "marie biscuits",
+  "Glucose Biscuits": "glucose biscuits",
+  "Cream Biscuits": "cream biscuits",
+  "Salt Biscuits": "salt biscuits",
+  "Mixture": "indian mixture snack",
+  "Murukku": "murukku snack",
+  "Potato Chips": "potato chips",
+  "Banana Chips": "banana chips",
+  "Peanut Candy": "peanut candy",
+  "Rusk": "rusk biscuits",
+  "Noodles": "instant noodles",
+  "Instant Pasta": "instant pasta",
+
+  "Filter Coffee": "filter coffee",
+  "Health Drink": "health drink powder",
+  "Malted Drink": "malted drink",
+  "Lemon Drink Powder": "lemon drink powder",
+  "Orange Drink Powder": "orange drink powder",
+  "Rose Milk Mix": "rose milk mix",
+  "Badam Drink Mix": "badam drink mix",
+  "Soft Drink": "soft drink bottle",
+  "Packaged Drinking Water": "drinking water bottle",
+
+  "Bath Soap": "bath soap",
+  "Washing Soap": "washing soap bar",
+  "Detergent Powder": "detergent powder",
+  "Dishwash Bar": "dishwash bar",
+  "Dishwash Liquid": "dishwash liquid",
+  "Floor Cleaner": "floor cleaner bottle",
+  "Toilet Cleaner": "toilet cleaner bottle",
+  "Hand Wash": "hand wash bottle",
+  "Toothpaste": "toothpaste",
+  "Toothbrush": "toothbrush",
+  "Match Box": "match box",
+  "Mosquito Coil": "mosquito coil",
+  "Garbage Bags": "garbage bags",
+  "Aluminium Foil": "aluminium foil roll"
+};
+
+/* Each product image URL */
+function getProductImage(productName, category, productId) {
+  const keyword = productImageKeywords[productName] || `${productName} grocery`;
+  const query = encodeURIComponent(keyword);
+
+  /* sig productId use pannradhuna each product-ku separate image request */
+  return `https://source.unsplash.com/600x600/?${query}&sig=${productId}`;
+}
+
+/* =====================================================
+   PRODUCT DATA
+   Product Name, Category, Pack Size
+   ===================================================== */
+
 const productData = [
   ["Ponni Boiled Rice", "Rice & Flours", "1 kg"],
   ["Ponni Raw Rice", "Rice & Flours", "1 kg"],
@@ -130,18 +266,27 @@ const productData = [
   ["Aluminium Foil", "Household", "1 Roll"]
 ];
 
-const allProducts = productData.map((item, index) => ({
-  id: index + 1001,
-  name: item[0],
-  category: item[1],
-  weight: item[2],
-  image: categoryImages[item[1]]
-}));
+/* Product objects */
+const allProducts = productData.map((item, index) => {
+  const productId = index + 1001;
+
+  return {
+    id: productId,
+    name: item[0],
+    category: item[1],
+    weight: item[2],
+    image: getProductImage(item[0], item[1], productId),
+    fallbackImage: categoryFallbackImages[item[1]]
+  };
+});
 
 let activeCategory = "All";
 let activeSearch = "";
 
-/* SVGs used inside generated cards */
+/* =====================================================
+   SVG ICONS FOR GENERATED PRODUCT CARDS
+   ===================================================== */
+
 function cartIconSvg() {
   return `
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -160,7 +305,10 @@ function phoneIconSvg() {
   `;
 }
 
-/* Cart storage */
+/* =====================================================
+   CART STORAGE
+   ===================================================== */
+
 function getProductsCart() {
   try {
     return JSON.parse(localStorage.getItem("centralStoresCart")) || [];
@@ -180,9 +328,9 @@ function saveProductsCart(cart) {
 function addProductToCart(product) {
   const cart = getProductsCart();
 
-  const existingProduct = cart.find(
-    (item) => String(item.id) === String(product.id)
-  );
+  const existingProduct = cart.find((item) => {
+    return String(item.id) === String(product.id);
+  });
 
   if (existingProduct) {
     existingProduct.quantity += 1;
@@ -203,12 +351,21 @@ function addProductToCart(product) {
   }
 }
 
-/* Product card */
+/* =====================================================
+   PRODUCT CARD
+   ===================================================== */
+
 function createProductCard(product) {
   return `
     <article class="all-product-card">
       <div class="all-product-image">
-        <img src="${product.image}" alt="${product.name}" loading="lazy">
+        <img
+          src="${product.image}"
+          alt="${product.name}"
+          loading="lazy"
+          data-fallback="${product.fallbackImage}"
+          onerror="this.onerror=null; this.src=this.dataset.fallback;"
+        >
         <span class="all-product-category">${product.category}</span>
       </div>
 
@@ -232,7 +389,10 @@ function createProductCard(product) {
   `;
 }
 
-/* Filter */
+/* =====================================================
+   FILTER PRODUCTS
+   ===================================================== */
+
 function getFilteredProducts() {
   return allProducts.filter((product) => {
     const categoryMatch =
@@ -249,7 +409,10 @@ function getFilteredProducts() {
   });
 }
 
-/* Render */
+/* =====================================================
+   RENDER PRODUCTS
+   ===================================================== */
+
 function renderProducts() {
   const grid = document.getElementById("allProductsGrid");
   const count = document.getElementById("productsCount");
@@ -258,11 +421,13 @@ function renderProducts() {
 
   if (!grid) return;
 
-  const filtered = getFilteredProducts();
+  const filteredProducts = getFilteredProducts();
 
-  grid.innerHTML = filtered.map(createProductCard).join("");
+  grid.innerHTML = filteredProducts.map(createProductCard).join("");
 
-  if (count) count.textContent = filtered.length;
+  if (count) {
+    count.textContent = filteredProducts.length;
+  }
 
   if (title) {
     if (activeSearch) {
@@ -275,13 +440,16 @@ function renderProducts() {
   }
 
   if (empty) {
-    empty.classList.toggle("show", filtered.length === 0);
+    empty.classList.toggle("show", filteredProducts.length === 0);
   }
 
   setupAddButtons();
 }
 
-/* Add button events */
+/* =====================================================
+   ADD BUTTON EVENTS
+   ===================================================== */
+
 function setupAddButtons() {
   document.querySelectorAll(".all-add-cart-btn").forEach((button) => {
     button.addEventListener("click", function () {
@@ -293,19 +461,28 @@ function setupAddButtons() {
       addProductToCart(product);
 
       const label = this.querySelector("span");
-      if (label) label.textContent = "Added";
+
+      if (label) {
+        label.textContent = "Added";
+      }
 
       this.classList.add("added");
 
       setTimeout(() => {
-        if (label) label.textContent = "Add";
+        if (label) {
+          label.textContent = "Add";
+        }
+
         this.classList.remove("added");
       }, 1000);
     });
   });
 }
 
-/* Category buttons */
+/* =====================================================
+   CATEGORY FILTERS
+   ===================================================== */
+
 function setupCategoryFilters() {
   const buttons = document.querySelectorAll(".category-filter-btn");
 
@@ -328,7 +505,10 @@ function setupCategoryFilters() {
   });
 }
 
-/* Search */
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
 function setupSearch() {
   const input = document.getElementById("productSearchInput");
   const clear = document.getElementById("productSearchClear");
@@ -356,13 +536,16 @@ function setupSearch() {
   }
 }
 
-/* Reset button */
+/* =====================================================
+   RESET PRODUCTS
+   ===================================================== */
+
 function setupResetButton() {
-  const reset = document.getElementById("resetProductsBtn");
+  const resetButton = document.getElementById("resetProductsBtn");
 
-  if (!reset) return;
+  if (!resetButton) return;
 
-  reset.addEventListener("click", function () {
+  resetButton.addEventListener("click", function () {
     activeCategory = "All";
     activeSearch = "";
 
@@ -380,7 +563,10 @@ function setupResetButton() {
   });
 }
 
-/* Start */
+/* =====================================================
+   START PRODUCTS PAGE
+   ===================================================== */
+
 document.addEventListener("DOMContentLoaded", function () {
   setupCategoryFilters();
   setupSearch();
