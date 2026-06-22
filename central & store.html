@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Central & Stores - Premium Grocery Store">
+  <title>Central & Stores | Premium Grocery</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<style>
+/* =====================================================
+   ROOT + RESET
+   ===================================================== */
+
+:root {
+  --black: #121212;
+  --black-soft: #1d1d1d;
+  --gold: #e8bb43;
+  --gold-dark: #b98510;
+  --gold-light: #fff7df;
+  --white: #ffffff;
+  --text: #242424;
+  --muted: #777777;
+  --border: #ececec;
+  --bg: #f8f8f8;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+  padding-bottom: 76px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =====================================================
+   APP SHELL
+   ===================================================== */
+
+.app-shell {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--white);
+}
+
+/* =====================================================
+   SIDE MENU
+   ===================================================== */
+
+.menu-overlay {
+  position: fixed;
+  z-index: 98;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.58);
+  transition: 0.28s ease;
+}
+
+.menu-overlay.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.side-menu {
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(320px, 86vw);
+  padding: 20px 16px;
+  overflow-y: auto;
+  background: var(--white);
+  box-shadow: 8px 0 30px rgba(0, 0, 0, 0.18);
+  transform: translateX(-105%);
+  transition: transform 0.3s ease;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-logo,
+.brand-logo,
+.footer-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  color: var(--gold);
+}
+
+.menu-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+}
+
+.menu-logo svg {
+  width: 24px;
+  height: 24px;
+}
+
+.menu-brand h3 {
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.menu-brand p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.close-menu,
+.header-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--black);
+}
+
+.close-menu {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f4f4f4;
+}
+
+.close-menu svg {
+  width: 21px;
+  height: 21px;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 0;
+}
+
+.menu-links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 12px;
+  border-radius: 9px;
+  color: #333333;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.menu-links a:hover {
+  background: var(--gold-light);
+  color: var(--gold-dark);
+}
+
+.menu-links a svg {
+  width: 20px;
+  height: 20px;
+  color: var(--gold-dark);
+}
+
+.menu-support {
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--black);
+}
+
+.menu-support p {
+  margin-bottom: 10px;
+  color: #cfcfcf;
+  font-size: 10px;
+}
+
+.menu-support a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.menu-support a svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.top-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 8px;
+  min-height: 74px;
+  padding: 12px 16px;
+  background: var(--black);
+}
+
+.header-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 9px;
+  color: var(--white);
+}
+
+.header-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.header-icon-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.brand-logo {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(232, 187, 67, 0.5);
+  border-radius: 9px;
+  background: #1f1f1f;
+}
+
+.brand-logo svg {
+  width: 22px;
+  height: 22px;
+}
+
+.brand-text {
+  min-width: 0;
+}
+
+.brand-text h1 {
+  overflow: hidden;
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-text p {
+  margin-top: 3px;
+  color: #c8c8c8;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.header-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 9px;
+  color: var(--gold);
+}
+
+.header-cart:hover {
+  background: rgba(232, 187, 67, 0.1);
+}
+
+.header-cart > svg {
+  width: 26px;
+  height: 26px;
+}
+
+.cart-count {
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border: 2px solid var(--black);
+  border-radius: 50px;
+  background: var(--gold);
+  color: var(--black);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   SEARCH SECTION
+   ===================================================== */
+
+.search-section {
+  padding: 14px 16px;
+  background: var(--black);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid rgba(232, 187, 67, 0.38);
+  border-radius: 9px;
+  background: #202020;
+}
+
+.search-icon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--gold);
+}
+
+.search-box input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--white);
+  font-size: 12px;
+}
+
+.search-box input::placeholder {
+  color: #9d9d9d;
+}
+
+.search-clear {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #dddddd;
+}
+
+.search-clear.show {
+  display: inline-flex;
+}
+
+.search-clear svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* =====================================================
+   RESPONSIVE HEADER
+   ===================================================== */
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0;
+  }
+
+  .top-header {
+    min-height: 86px;
+    padding: 15px clamp(30px, 5vw, 80px);
+  }
+
+  .search-section {
+    padding: 16px clamp(30px, 5vw, 80px);
+  }
+
+  .brand-text h1 {
+    font-size: 18px;
+  }
+
+  .brand-text p {
+    font-size: 10px;
+  }
+
+  .side-menu {
+    width: 340px;
+  }
+}
+/* =====================================================
+   HERO BANNER
+   ===================================================== */
+
+.hero-banner {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+  background: var(--black);
+  border-radius: 0 0 28px 28px;
+  isolation: isolate;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 62%;
+  min-height: 420px;
+  padding: 42px 12px 72px 24px;
+  color: var(--white);
+}
+
+.hero-label {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 14px;
+  padding: 7px 10px;
+  border: 1px solid rgba(232, 187, 67, 0.65);
+  border-radius: 4px;
+  background: rgba(232, 187, 67, 0.08);
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hero-content h2 {
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(29px, 7.5vw, 54px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.hero-content p {
+  max-width: 290px;
+  margin: 16px 0 22px;
+  color: #d4d4d4;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.hero-shop-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: fit-content;
+  min-width: 138px;
+  padding: 13px 17px;
+  border-radius: 7px;
+  background: var(--gold);
+  color: var(--black);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.hero-shop-btn:hover {
+  background: var(--white);
+  transform: translateY(-2px);
+}
+
+.hero-shop-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.hero-visual {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  overflow: hidden;
+}
+
+.hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      var(--black) 0%,
+      rgba(18, 18, 18, 0.96) 8%,
+      rgba(18, 18, 18, 0.54) 35%,
+      rgba(18, 18, 18, 0.05) 75%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.45) 0%,
+      transparent 48%
+    );
+}
+
+.hero-dots {
+  position: absolute;
+  z-index: 4;
+  bottom: 25px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.hero-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.hero-dots span.active {
+  width: 22px;
+  background: var(--gold);
+}
+
+/* =====================================================
+   TRUST FEATURES
+   ===================================================== */
+
+.trust-features {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin: -18px 14px 0;
+  padding: 17px 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  text-align: center;
+}
+
+.trust-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  color: var(--gold-dark);
+}
+
+.trust-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.8;
+}
+
+.trust-item p {
+  margin: 0;
+  color: #383838;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* =====================================================
+   COMMON CONTENT SECTION
+   ===================================================== */
+
+.content-section {
+  padding: 34px 16px 12px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.section-mini-title {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--gold-dark);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+}
+
+.section-title-row h2 {
+  margin: 0;
+  color: var(--black);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 3px;
+  color: var(--gold-dark);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.view-all-link svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
+}
+
+/* =====================================================
+   TOP CATEGORIES
+   ===================================================== */
+
+.category-scroll {
+  display: flex;
+  gap: 13px;
+  overflow-x: auto;
+  padding: 2px 1px 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-card {
+  flex: 0 0 86px;
+  color: var(--text);
+  text-align: center;
+}
+
+.category-image {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 8px;
+  overflow: hidden;
+  border: 2px solid #f1e4bb;
+  border-radius: 50%;
+  background: #f7f7f7;
+  box-shadow: 0 4px 11px rgba(0, 0, 0, 0.08);
+}
+
+.category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-image img {
+  transform: scale(1.1);
+}
+
+.category-card span {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* =====================================================
+   MOBILE SMALL SCREEN
+   ===================================================== */
+
+@media (max-width: 380px) {
+  .hero-content {
+    width: 65%;
+    padding-left: 17px;
+  }
+
+  .hero-visual {
+    width: 60%;
+  }
+
+  .hero-content h2 {
+    font-size: 27px;
+  }
+
+  .trust-features {
+    margin-right: 9px;
+    margin-left: 9px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .trust-item p {
+    font-size: 8px;
+  }
+
+  .category-card {
+    flex-basis: 78px;
+  }
+
+  .category-image {
+    width: 74px;
+    height: 74px;
+  }
+}
+
+/* =====================================================
+   TABLET + DESKTOP
+   ===================================================== */
+
+@media (min-width: 768px) {
+  .hero-banner {
+    min-height: 500px;
+    border-radius: 0 0 38px 38px;
+  }
+
+  .hero-content {
+    width: 53%;
+    min-height: 500px;
+    padding-left: clamp(40px, 7vw, 100px);
+  }
+
+  .hero-content p {
+    max-width: 370px;
+    font-size: 14px;
+  }
+
+  .hero-visual {
+    width: 60%;
+  }
+
+  .trust-features {
+    max-width: 900px;
+    margin: -25px auto 0;
+    padding: 22px;
+  }
+
+  .trust-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .trust-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .trust-item p {
+    font-size: 11px;
+  }
+
+  .content-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 55px 30px 20px;
+  }
+
+  .section-title-row h2 {
+    font-size: 28px;
+  }
+
+  .category-scroll {
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .category-card {
+    flex: 0 0 130px;
+  }
+
+  .category-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .category-card span {
+    font-size: 12px;
+  }
+}
+/* =====================================================
+   FEATURED PRODUCTS
+   ===================================================== */
+
+.featured-section {
+  padding-top: 36px;
+  padding-bottom: 34px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.product-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.wishlist-btn {
+  position: absolute;
+  z-index: 3;
+  top: 9px;
+  right: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: #555555;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.08);
+}
+
+.wishlist-btn:hover {
+  color: #c0392b;
+}
+
+.wishlist-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.8;
+}
+
+.product-image {
+  display: block;
+  height: 145px;
+  overflow: hidden;
+  background: #f6f6f6;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.06);
+}
+
+.product-details {
+  padding: 12px 11px 13px;
+}
+
+.product-category {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--gold-dark);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.75px;
+}
+
+.product-details h3 {
+  display: -webkit-box;
+  min-height: 34px;
+  margin: 0;
+  overflow: hidden;
+  color: var(--black);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.product-weight {
+  margin: 5px 0 10px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.product-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.product-price strong {
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.product-price del {
+  color: #999999;
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.add-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 57px;
+  padding: 8px 8px;
+  border-radius: 6px;
+  background: var(--black);
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.add-cart-btn:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+
+.add-cart-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
+}
+
+/* =====================================================
+   BULK ORDER BANNER
+   ===================================================== */
+
+.bulk-order-section {
+  padding: 0 16px 34px;
+}
+
+.bulk-order-content {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 20px 16px;
+  overflow: hidden;
+  border-radius: 14px;
+  background:
+    linear-gradient(125deg, rgba(0, 0, 0, 0.06), transparent 45%),
+    var(--black);
+  color: var(--white);
+}
+
+.bulk-order-icon {
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(232, 187, 67, 0.45);
+  border-radius: 10px;
+  background: rgba(232, 187, 67, 0.1);
+  color: var(--gold);
+}
+
+.bulk-order-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bulk-order-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.bulk-order-text > span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--gold);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+.bulk-order-text h2 {
+  margin: 0;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.bulk-order-text p {
+  display: none;
+  margin-top: 4px;
+  color: #c9c9c9;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.bulk-order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  padding: 9px 10px;
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--black);
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.bulk-order-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+/* =====================================================
+   ABOUT STORE
+   ===================================================== */
+
+.about-store {
+  padding: 38px 20px;
+  text-align: center;
+  background: #fcfaf4;
+}
+
+.about-store h2 {
+  margin: 0;
+  color: var(--black);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.about-store > p {
+  max-width: 600px;
+  margin: 13px auto 23px;
+  color: #626262;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.about-points {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  max-width: 570px;
+  margin: 0 auto;
+}
+
+.about-points > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 13px;
+  border: 1px solid #eee4c8;
+  border-radius: 8px;
+  background: var(--white);
+  color: #3a3a3a;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.about-points svg {
+  flex: 0 0 auto;
+  width: 19px;
+  height: 19px;
+  color: var(--gold-dark);
+}
+
+/* =====================================================
+   CONTACT SECTION
+   ===================================================== */
+
+.contact-section {
+  padding: 40px 20px;
+  background: var(--white);
+  text-align: center;
+}
+
+.contact-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-section h2 {
+  margin: 0;
+  color: var(--black);
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.contact-section p {
+  margin: 12px auto 21px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.contact-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.call-store-btn,
+.whatsapp-store-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 135px;
+  padding: 12px 14px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.call-store-btn {
+  border: 1px solid var(--black);
+  background: var(--white);
+  color: var(--black);
+}
+
+.whatsapp-store-btn {
+  background: var(--black);
+  color: var(--gold);
+}
+
+.call-store-btn svg,
+.whatsapp-store-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.site-footer {
+  padding: 28px 20px 34px;
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.footer-logo {
+  width: 39px;
+  height: 39px;
+  border: 1px solid rgba(232, 187, 67, 0.5);
+  border-radius: 9px;
+  background: #1f1f1f;
+}
+
+.footer-logo svg {
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+}
+
+.footer-brand h3 {
+  margin: 0;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.footer-brand p {
+  margin-top: 2px;
+  color: #bcbcbc;
+  font-size: 9px;
+}
+
+.footer-note {
+  margin: 16px 0 13px;
+  color: #c7c7c7;
+  font-size: 10px;
+}
+
+.copyright {
+  color: #858585;
+  font-size: 9px;
+}
+
+/* =====================================================
+   MOBILE BOTTOM NAVIGATION
+   ===================================================== */
+
+.bottom-nav {
+  position: fixed;
+  z-index: 90;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  min-height: 67px;
+  border-top: 1px solid #e7e7e7;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 -5px 18px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #777777;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.bottom-nav-item svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-nav-item.active {
+  color: var(--gold-dark);
+}
+
+.bottom-cart-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-cart-icon b {
+  position: absolute;
+  top: -7px;
+  right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border: 1px solid var(--white);
+  border-radius: 50px;
+  background: var(--gold);
+  color: var(--black);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   TABLET + DESKTOP
+   ===================================================== */
+
+@media (min-width: 768px) {
+  .featured-section {
+    padding-bottom: 55px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .product-image {
+    height: 220px;
+  }
+
+  .product-details {
+    padding: 16px;
+  }
+
+  .product-category {
+    font-size: 9px;
+  }
+
+  .product-details h3 {
+    min-height: 40px;
+    font-size: 14px;
+  }
+
+  .product-weight {
+    font-size: 10px;
+  }
+
+  .product-price strong {
+    font-size: 18px;
+  }
+
+  .add-cart-btn {
+    min-width: 75px;
+    padding: 10px 11px;
+    font-size: 10px;
+  }
+
+  .bulk-order-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px 55px;
+  }
+
+  .bulk-order-content {
+    gap: 20px;
+    padding: 28px 32px;
+  }
+
+  .bulk-order-icon {
+    flex-basis: 58px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .bulk-order-icon svg {
+    width: 31px;
+    height: 31px;
+  }
+
+  .bulk-order-text h2 {
+    font-size: 21px;
+  }
+
+  .bulk-order-text p {
+    display: block;
+  }
+
+  .bulk-order-btn {
+    padding: 12px 15px;
+    font-size: 11px;
+  }
+
+  .about-store {
+    padding: 65px 30px;
+  }
+
+  .about-store h2 {
+    font-size: 30px;
+  }
+
+  .about-store > p {
+    font-size: 14px;
+  }
+
+  .about-points {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+  }
+
+  .about-points > div {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .contact-section {
+    padding: 65px 30px;
+  }
+
+  .contact-section h2 {
+    font-size: 30px;
+  }
+
+  .contact-section p {
+    font-size: 14px;
+  }
+
+  .site-footer {
+    padding: 38px 30px;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+}
+/* =====================================================
+   APP JAVASCRIPT STATES
+   ===================================================== */
+
+.add-cart-btn.added {
+  background: var(--gold);
+  color: var(--black);
+}
+
+.wishlist-btn.active {
+  border-color: #e8b8b3;
+  background: #fff3f2;
+  color: #c0392b;
+}
+
+.wishlist-btn.active svg {
+  fill: currentColor;
+}
+
+/* =====================================================
+   CART TOAST
+   ===================================================== */
+
+.cart-toast {
+  position: fixed;
+  z-index: 200;
+  right: 16px;
+  bottom: 84px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: min(330px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border: 1px solid rgba(232, 187, 67, 0.35);
+  border-radius: 9px;
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: 0.28s ease;
+}
+
+.cart-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cart-toast svg {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--gold);
+}
+
+@media (min-width: 768px) {
+  .cart-toast {
+    right: 28px;
+    bottom: 28px;
+  }
+}
+
+</style>
+<body>
+
+  <!-- =====================================================
+       SVG ICON LIBRARY
+       ===================================================== -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+
+    <!-- Menu -->
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 7h16M4 12h16M4 17h16"></path>
+    </symbol>
+
+    <!-- Close -->
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6L6 18"></path>
+    </symbol>
+
+    <!-- Cart -->
+    <symbol id="icon-cart" viewBox="0 0 24 24">
+      <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.4L21 8H7"></path>
+      <circle cx="10" cy="20" r="1.4"></circle>
+      <circle cx="18" cy="20" r="1.4"></circle>
+    </symbol>
+
+    <!-- Search -->
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="6"></circle>
+      <path d="m16 16 4 4"></path>
+    </symbol>
+
+    <!-- Home -->
+    <symbol id="icon-home" viewBox="0 0 24 24">
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path>
+    </symbol>
+
+    <!-- Grid / Categories -->
+    <symbol id="icon-grid" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6" rx="1"></rect>
+      <rect x="14" y="4" width="6" height="6" rx="1"></rect>
+      <rect x="4" y="14" width="6" height="6" rx="1"></rect>
+      <rect x="14" y="14" width="6" height="6" rx="1"></rect>
+    </symbol>
+
+    <!-- Heart -->
+    <symbol id="icon-heart" viewBox="0 0 24 24">
+      <path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6z"></path>
+    </symbol>
+
+    <!-- Shield -->
+    <symbol id="icon-shield" viewBox="0 0 24 24">
+      <path d="M12 3 20 6v5c0 5.2-3.4 8.6-8 10-4.6-1.4-8-4.8-8-10V6z"></path>
+      <path d="m8.5 12 2.2 2.2 4.8-5"></path>
+    </symbol>
+
+    <!-- Delivery -->
+    <symbol id="icon-truck" viewBox="0 0 24 24">
+      <path d="M3 6h11v10H3z"></path>
+      <path d="M14 10h4l3 3v3h-7z"></path>
+      <circle cx="7" cy="18" r="1.5"></circle>
+      <circle cx="18" cy="18" r="1.5"></circle>
+    </symbol>
+
+    <!-- Price Tag -->
+    <symbol id="icon-tag" viewBox="0 0 24 24">
+      <path d="M20 13 13 20 4 11V4h7z"></path>
+      <circle cx="8.5" cy="8.5" r="1"></circle>
+    </symbol>
+
+    <!-- Phone -->
+    <symbol id="icon-phone" viewBox="0 0 24 24">
+      <path d="M6.6 3.5 9 3l1.7 4.3-2.1 1.4a15.3 15.3 0 0 0 6.8 6.8l1.4-2.1L21 15l-.5 2.4A3 3 0 0 1 17.6 20C10 20 4 14 4 6.4a3 3 0 0 1 2.6-2.9z"></path>
+    </symbol>
+
+    <!-- WhatsApp Style Chat -->
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+      <path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-3.6A8.5 8.5 0 1 1 20.5 11.5z"></path>
+      <path d="M8.6 8.1c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c.5 1 1.3 1.8 2.4 2.3l.7-.7c.2-.2.4-.2.7-.1l1.8.8c.3.1.4.3.4.5v.5c0 .3 0 .6-.5.8-.5.2-1.5.4-3.2-.4-1.1-.5-2.2-1.5-3-2.5-.8-1-1.3-2.2-1.4-3.1-.1-.9.2-1.4.4-1.7z"></path>
+    </symbol>
+
+    <!-- Package -->
+    <symbol id="icon-package" viewBox="0 0 24 24">
+      <path d="m4 7 8-4 8 4-8 4z"></path>
+      <path d="M4 7v10l8 4 8-4V7"></path>
+      <path d="M12 11v10"></path>
+    </symbol>
+
+    <!-- Info -->
+    <symbol id="icon-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M12 10v6"></path>
+      <path d="M12 7h.01"></path>
+    </symbol>
+
+    <!-- Arrow Right -->
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14"></path>
+      <path d="m13 6 6 6-6 6"></path>
+    </symbol>
+
+  </svg>
+
+  <!-- =====================================================
+       SIDE MENU
+       ===================================================== -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+  <aside class="side-menu" id="sideMenu">
+
+    <div class="menu-top">
+      <a href="index.html" class="menu-brand">
+        <div class="menu-logo">
+          <svg><use href="#icon-cart"></use></svg>
+        </div>
+
+        <div>
+          <h3>Central & Stores</h3>
+          <p>Premium Grocery Store</p>
+        </div>
+      </a>
+
+      <button class="close-menu" type="button" onclick="toggleMenu()" aria-label="Close Menu">
+        <svg><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+
+    <nav class="menu-links">
+      <a href="index.html">
+        <svg><use href="#icon-home"></use></svg>
+        <span>Home</span>
+      </a>
+
+      <a href="#categories" onclick="toggleMenu()">
+        <svg><use href="#icon-grid"></use></svg>
+        <span>Categories</span>
+      </a>
+
+      <a href="#featured" onclick="toggleMenu()">
+        <svg><use href="#icon-heart"></use></svg>
+        <span>Featured Products</span>
+      </a>
+
+      <a href="cart.html">
+        <svg><use href="#icon-cart"></use></svg>
+        <span>My Cart</span>
+      </a>
+
+      <a href="#bulk-order" onclick="toggleMenu()">
+        <svg><use href="#icon-package"></use></svg>
+        <span>Bulk Orders</span>
+      </a>
+
+      <a href="#contact" onclick="toggleMenu()">
+        <svg><use href="#icon-phone"></use></svg>
+        <span>Contact Us</span>
+      </a>
+
+      <a href="#about" onclick="toggleMenu()">
+        <svg><use href="#icon-info"></use></svg>
+        <span>About Store</span>
+      </a>
+    </nav>
+
+    <div class="menu-support">
+      <p>Need help with your order?</p>
+
+      <a href="https://wa.me/919543128730" target="_blank" rel="noopener">
+        <svg><use href="#icon-whatsapp"></use></svg>
+        WhatsApp Support
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- =====================================================
+       MAIN APP
+       ===================================================== -->
+  <main class="app-shell">
+
+    <!-- PREMIUM HEADER -->
+    <header class="top-header">
+
+      <button class="header-icon-btn menu-btn" type="button" onclick="toggleMenu()" aria-label="Open Menu">
+        <svg><use href="#icon-menu"></use></svg>
+      </button>
+
+      <a href="index.html" class="brand">
+
+        <div class="brand-logo">
+          <svg><use href="#icon-cart"></use></svg>
+        </div>
+
+        <div class="brand-text">
+          <h1>Central & Stores</h1>
+          <p>Daily Grocery · Trusted Store</p>
+        </div>
+
+      </a>
+
+      <a href="cart.html" class="header-cart" aria-label="Open Cart">
+        <svg><use href="#icon-cart"></use></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+
+    </header>
+
+    <!-- SEARCH BAR -->
+    <section class="search-section">
+      <div class="search-box">
+
+        <svg class="search-icon"><use href="#icon-search"></use></svg>
+
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search groceries, rice, oil, snacks..."
+          autocomplete="off"
+        >
+
+        <button class="search-clear" id="searchClear" type="button" aria-label="Clear Search">
+          <svg><use href="#icon-close"></use></svg>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- PART 2 STARTS HERE -->
+    <!-- Hero banner, trust features, categories, products,
+         bulk order, footer and bottom navigation will come next -->
+ <!-- =====================================================
+         HERO BANNER
+         ===================================================== -->
+    <section class="hero-banner">
+
+      <div class="hero-content">
+        <span class="hero-label">PREMIUM DAILY ESSENTIALS</span>
+
+        <h2>
+          Premium Quality<br>
+          Groceries<br>
+          Delivered with Care
+        </h2>
+
+        <p>
+          Fresh groceries, trusted brands and daily essentials
+          delivered to your doorstep.
+        </p>
+
+        <a href="#featured" class="hero-shop-btn">
+          <span>Shop Now</span>
+          <svg><use href="#icon-arrow-right"></use></svg>
+        </a>
+      </div>
+
+      <div class="hero-visual">
+        <img
+          src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=85"
+          alt="Fresh premium groceries"
+          loading="eager"
+        >
+        <div class="hero-image-overlay"></div>
+      </div>
+
+      <div class="hero-dots" aria-label="Banner slider">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         TRUST FEATURES
+         ===================================================== -->
+    <section class="trust-features">
+
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg><use href="#icon-shield"></use></svg>
+        </div>
+        <p>100% Quality<br>Products</p>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg><use href="#icon-truck"></use></svg>
+        </div>
+        <p>Fast &amp; Reliable<br>Delivery</p>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg><use href="#icon-tag"></use></svg>
+        </div>
+        <p>Best Price<br>Everyday</p>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg><use href="#icon-heart"></use></svg>
+        </div>
+        <p>Customer<br>Satisfaction</p>
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         TOP CATEGORIES
+         ===================================================== -->
+    <section class="content-section categories-section" id="categories">
+
+      <div class="section-title-row">
+        <div>
+          <span class="section-mini-title">SHOP BY NEED</span>
+          <h2>Top Categories</h2>
+        </div>
+
+        <a href="products.html" class="view-all-link">
+          <span>View All</span>
+          <svg><use href="#icon-arrow-right"></use></svg>
+        </a>
+      </div>
+
+      <div class="category-scroll">
+
+        <a href="products.html?category=Rice%20%26%20Flours" class="category-card">
+          <div class="category-image">
+            <img
+              src="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=400&q=80"
+              alt="Rice and flours"
+              loading="lazy"
+            >
+          </div>
+          <span>Rice &amp; Flours</span>
+        </a>
+
+        <a href="products.html?category=Pulses%20%26%20Dals" class="category-card">
+          <div class="category-image">
+            <img
+              src="https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=400&q=80"
+              alt="Pulses and dals"
+              loading="lazy"
+            >
+          </div>
+          <span>Pulses &amp; Dals</span>
+        </a>
+
+        <a href="products.html?category=Oils%20%26%20Ghee" class="category-card">
+          <div class="category-image">
+            <img
+              src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80"
+              alt="Oils and ghee"
+              loading="lazy"
+            >
+          </div>
+          <span>Oils &amp; Ghee</span>
+        </a>
+
+        <a href="products.html?category=Masalas%20%26%20Spices" class="category-card">
+          <div class="category-image">
+            <img
+              src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=400&q=80"
+              alt="Masalas and spices"
+              loading="lazy"
+            >
+          </div>
+          <span>Masalas &amp; Spices</span>
+        </a>
+
+        <a href="products.html?category=Beverages" class="category-card">
+          <div class="category-image">
+            <img
+              src="https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=400&q=80"
+              alt="Beverages"
+              loading="lazy"
+            >
+          </div>
+          <span>Beverages</span>
+        </a>
+
+        <a href="products.html?category=Snacks" class="category-card">
+          <div class="category-image">
+            <img
+              src="https://images.unsplash.com/photo-1621939514649-280e2aa1d0e1?auto=format&fit=crop&w=400&q=80"
+              alt="Snacks"
+              loading="lazy"
+            >
+          </div>
+          <span>Snacks</span>
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         FEATURED PRODUCTS
+         ===================================================== -->
+    <section class="content-section featured-section" id="featured">
+
+      <div class="section-title-row">
+        <div>
+          <span class="section-mini-title">POPULAR PICKS</span>
+          <h2>Featured Products</h2>
+        </div>
+
+        <a href="products.html" class="view-all-link">
+          <span>View All</span>
+          <svg><use href="#icon-arrow-right"></use></svg>
+        </a>
+      </div>
+
+      <div class="product-grid">
+
+        <!-- Product 1 -->
+        <article class="product-card">
+          <button class="wishlist-btn" type="button" aria-label="Add to wishlist">
+            <svg><use href="#icon-heart"></use></svg>
+          </button>
+
+          <a href="products.html" class="product-image">
+            <img
+              src="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=500&q=80"
+              alt="Premium Basmati Rice"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="product-details">
+            <span class="product-category">RICE & FLOURS</span>
+            <h3>Premium Basmati Rice</h3>
+            <p class="product-weight">5 kg Pack</p>
+
+            <div class="product-bottom">
+              <div class="product-price">
+                <strong>₹420</strong>
+                <del>₹470</del>
+              </div>
+
+              <button
+                class="add-cart-btn"
+                type="button"
+                data-id="1"
+                data-name="Premium Basmati Rice"
+                data-price="420"
+                data-weight="5 kg"
+                data-image="https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=500&q=80"
+              >
+                <svg><use href="#icon-cart"></use></svg>
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 2 -->
+        <article class="product-card">
+          <button class="wishlist-btn" type="button" aria-label="Add to wishlist">
+            <svg><use href="#icon-heart"></use></svg>
+          </button>
+
+          <a href="products.html" class="product-image">
+            <img
+              src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=500&q=80"
+              alt="Aachi Turmeric Powder"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="product-details">
+            <span class="product-category">MASALAS</span>
+            <h3>Aachi Turmeric Powder</h3>
+            <p class="product-weight">500 g Pack</p>
+
+            <div class="product-bottom">
+              <div class="product-price">
+                <strong>₹85</strong>
+                <del>₹99</del>
+              </div>
+
+              <button
+                class="add-cart-btn"
+                type="button"
+                data-id="2"
+                data-name="Aachi Turmeric Powder"
+                data-price="85"
+                data-weight="500 g"
+                data-image="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=500&q=80"
+              >
+                <svg><use href="#icon-cart"></use></svg>
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 3 -->
+        <article class="product-card">
+          <button class="wishlist-btn" type="button" aria-label="Add to wishlist">
+            <svg><use href="#icon-heart"></use></svg>
+          </button>
+
+          <a href="products.html" class="product-image">
+            <img
+              src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=500&q=80"
+              alt="Fortune Sunflower Oil"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="product-details">
+            <span class="product-category">OILS & GHEE</span>
+            <h3>Fortune Sunflower Oil</h3>
+            <p class="product-weight">1 Litre Pack</p>
+
+            <div class="product-bottom">
+              <div class="product-price">
+                <strong>₹148</strong>
+                <del>₹165</del>
+              </div>
+
+              <button
+                class="add-cart-btn"
+                type="button"
+                data-id="3"
+                data-name="Fortune Sunflower Oil"
+                data-price="148"
+                data-weight="1 Litre"
+                data-image="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=500&q=80"
+              >
+                <svg><use href="#icon-cart"></use></svg>
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 4 -->
+        <article class="product-card">
+          <button class="wishlist-btn" type="button" aria-label="Add to wishlist">
+            <svg><use href="#icon-heart"></use></svg>
+          </button>
+
+          <a href="products.html" class="product-image">
+            <img
+              src="https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=500&q=80"
+              alt="Premium Toor Dal"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="product-details">
+            <span class="product-category">PULSES & DALS</span>
+            <h3>Premium Toor Dal</h3>
+            <p class="product-weight">1 kg Pack</p>
+
+            <div class="product-bottom">
+              <div class="product-price">
+                <strong>₹165</strong>
+                <del>₹185</del>
+              </div>
+
+              <button
+                class="add-cart-btn"
+                type="button"
+                data-id="4"
+                data-name="Premium Toor Dal"
+                data-price="165"
+                data-weight="1 kg"
+                data-image="https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=500&q=80"
+              >
+                <svg><use href="#icon-cart"></use></svg>
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         BULK ORDER BANNER
+         ===================================================== -->
+    <section class="bulk-order-section" id="bulk-order">
+      <div class="bulk-order-content">
+
+        <div class="bulk-order-icon">
+          <svg><use href="#icon-package"></use></svg>
+        </div>
+
+        <div class="bulk-order-text">
+          <span>FOR SHOPS, HOTELS & EVENTS</span>
+          <h2>Bulk Orders Available</h2>
+          <p>Get wholesale pricing for large quantity grocery orders.</p>
+        </div>
+
+        <a
+          href="https://wa.me/919543128730?text=Hello%20Central%20%26%20Stores%2C%20I%20need%20bulk%20order%20details."
+          target="_blank"
+          rel="noopener"
+          class="bulk-order-btn"
+        >
+          <span>Contact Us</span>
+          <svg><use href="#icon-arrow-right"></use></svg>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         ABOUT STORE
+         ===================================================== -->
+    <section class="about-store" id="about">
+      <span class="section-mini-title">ABOUT CENTRAL & STORES</span>
+      <h2>Your Trusted Grocery Store</h2>
+
+      <p>
+        Quality groceries, daily essentials and household products delivered with care.
+        After you place an order, our shop owner will call you to verify the order
+        before delivery.
+      </p>
+
+      <div class="about-points">
+        <div>
+          <svg><use href="#icon-shield"></use></svg>
+          <span>Quality Checked Products</span>
+        </div>
+
+        <div>
+          <svg><use href="#icon-phone"></use></svg>
+          <span>Order Verification Call</span>
+        </div>
+
+        <div>
+          <svg><use href="#icon-truck"></use></svg>
+          <span>Reliable Local Delivery</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CONTACT SECTION
+         ===================================================== -->
+    <section class="contact-section" id="contact">
+      <div class="contact-content">
+        <span class="section-mini-title">NEED HELP?</span>
+        <h2>Talk to Our Store Team</h2>
+        <p>For product availability, delivery details or bulk orders, contact us directly.</p>
+
+        <div class="contact-buttons">
+          <a href="tel:+919543128730" class="call-store-btn">
+            <svg><use href="#icon-phone"></use></svg>
+            <span>Call Store</span>
+          </a>
+
+          <a href="https://wa.me/919543128730" target="_blank" rel="noopener" class="whatsapp-store-btn">
+            <svg><use href="#icon-whatsapp"></use></svg>
+            <span>WhatsApp Us</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg><use href="#icon-cart"></use></svg>
+        </div>
+
+        <div>
+          <h3>Central & Stores</h3>
+          <p>Premium Grocery Store</p>
+        </div>
+      </div>
+
+      <p class="footer-note">
+        Fresh groceries. Trusted service. Easy ordering.
+      </p>
+
+      <p class="copyright">
+        © 2026 Central & Stores. All Rights Reserved.
+      </p>
+    </footer>
+
+  </main>
+
+  <!-- =====================================================
+       MOBILE BOTTOM NAVIGATION
+       ===================================================== -->
+  <nav class="bottom-nav">
+
+    <a href="index.html" class="bottom-nav-item active">
+      <svg><use href="#icon-home"></use></svg>
+      <span>Home</span>
+    </a>
+
+    <a href="#categories" class="bottom-nav-item">
+      <svg><use href="#icon-grid"></use></svg>
+      <span>Categories</span>
+    </a>
+
+    <a href="products.html" class="bottom-nav-item">
+      <svg><use href="#icon-search"></use></svg>
+      <span>Search</span>
+    </a>
+
+    <a href="cart.html" class="bottom-nav-item bottom-cart-nav">
+      <div class="bottom-cart-icon">
+        <svg><use href="#icon-cart"></use></svg>
+        <b id="bottomCartCount">0</b>
+      </div>
+      <span>Cart</span>
+    </a>
+
+    <a href="https://wa.me/919543128730" target="_blank" rel="noopener" class="bottom-nav-item">
+      <svg><use href="#icon-whatsapp"></use></svg>
+      <span>Contact</span>
+    </a>
+
+  </nav>
+
+  <script src="app.js"></script>
+  
+     </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
