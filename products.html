@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | Central & Stores</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Existing common style + new products style -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="products.css">
+</head>
+
+<body>
+
+  <!-- SVG ICONS -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 7h16M4 12h16M4 17h16"></path>
+    </symbol>
+
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6L6 18"></path>
+    </symbol>
+
+    <symbol id="icon-cart" viewBox="0 0 24 24">
+      <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.4L21 8H7"></path>
+      <circle cx="10" cy="20" r="1.4"></circle>
+      <circle cx="18" cy="20" r="1.4"></circle>
+    </symbol>
+
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="6"></circle>
+      <path d="m16 16 4 4"></path>
+    </symbol>
+
+    <symbol id="icon-home" viewBox="0 0 24 24">
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path>
+    </symbol>
+
+    <symbol id="icon-grid" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6" rx="1"></rect>
+      <rect x="14" y="4" width="6" height="6" rx="1"></rect>
+      <rect x="4" y="14" width="6" height="6" rx="1"></rect>
+      <rect x="14" y="14" width="6" height="6" rx="1"></rect>
+    </symbol>
+
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+      <path d="M19 12H5"></path>
+      <path d="m11 18-6-6 6-6"></path>
+    </symbol>
+
+    <symbol id="icon-phone" viewBox="0 0 24 24">
+      <path d="M6.6 3.5 9 3l1.7 4.3-2.1 1.4a15.3 15.3 0 0 0 6.8 6.8l1.4-2.1L21 15l-.5 2.4A3 3 0 0 1 17.6 20C10 20 4 14 4 6.4a3 3 0 0 1 2.6-2.9z"></path>
+    </symbol>
+
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+      <path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-3.6A8.5 8.5 0 1 1 20.5 11.5z"></path>
+      <path d="M8.6 8.1c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c.5 1 1.3 1.8 2.4 2.3l.7-.7c.2-.2.4-.2.7-.1l1.8.8c.3.1.4.3.4.5v.5c0 .3 0 .6-.5.8-.5.2-1.5.4-3.2-.4-1.1-.5-2.2-1.5-3-2.5-.8-1-1.3-2.2-1.4-3.1-.1-.9.2-1.4.4-1.7z"></path>
+    </symbol>
+  </svg>
+
+  <!-- SIDE MENU -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+  <aside class="side-menu" id="sideMenu">
+    <div class="menu-top">
+      <a href="index.html" class="menu-brand">
+        <div class="menu-logo">
+          <svg><use href="#icon-cart"></use></svg>
+        </div>
+        <div>
+          <h3>Central &amp; Stores</h3>
+          <p>Premium Grocery Store</p>
+        </div>
+      </a>
+
+      <button class="close-menu" type="button" onclick="toggleMenu()" aria-label="Close menu">
+        <svg><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+
+    <nav class="menu-links">
+      <a href="index.html">
+        <svg><use href="#icon-home"></use></svg>
+        <span>Home</span>
+      </a>
+
+      <a href="products.html">
+        <svg><use href="#icon-grid"></use></svg>
+        <span>All Products</span>
+      </a>
+
+      <a href="cart.html">
+        <svg><use href="#icon-cart"></use></svg>
+        <span>My Cart</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="app-shell">
+
+    <!-- HEADER -->
+    <header class="top-header">
+      <button class="header-icon-btn" type="button" onclick="toggleMenu()" aria-label="Open menu">
+        <svg><use href="#icon-menu"></use></svg>
+      </button>
+
+      <a href="index.html" class="brand">
+        <div class="brand-logo">
+          <svg><use href="#icon-cart"></use></svg>
+        </div>
+        <div class="brand-text">
+          <h1>Central &amp; Stores</h1>
+          <p>Daily Grocery · Trusted Store</p>
+        </div>
+      </a>
+
+      <a href="cart.html" class="header-cart" aria-label="Open cart">
+        <svg><use href="#icon-cart"></use></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+    </header>
+
+    <!-- PAGE TITLE -->
+    <section class="products-page-header">
+      <a href="index.html" class="back-home-btn">
+        <svg><use href="#icon-arrow-left"></use></svg>
+        <span>Back to Home</span>
+      </a>
+
+      <span>DAILY ESSENTIALS</span>
+      <h2>All Products</h2>
+      <p>Browse products and add required items to your cart.</p>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="products-search-section">
+      <div class="products-search-box">
+        <svg><use href="#icon-search"></use></svg>
+        <input type="search" id="productSearchInput" placeholder="Search rice, oil, dal, spices..." autocomplete="off">
+        <button type="button" id="productSearchClear" aria-label="Clear search">
+          <svg><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- CATEGORY FILTER -->
+    <section class="category-filter-section">
+      <div class="category-filter-scroll" id="categoryFilter">
+        <button class="category-filter-btn active" type="button" data-category="All">All Products</button>
+        <button class="category-filter-btn" type="button" data-category="Rice & Flours">Rice &amp; Flours</button>
+        <button class="category-filter-btn" type="button" data-category="Pulses & Dals">Pulses &amp; Dals</button>
+        <button class="category-filter-btn" type="button" data-category="Oils & Ghee">Oils &amp; Ghee</button>
+        <button class="category-filter-btn" type="button" data-category="Masalas & Spices">Masalas</button>
+        <button class="category-filter-btn" type="button" data-category="Essentials">Essentials</button>
+        <button class="category-filter-btn" type="button" data-category="Snacks">Snacks</button>
+        <button class="category-filter-btn" type="button" data-category="Beverages">Beverages</button>
+        <button class="category-filter-btn" type="button" data-category="Household">Household</button>
+      </div>
+    </section>
+
+    <!-- PRODUCT LIST -->
+    <section class="products-list-section">
+      <div class="products-list-top">
+        <div>
+          <span class="products-count-label">AVAILABLE ITEMS</span>
+          <h2 id="productsTitle">All Daily Essentials</h2>
+        </div>
+
+        <div class="products-count-box">
+          <span id="productsCount">0</span>
+          <small>Products</small>
+        </div>
+      </div>
+
+      <!-- products.js will add cards here -->
+      <div class="all-products-grid" id="allProductsGrid"></div>
+
+      <div class="no-products-found" id="noProductsFound">
+        <h3>No products found</h3>
+        <p>Try another search word or select another category.</p>
+        <button type="button" id="resetProductsBtn">View All Products</button>
+      </div>
+    </section>
+
+    <!-- ORDER INFO -->
+    <section class="order-info-banner">
+      <div class="order-info-icon">
+        <svg><use href="#icon-phone"></use></svg>
+      </div>
+
+      <div class="order-info-text">
+        <span>ORDER CONFIRMATION</span>
+        <h3>Shop owner will call you</h3>
+        <p>After you place the order, our store team will confirm availability, final price and delivery details by call.</p>
+      </div>
+    </section>
+
+    <!-- HELP -->
+    <section class="products-help-section">
+      <span>CAN'T FIND A PRODUCT?</span>
+      <h2>Contact Our Store Team</h2>
+      <p>Send your grocery list through WhatsApp. We will check availability and call you back.</p>
+
+      <a href="https://wa.me/919543128730" target="_blank" rel="noopener" class="products-whatsapp-btn">
+        <svg><use href="#icon-whatsapp"></use></svg>
+        <span>WhatsApp Store</span>
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg><use href="#icon-cart"></use></svg>
+        </div>
+        <div>
+          <h3>Central &amp; Stores</h3>
+          <p>Premium Grocery Store</p>
+        </div>
+      </div>
+
+      <p class="footer-note">Fresh groceries. Trusted service. Easy ordering.</p>
+      <p class="copyright">© 2026 Central &amp; Stores. All Rights Reserved.</p>
+    </footer>
+  </main>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <svg><use href="#icon-home"></use></svg>
+      <span>Home</span>
+    </a>
+
+    <a href="products.html" class="bottom-nav-item active">
+      <svg><use href="#icon-grid"></use></svg>
+      <span>Products</span>
+    </a>
+
+    <a href="#productSearchInput" class="bottom-nav-item">
+      <svg><use href="#icon-search"></use></svg>
+      <span>Search</span>
+    </a>
+
+    <a href="cart.html" class="bottom-nav-item">
+      <div class="bottom-cart-icon">
+        <svg><use href="#icon-cart"></use></svg>
+        <b id="bottomCartCount">0</b>
+      </div>
+      <span>Cart</span>
+    </a>
+
+    <a href="https://wa.me/919543128730" target="_blank" rel="noopener" class="bottom-nav-item">
+      <svg><use href="#icon-whatsapp"></use></svg>
+      <span>Contact</span>
+    </a>
+  </nav>
+
+  <script src="app.js"></script>
+  <script src="products.js"></script>
+</body>
+                                                                                                                                                   </html>
