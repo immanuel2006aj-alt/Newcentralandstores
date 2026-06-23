@@ -1,7 +1,7 @@
 /* =========================================================
    CENTRAL & STORES - PRODUCTS.JS
-   CURRENT VERSION: SIDE MENU ONLY
-   Product grid / cart product loading will be added later.
+   Tamil Nadu + Indian Brands | Premium Grocery Product Grid
+   150 Products | Cart | Search | Side Menu
 ========================================================= */
 
 "use strict";
@@ -9,134 +9,190 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   /* =========================================================
-     ELEMENTS
+     SETTINGS
   ========================================================= */
 
-  const openMenuBtn = document.getElementById("openMenuBtn");
-  const closeMenuBtn = document.getElementById("closeMenu");
-  const sideMenu = document.getElementById("sideMenu");
-  const menuOverlay = document.getElementById("menuOverlay");
+  const CART_KEY = "centralStoresCart";
+
+  const DEFAULT_IMAGE =
+    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80";
 
 
   /* =========================================================
-     SAFETY CHECK
+     PRODUCTS DATA
+     Object format:
+     id, name, category, weight, price, image, quantity
+
+     Later image replace:
+     image: "https://your-image-link.jpg"
   ========================================================= */
 
-  if (!openMenuBtn || !sideMenu || !menuOverlay) {
-    console.warn("Side menu elements not found.");
+  const products = [
 
-    console.log({
-      openMenuBtn,
-      sideMenu,
-      menuOverlay
-    });
+    /* ================= RICE & FLOURS ================= */
 
-    return;
-  }
+    { id: "rice-001", name: "India Gate Basmati Rice", category: "Rice & Flours", weight: "1 kg", price: 189, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-002", name: "Daawat Basmati Rice", category: "Rice & Flours", weight: "1 kg", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-003", name: "Fortune Biryani Special Basmati Rice", category: "Rice & Flours", weight: "1 kg", price: 169, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-004", name: "Ponni Boiled Rice", category: "Rice & Flours", weight: "1 kg", price: 92, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-005", name: "Ponni Raw Rice", category: "Rice & Flours", weight: "1 kg", price: 95, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-006", name: "Seeraga Samba Rice", category: "Rice & Flours", weight: "1 kg", price: 159, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-007", name: "Sona Masoori Rice", category: "Rice & Flours", weight: "1 kg", price: 98, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-008", name: "Idli Rice", category: "Rice & Flours", weight: "1 kg", price: 88, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-009", name: "Naga Maida", category: "Rice & Flours", weight: "1 kg", price: 99, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-010", name: "Naga Rava", category: "Rice & Flours", weight: "500 g", price: 58, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-011", name: "Naga Wheat Flour", category: "Rice & Flours", weight: "1 kg", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-012", name: "Anil Maida", category: "Rice & Flours", weight: "1 kg", price: 92, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-013", name: "Anil Rava", category: "Rice & Flours", weight: "500 g", price: 62, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-014", name: "Aashirvaad Whole Wheat Atta", category: "Rice & Flours", weight: "1 kg", price: 88, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "rice-015", name: "Pillsbury Chakki Fresh Atta", category: "Rice & Flours", weight: "1 kg", price: 92, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= PULSES & DALS ================= */
+
+    { id: "dal-001", name: "Toor Dal", category: "Pulses & Dals", weight: "1 kg", price: 225, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-002", name: "Urad Dal", category: "Pulses & Dals", weight: "500 g", price: 129, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-003", name: "Moong Dal", category: "Pulses & Dals", weight: "500 g", price: 118, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-004", name: "Chana Dal", category: "Pulses & Dals", weight: "500 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-005", name: "Masoor Dal", category: "Pulses & Dals", weight: "500 g", price: 99, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-006", name: "White Channa", category: "Pulses & Dals", weight: "500 g", price: 109, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-007", name: "Black Channa", category: "Pulses & Dals", weight: "500 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-008", name: "Rajma", category: "Pulses & Dals", weight: "500 g", price: 149, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-009", name: "Green Gram", category: "Pulses & Dals", weight: "500 g", price: 119, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dal-010", name: "Cowpea", category: "Pulses & Dals", weight: "500 g", price: 95, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= OILS & GHEE ================= */
+
+    { id: "oil-001", name: "Idhayam Gingelly Oil", category: "Oils & Ghee", weight: "500 ml", price: 249, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-002", name: "Idhayam Mantra Groundnut Oil", category: "Oils & Ghee", weight: "1 Litre", price: 299, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-003", name: "Gold Winner Sunflower Oil", category: "Oils & Ghee", weight: "1 Litre", price: 189, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-004", name: "Fortune Sunflower Oil", category: "Oils & Ghee", weight: "1 Litre", price: 185, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-005", name: "Saffola Gold Oil", category: "Oils & Ghee", weight: "1 Litre", price: 229, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-006", name: "Parachute Coconut Oil", category: "Oils & Ghee", weight: "500 ml", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-007", name: "Aavin Ghee", category: "Oils & Ghee", weight: "500 ml", price: 399, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-008", name: "Nandini Ghee", category: "Oils & Ghee", weight: "500 ml", price: 389, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-009", name: "Fortune Mustard Oil", category: "Oils & Ghee", weight: "1 Litre", price: 219, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "oil-010", name: "Dalda Vanaspati", category: "Oils & Ghee", weight: "1 kg", price: 199, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= MASALAS ================= */
+
+    { id: "masala-001", name: "Aachi Chilli Powder", category: "Masalas", weight: "200 g", price: 99, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-002", name: "Aachi Turmeric Powder", category: "Masalas", weight: "200 g", price: 69, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-003", name: "Aachi Sambar Powder", category: "Masalas", weight: "200 g", price: 95, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-004", name: "Aachi Rasam Powder", category: "Masalas", weight: "100 g", price: 65, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-005", name: "Aachi Chicken Masala", category: "Masalas", weight: "100 g", price: 85, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-006", name: "Aachi Mutton Masala", category: "Masalas", weight: "100 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-007", name: "Sakthi Chilli Powder", category: "Masalas", weight: "200 g", price: 95, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-008", name: "Sakthi Turmeric Powder", category: "Masalas", weight: "200 g", price: 65, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-009", name: "Sakthi Sambar Powder", category: "Masalas", weight: "200 g", price: 92, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-010", name: "Sakthi Garam Masala", category: "Masalas", weight: "100 g", price: 79, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-011", name: "Sakthi Pepper Powder", category: "Masalas", weight: "100 g", price: 109, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-012", name: "MTR Sambar Powder", category: "Masalas", weight: "200 g", price: 109, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-013", name: "MTR Garam Masala", category: "Masalas", weight: "100 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-014", name: "Eastern Chicken Masala", category: "Masalas", weight: "100 g", price: 85, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "masala-015", name: "Everest Kashmiri Lal Chilli Powder", category: "Masalas", weight: "100 g", price: 99, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= TEA, COFFEE & BEVERAGES ================= */
+
+    { id: "bev-001", name: "Three Roses Tea", category: "Tea, Coffee & Beverages", weight: "250 g", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-002", name: "Three Roses Dust Tea", category: "Tea, Coffee & Beverages", weight: "500 g", price: 329, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-003", name: "AVT Premium Tea", category: "Tea, Coffee & Beverages", weight: "250 g", price: 169, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-004", name: "AVT Gold Cup Tea", category: "Tea, Coffee & Beverages", weight: "500 g", price: 319, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-005", name: "Tata Tea Gold", category: "Tea, Coffee & Beverages", weight: "250 g", price: 189, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-006", name: "Brooke Bond Red Label Tea", category: "Tea, Coffee & Beverages", weight: "250 g", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-007", name: "Bru Instant Coffee", category: "Tea, Coffee & Beverages", weight: "100 g", price: 119, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-008", name: "Narasus Coffee Powder", category: "Tea, Coffee & Beverages", weight: "200 g", price: 189, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-009", name: "Cothas Coffee Powder", category: "Tea, Coffee & Beverages", weight: "200 g", price: 199, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-010", name: "Aavin Milk", category: "Tea, Coffee & Beverages", weight: "500 ml", price: 34, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-011", name: "Aavin Buttermilk", category: "Tea, Coffee & Beverages", weight: "200 ml", price: 22, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-012", name: "Bovonto Soft Drink", category: "Tea, Coffee & Beverages", weight: "750 ml", price: 55, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-013", name: "Horlicks Classic Malt", category: "Tea, Coffee & Beverages", weight: "500 g", price: 349, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "bev-014", name: "Boost Nutrition Drink", category: "Tea, Coffee & Beverages", weight: "500 g", price: 339, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= BISCUITS & SNACKS ================= */
+
+    { id: "snack-001", name: "Britannia Good Day Biscuit", category: "Biscuits & Snacks", weight: "200 g", price: 49, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-002", name: "Britannia Marie Gold Biscuit", category: "Biscuits & Snacks", weight: "250 g", price: 55, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-003", name: "Britannia 50-50 Biscuit", category: "Biscuits & Snacks", weight: "200 g", price: 45, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-004", name: "Britannia Milk Bikis Biscuit", category: "Biscuits & Snacks", weight: "200 g", price: 49, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-005", name: "Sunfeast Dark Fantasy Biscuit", category: "Biscuits & Snacks", weight: "75 g", price: 49, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-006", name: "Sunfeast Marie Light Biscuit", category: "Biscuits & Snacks", weight: "250 g", price: 52, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-007", name: "Parle-G Gold Biscuit", category: "Biscuits & Snacks", weight: "250 g", price: 42, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-008", name: "Parle Hide & Seek Biscuit", category: "Biscuits & Snacks", weight: "100 g", price: 45, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-009", name: "Oreo Original Biscuit", category: "Biscuits & Snacks", weight: "120 g", price: 49, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-010", name: "A2B Mixture", category: "Biscuits & Snacks", weight: "200 g", price: 119, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-011", name: "A2B Murukku", category: "Biscuits & Snacks", weight: "200 g", price: 109, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-012", name: "Anil Mixture", category: "Biscuits & Snacks", weight: "200 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-013", name: "Haldiram's Bhujia", category: "Biscuits & Snacks", weight: "200 g", price: 129, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-014", name: "Lays Classic Salted Chips", category: "Biscuits & Snacks", weight: "52 g", price: 30, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "snack-015", name: "Kurkure Masala Munch", category: "Biscuits & Snacks", weight: "90 g", price: 35, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= INSTANT FOODS ================= */
+
+    { id: "instant-001", name: "Maggi 2-Minute Noodles", category: "Instant Foods", weight: "280 g", price: 75, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-002", name: "Sunfeast Yippee Noodles", category: "Instant Foods", weight: "280 g", price: 69, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-003", name: "Anil Semiya", category: "Instant Foods", weight: "400 g", price: 69, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-004", name: "Anil Macaroni", category: "Instant Foods", weight: "400 g", price: 79, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-005", name: "MTR Gulab Jamun Mix", category: "Instant Foods", weight: "200 g", price: 129, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-006", name: "Aachi Gulab Jamun Mix", category: "Instant Foods", weight: "200 g", price: 115, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-007", name: "MTR Ready Idli Mix", category: "Instant Foods", weight: "500 g", price: 119, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-008", name: "MTR Ready Dosa Mix", category: "Instant Foods", weight: "500 g", price: 119, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-009", name: "Aachi Instant Upma Mix", category: "Instant Foods", weight: "250 g", price: 79, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-010", name: "Kellogg's Corn Flakes", category: "Instant Foods", weight: "475 g", price: 229, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-011", name: "Saffola Oats", category: "Instant Foods", weight: "500 g", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "instant-012", name: "Sakthi Bajji Mix", category: "Instant Foods", weight: "200 g", price: 69, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= PERSONAL CARE ================= */
+
+    { id: "care-001", name: "Chik Shampoo Sachets", category: "Personal Care", weight: "10 Sachets", price: 39, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-002", name: "Meera Shampoo", category: "Personal Care", weight: "180 ml", price: 149, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-003", name: "Nyle Shampoo", category: "Personal Care", weight: "180 ml", price: 139, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-004", name: "Karthika Hair Oil", category: "Personal Care", weight: "200 ml", price: 169, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-005", name: "Meera Herbal Powder", category: "Personal Care", weight: "100 g", price: 79, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-006", name: "Hamam Soap", category: "Personal Care", weight: "3 Bars", price: 119, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-007", name: "Cinthol Soap", category: "Personal Care", weight: "3 Bars", price: 129, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-008", name: "Pears Soap", category: "Personal Care", weight: "3 Bars", price: 159, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-009", name: "Colgate Strong Teeth Toothpaste", category: "Personal Care", weight: "150 g", price: 129, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-010", name: "Dabur Red Toothpaste", category: "Personal Care", weight: "100 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-011", name: "Whisper Ultra Pads", category: "Personal Care", weight: "7 Pads", price: 149, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-012", name: "Stayfree Secure Pads", category: "Personal Care", weight: "7 Pads", price: 139, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "care-013", name: "Pampers Baby Diapers", category: "Personal Care", weight: "10 Pieces", price: 299, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= HOUSEHOLD ================= */
+
+    { id: "home-001", name: "Henko Detergent Powder", category: "Household", weight: "1 kg", price: 149, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-002", name: "Surf Excel Easy Wash", category: "Household", weight: "1 kg", price: 159, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-003", name: "Rin Detergent Bar", category: "Household", weight: "4 Bars", price: 69, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-004", name: "Vim Dishwash Bar", category: "Household", weight: "3 Bars", price: 59, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-005", name: "Vim Dishwash Liquid", category: "Household", weight: "500 ml", price: 149, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-006", name: "Harpic Toilet Cleaner", category: "Household", weight: "500 ml", price: 139, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-007", name: "Lizol Floor Cleaner", category: "Household", weight: "975 ml", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-008", name: "Good Knight Mosquito Coil", category: "Household", weight: "10 Coils", price: 65, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-009", name: "Mortein Mosquito Spray", category: "Household", weight: "400 ml", price: 199, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-010", name: "Cycle Agarbathi", category: "Household", weight: "1 Pack", price: 59, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "home-011", name: "Camphor Tablets", category: "Household", weight: "100 g", price: 79, image: DEFAULT_IMAGE, quantity: 1 },
+
+    /* ================= DAIRY, SWEETS & ESSENTIALS ================= */
+
+    { id: "dairy-001", name: "Aavin Curd", category: "Dairy & Frozen", weight: "400 g", price: 59, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dairy-002", name: "Aavin Paneer", category: "Dairy & Frozen", weight: "200 g", price: 129, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dairy-003", name: "Aavin Ice Cream", category: "Dairy & Frozen", weight: "750 ml", price: 249, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dairy-004", name: "Amul Butter", category: "Dairy & Frozen", weight: "100 g", price: 79, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "dairy-005", name: "Amul Cheese Cubes", category: "Dairy & Frozen", weight: "200 g", price: 189, image: DEFAULT_IMAGE, quantity: 1 },
+
+    { id: "sweet-001", name: "A2B Mysore Pak", category: "Sweets", weight: "250 g", price: 219, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "sweet-002", name: "Sri Krishna Sweets Mysurpa", category: "Sweets", weight: "250 g", price: 269, image: DEFAULT_IMAGE, quantity: 1 },
+
+    { id: "ess-001", name: "Tata Salt", category: "Essentials", weight: "1 kg", price: 35, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "ess-002", name: "Madhur Sugar", category: "Essentials", weight: "1 kg", price: 69, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "ess-003", name: "Jaggery Powder", category: "Essentials", weight: "500 g", price: 89, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "ess-004", name: "Tamarind", category: "Essentials", weight: "500 g", price: 99, image: DEFAULT_IMAGE, quantity: 1 },
+    { id: "ess-005", name: "Double Horse Appalam", category: "Essentials", weight: "200 g", price: 69, image: DEFAULT_IMAGE, quantity: 1 }
+  ];
 
 
   /* =========================================================
-     OPEN SIDE MENU
+     PAGE ELEMENTS
   ========================================================= */
 
-  function openSideMenu() {
-    sideMenu.classList.add("is-open");
-    menuOverlay.classList.add("is-open");
-
-    sideMenu.setAttribute("aria-hidden", "false");
-
-    document.body.classList.add("menu-open");
-
-    setTimeout(function () {
-      if (closeMenuBtn) {
-        closeMenuBtn.focus();
-      }
-    }, 250);
-  }
-
-
-  /* =========================================================
-     CLOSE SIDE MENU
-  ========================================================= */
-
-  function closeSideMenu() {
-    sideMenu.classList.remove("is-open");
-    menuOverlay.classList.remove("is-open");
-
-    sideMenu.setAttribute("aria-hidden", "true");
-
-    document.body.classList.remove("menu-open");
-
-    setTimeout(function () {
-      openMenuBtn.focus();
-    }, 250);
-  }
-
-
-  /* =========================================================
-     BUTTON EVENTS
-  ========================================================= */
-
-  openMenuBtn.addEventListener("click", function () {
-    openSideMenu();
-  });
-
-  if (closeMenuBtn) {
-    closeMenuBtn.addEventListener("click", function () {
-      closeSideMenu();
-    });
-  }
-
-  menuOverlay.addEventListener("click", function () {
-    closeSideMenu();
-  });
-
-
-  /* =========================================================
-     ESC KEY CLOSE
-  ========================================================= */
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-      closeSideMenu();
-    }
-  });
-
-
-  /* =========================================================
-     SWIPE LEFT TO CLOSE MENU - MOBILE
-  ========================================================= */
-
-  let touchStartX = 0;
-  let touchEndX = 0;
-
-  sideMenu.addEventListener("touchstart", function (event) {
-    touchStartX = event.changedTouches[0].screenX;
-  }, { passive: true });
-
-  sideMenu.addEventListener("touchend", function (event) {
-    touchEndX = event.changedTouches[0].screenX;
-
-    const swipeDistance = touchStartX - touchEndX;
-
-    if (swipeDistance > 70) {
-      closeSideMenu();
-    }
-  }, { passive: true });
-
-
-  /* =========================================================
-     PREVENT CLICK THROUGH WHEN MENU OPEN
-  ========================================================= */
-
-  sideMenu.addEventListener("click", function (event) {
-    event.stopPropagation();
-  });
-
-
-  /* =========================================================
-     READY MESSAGE
-  ========================================================= */
-
-  console.log("Central & Stores side menu ready.");
-});
+  const productsGrid = document.getElementById("productsGrid");
+  const productCount = document.getElementById("produc
