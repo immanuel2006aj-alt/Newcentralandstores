@@ -526,55 +526,44 @@
         </div>
 
       </section>
+<!-- =========================================================
+     AVAILABLE PRODUCTS + LIVE GRID
+========================================================= -->
+<section class="available-products-section" id="productsSection">
 
-      <!-- =========================================================
-           PRODUCT LIST TITLE
-      ========================================================== -->
-      <section class="products-list-section">
+  <div class="available-products-head">
+    <div>
+      <p class="section-kicker">AVAILABLE ITEMS</p>
+      <h2 id="productsTitle">All Daily Essentials</h2>
+    </div>
 
-        <div class="products-list-heading">
+    <div class="products-count-card">
+      <strong id="productCount">0</strong>
+      <span>PRODUCTS</span>
+    </div>
+  </div>
 
-          <div>
-            <span class="section-eyebrow">
-              AVAILABLE ITEMS
-            </span>
+  <!-- Products.js inserts all cards here -->
+  <div class="products-grid" id="productsGrid"></div>
 
-            <h2 id="productsTitle">All Daily Essentials</h2>
-          </div>
+  <!-- Only shows when search has no result -->
+  <div class="products-empty" id="productsEmpty" hidden>
+    <div class="products-empty-icon">
+      <svg>
+        <use href="#icon-search"></use>
+      </svg>
+    </div>
 
-          <div class="products-count-box">
-            <strong id="productsCount">0</strong>
-            <span>PRODUCTS</span>
-          </div>
+    <h3>No products found</h3>
+    <p>Try another product name or select a different category.</p>
 
-        </div>
+    <button type="button" id="resetProductsBtn">
+      View All Products
+    </button>
+  </div>
 
-        <!-- Products.js will insert all product cards here -->
-        <div class="products-grid" id="productsGrid"></div>
-
-        <!-- Search / category empty result -->
-        <div class="products-empty-state" id="productsEmptyState">
-
-          <div class="empty-icon">
-            <svg>
-              <use href="#icon-search"></use>
-            </svg>
-          </div>
-
-          <h3>No products found</h3>
-
-          <p>
-            Try another product name or select a different category.
-          </p>
-
-          <button type="button" id="resetProductsBtn">
-            View All Products
-          </button>
-
-        </div>
-
-            </section>
-      <!-- =========================================================
+</section>
+ <!-- =========================================================
            ORDER CONFIRMATION SECTION
       ========================================================== -->
       <section class="order-confirmation-section">
