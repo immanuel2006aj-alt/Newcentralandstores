@@ -8,7 +8,7 @@
 const DEFAULT_IMAGE =
   "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80";
 
-const products = [
+window.products = [
   { id: "rice-001", name: "India Gate Basmati Rice", category: "Rice & Flours", weight: "1 kg", price: 189, image: DEFAULT_IMAGE, quantity: 1 },
   { id: "rice-002", name: "Daawat Basmati Rice", category: "Rice & Flours", weight: "1 kg", price: 179, image: DEFAULT_IMAGE, quantity: 1 },
   { id: "rice-003", name: "Fortune Biryani Special Basmati Rice", category: "Rice & Flours", weight: "1 kg", price: 169, image: DEFAULT_IMAGE, quantity: 1 },
