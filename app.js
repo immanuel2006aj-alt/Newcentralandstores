@@ -87,50 +87,47 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function productCardTemplate(product) {
-    const image =
-      product.image ||
-      "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80";
+  const price = Number(product.price || 0);
 
-    return `
-      <article class="product-card">
-        <div class="product-image">
-          <img
-            src="${image}"
-            alt="${product.name || "Grocery Product"}"
-            loading="lazy"
-            onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80';"
-          >
+  return `
+    <article class="product-card">
+      <div class="product-image">
+        <img
+          src="${product.image}"
+          alt="${product.name}"
+          loading="lazy"
+        >
 
-          <button
-            type="button"
-            class="product-wishlist-btn"
-            aria-label="Wishlist"
-          >♡</button>
+        <button
+          type="button"
+          class="product-wishlist-btn"
+          aria-label="Add ${product.name} to wishlist"
+        >♡</button>
+      </div>
+
+      <div class="product-details">
+        <p class="product-category">${product.category}</p>
+
+        <h3>${product.name}</h3>
+
+        <p class="product-weight">${product.weight}</p>
+
+        <div class="product-price-wrap">
+          <span class="product-price-label">PRICE</span>
+          <p class="product-price">₹${price}</p>
         </div>
 
-        <div class="product-details">
-          <p class="product-category">${product.category || "Grocery Product"}</p>
-
-          <h3>${product.name || "Product Name"}</h3>
-
-          <p class="product-weight">${product.weight || "1 Pack"}</p>
-
-          <div class="product-price-wrap">
-            <span class="product-price-label">STORE PRICE</span>
-            <p class="product-price">${formatPrice(product.price)}</p>
-          </div>
-
-          <button
-            type="button"
-            class="add-cart-btn"
-            data-product-id="${product.id}"
-          >
-            <span class="add-cart-icon">+</span>
-            <span>Add</span>
-          </button>
-        </div>
-      </article>
-    `;
+        <button
+          type="button"
+          class="add-cart-btn"
+          data-product-id="${product.id}"
+        >
+          <span class="add-cart-icon">+</span>
+          <span>Add</span>
+        </button>
+      </div>
+    </article>
+  `;
   }
 
   function renderProducts(list) {
