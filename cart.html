@@ -776,51 +776,248 @@
   </div>
 
   <script>
-    const STORE_WHATSAPP = "919543128730";
-    const CART_KEY = "centralStoresCart";
-    const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=85";
+  const STORE_WHATSAPP = "9199543128730";
+  const CART_KEY = "centralStoresCart";
+  const DEFAULT_IMAGE =
+    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80";
 
-    const cartItemsList = document.getElementById("cartItemsList");
-    const emptyCart = document.getElementById("emptyCart");
-    const cartItemCount = document.getElementById("cartItemCount");
-    const orderForm = document.getElementById("orderForm");
-    const sendOrderBtn = document.getElementById("sendOrderBtn");
+  const cartItemsList = document.getElementById("cartItemsList");
+  const emptyCart = document.getElementById("emptyCart");
+  const cartItemCount = document.getElementById("cartItemCount");
+  const orderForm = document.getElementById("orderForm");
+  const sendOrderBtn = document.getElementById("sendOrderBtn");
 
-    function getCart() {
-      try {
-        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-      } catch (error) {
-        return [];
-      }
+  function getCart() {
+    try {
+      return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function totalQuantity(cart) {
+    return cart.reduce(function (total, item) {
+      return total + Number(item.quantity || 1);
+    }, 0);
+  }
+
+  function updateCartCount() {
+    const cart = getCart();
+    const quantity = totalQuantity(cart);
+
+    if (cartItemCount) {
+      cartItemCount.textContent =
+        quantity === 1 ? "1 Item" : quantity + " Items";
     }
 
-    function saveCart(cart) {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    }
-
-    function totalQuantity(cart) {
-      return cart.reduce((total, item) => total + (item.quantity || 1), 0);
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const quantity = totalQuantity(cart);
-      cartItemCount.textContent = quantity + (quantity === 1 ? " Item" : " Items");
+    if (sendOrderBtn) {
       sendOrderBtn.disabled = cart.length === 0;
     }
+  }
 
-    function cartItemHTML(item) {
-      return `
-        <article class="cart-item">
-          <div class="cart-item-image">
-            <img src="${item.image || DEFAULT_IMAGE}" alt="${item.name}" onerror="this.src='${DEFAULT_IMAGE}'">
+  function cartItemHTML(item, index) {
+    const image = item.image || DEFAULT_IMAGE;
+    const category = item.category || "Grocery Product";
+    const size = item.weight || item.size || "Pack";
+
+    return `
+      <article class="cart-item">
+        <div class="cart-item-image">
+          <img
+            src="${image}"
+            alt="${item.name || "Product"}"
+            onerror="this.src='${DEFAULT_IMAGE}'"
+          >
+        </div>
+
+        <div class="cart-item-content">
+          <span class="cart-item-category">${category}</span>
+          <h4 class="cart-item-name">${item.name || "Product"}</h4>
+          <p class="cart-item-size">${size}</p>
+
+          <div class="cart-item-actions">
+            <div class="quantity-control">
+              <button
+                type="button"
+                class="qty-btn"
+                data-action="decrease"
+                data-index="${index}"
+                aria-label="Decrease quantity"
+              >−</button>
+
+              <span class="qty-value">${item.quantity || 1}</span>
+
+              <button
+                type="button"
+                class="qty-btn"
+                data-action="increase"
+                data-index="${index}"
+                aria-label="Increase quantity"
+              >+</button>
+            </div>
+
+            <button
+              type="button"
+              class="remove-item-btn"
+              data-action="remove"
+              data-index="${index}"
+            >
+              Remove
+            </button>
           </div>
+        </div>
+      </article>
+    `;
+  }
 
-          <div class="cart-item-content">
-            <span class="cart-item-category">${item.category || "Grocery Product"}</span>
-            <h4 class="cart-item-name">${item.name}</h4>
-            <p class="cart-item-size">${item.size || ""}</p>
+  function renderCart() {
+    const cart = getCart();
 
-            <div class="cart-item-actions">
-              <div class="quantity-control">
-                <butt
+    if (!cartItemsList || !emptyCart) return;
+
+    if (cart.length === 0) {
+      cartItemsList.innerHTML = "";
+      emptyCart.style.display = "flex";
+
+      if (orderForm) {
+        orderForm.style.display = "none";
+      }
+
+      updateCartCount();
+      return;
+    }
+
+    emptyCart.style.display = "none";
+
+    if (orderForm) {
+      orderForm.style.display = "block";
+    }
+
+    cartItemsList.innerHTML = cart
+      .map(function (item, index) {
+        return cartItemHTML(item, index);
+      })
+      .join("");
+
+    updateCartCount();
+  }
+
+  function updateQuantity(index, change) {
+    const cart = getCart();
+
+    if (!cart[index]) return;
+
+    const currentQuantity = Number(cart[index].quantity || 1);
+    const newQuantity = currentQuantity + change;
+
+    if (newQuantity <= 0) {
+      cart.splice(index, 1);
+    } else {
+      cart[index].quantity = newQuantity;
+    }
+
+    saveCart(cart);
+    renderCart();
+  }
+
+  function removeCartItem(index) {
+    const cart = getCart();
+
+    if (!cart[index]) return;
+
+    cart.splice(index, 1);
+    saveCart(cart);
+    renderCart();
+  }
+
+  document.addEventListener("click", function (event) {
+    const button = event.target.closest("[data-action]");
+
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const index = Number(button.dataset.index);
+
+    if (action === "increase") {
+      updateQuantity(index, 1);
+    }
+
+    if (action === "decrease") {
+      updateQuantity(index, -1);
+    }
+
+    if (action === "remove") {
+      removeCartItem(index);
+    }
+  });
+
+  if (orderForm) {
+    orderForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      const customerName = document.getElementById("customerName")?.value.trim() || "";
+      const customerPhone = document.getElementById("customerPhone")?.value.trim() || "";
+      const customerAddress = document.getElementById("customerAddress")?.value.trim() || "";
+
+      if (!customerName || !customerPhone || !customerAddress) {
+        alert("Please fill your name, mobile number and delivery address.");
+        return;
+      }
+
+      const productLines = cart
+        .map(function (item, index) {
+          const quantity = item.quantity || 1;
+          const productName = item.name || "Product";
+          const productSize = item.weight || item.size || "Pack";
+
+          return (
+            (index + 1) +
+            ". " +
+            productName +
+            " - " +
+            productSize +
+            " × " +
+            quantity
+          );
+        })
+        .join("\n");
+
+      const message =
+        "Hello Central & Stores!%0A%0A" +
+        "*New Grocery Order*%0A%0A" +
+        "*Customer Name:* " +
+        encodeURIComponent(customerName) +
+        "%0A" +
+        "*Mobile:* " +
+        encodeURIComponent(customerPhone) +
+        "%0A" +
+        "*Address:* " +
+        encodeURIComponent(customerAddress) +
+        "%0A%0A" +
+        "*Products:*%0A" +
+        encodeURIComponent(productLines) +
+        "%0A%0A" +
+        "Please confirm availability and final price.";
+
+      window.open(
+        "https://wa.me/" + STORE_WHATSAPP + "?text=" + message,
+        "_blank"
+      );
+    });
+  }
+
+  renderCart();
+</script>
+</body>
+</html>
