@@ -1,317 +1,166 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.getElementById("allProductsGrid");
-  const count = document.getElementById("productsCount");
-  const title = document.getElementById("productsTitle");
-  const noProducts = document.getElementById("noProductsFound");
+const CART_KEY = "centralStoresCart";
+const ADD_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3";
 
-  if (!grid) {
-    console.log("ERROR: allProductsGrid id not found");
-    return;
+function playAddSound() {
+  try {
+    const sound = new Audio(ADD_SOUND_URL);
+    sound.volume = 0.22;
+    sound.play().catch(() => {});
+  } catch (error) {}
+}
+
+const products = [
+  // RICE & FLOURS — 15
+  { id: 1, name: "Ponni Boiled Rice", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80" },
+  { id: 2, name: "Ponni Raw Rice", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80" },
+  { id: 3, name: "Premium Basmati Rice", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80" },
+  { id: 4, name: "Jeera Samba Rice", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80" },
+  { id: 5, name: "Idli Rice", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80" },
+  { id: 6, name: "Brown Rice", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80" },
+  { id: 7, name: "Ragi Flour", category: "Rice & Flours", size: "500 g Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 8, name: "Wheat Flour", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 9, name: "Maida Flour", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 10, name: "Rice Flour", category: "Rice & Flours", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 11, name: "Besan Flour", category: "Rice & Flours", size: "500 g Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 12, name: "Corn Flour", category: "Rice & Flours", size: "500 g Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 13, name: "Health Mix Powder", category: "Rice & Flours", size: "500 g Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 14, name: "Appam Flour", category: "Rice & Flours", size: "500 g Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+  { id: 15, name: "Dosa Mix", category: "Rice & Flours", size: "500 g Pack", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" },
+
+  // PULSES & DALS — 15
+  { id: 16, name: "Toor Dal", category: "Pulses & Dals", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 17, name: "Urad Dal", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 18, name: "Chana Dal", category: "Pulses & Dals", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 19, name: "Moong Dal", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 20, name: "Masoor Dal", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 21, name: "Green Gram", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 22, name: "White Chana", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 23, name: "Black Chana", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 24, name: "Rajma", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 25, name: "Kabuli Chana", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 26, name: "Horse Gram", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 27, name: "Cowpeas", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 28, name: "Soya Chunks", category: "Pulses & Dals", size: "200 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 29, name: "Roasted Gram", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+  { id: 30, name: "Fried Gram", category: "Pulses & Dals", size: "500 g Pack", image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80" },
+
+  // OILS & GHEE — 10
+  { id: 31, name: "Sunflower Oil", category: "Oils & Ghee", size: "1 Litre Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+  { id: 32, name: "Groundnut Oil", category: "Oils & Ghee", size: "1 Litre Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+  { id: 33, name: "Coconut Oil", category: "Oils & Ghee", size: "1 Litre Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+  { id: 34, name: "Gingelly Oil", category: "Oils & Ghee", size: "500 ml Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+  { id: 35, name: "Mustard Oil", category: "Oils & Ghee", size: "1 Litre Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+  { id: 36, name: "Cow Ghee", category: "Oils & Ghee", size: "500 ml Pack", image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=700&q=80" },
+  { id: 37, name: "Pure Ghee", category: "Oils & Ghee", size: "1 Litre Pack", image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=700&q=80" },
+  { id: 38, name: "Vanaspati", category: "Oils & Ghee", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=700&q=80" },
+  { id: 39, name: "Olive Oil", category: "Oils & Ghee", size: "500 ml Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+  { id: 40, name: "Rice Bran Oil", category: "Oils & Ghee", size: "1 Litre Pack", image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80" },
+
+  // MASALAS — 15
+  { id: 41, name: "Turmeric Powder", category: "Masalas", size: "500 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 42, name: "Chilli Powder", category: "Masalas", size: "500 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 43, name: "Coriander Powder", category: "Masalas", size: "500 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 44, name: "Garam Masala", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 45, name: "Sambar Powder", category: "Masalas", size: "200 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 46, name: "Rasam Powder", category: "Masalas", size: "200 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 47, name: "Chicken Masala", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 48, name: "Mutton Masala", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 49, name: "Biryani Masala", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 50, name: "Pepper Powder", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 51, name: "Cumin Seeds", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 52, name: "Mustard Seeds", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 53, name: "Fennel Seeds", category: "Masalas", size: "100 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 54, name: "Cardamom", category: "Masalas", size: "50 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+  { id: 55, name: "Cloves", category: "Masalas", size: "50 g Pack", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80" },
+
+  // BEVERAGES — 10
+  { id: 56, name: "Tata Tea Gold", category: "Beverages", size: "500 g Pack", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=700&q=80" },
+  { id: 57, name: "Brooke Bond Tea", category: "Beverages", size: "500 g Pack", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=700&q=80" },
+  { id: 58, name: "Instant Coffee", category: "Beverages", size: "100 g Jar", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" },
+  { id: 59, name: "Filter Coffee Powder", category: "Beverages", size: "250 g Pack", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" },
+  { id: 60, name: "Malted Health Drink", category: "Beverages", size: "500 g Pack", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80" },
+  { id: 61, name: "Chocolate Health Drink", category: "Beverages", size: "500 g Pack", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80" },
+  { id: 62, name: "Lemon Drink Powder", category: "Beverages", size: "200 g Pack", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=700&q=80" },
+  { id: 63, name: "Orange Drink Powder", category: "Beverages", size: "200 g Pack", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=700&q=80" },
+  { id: 64, name: "Rose Milk Mix", category: "Beverages", size: "200 g Pack", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=700&q=80" },
+  { id: 65, name: "Badam Drink Mix", category: "Beverages", size: "200 g Pack", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80" },
+
+  // SNACKS — 15
+  { id: 66, name: "Potato Chips", category: "Snacks", size: "150 g Pack", image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=700&q=80" },
+  { id: 67, name: "Banana Chips", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=700&q=80" },
+  { id: 68, name: "Mixture", category: "Snacks", size: "250 g Pack", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80" },
+  { id: 69, name: "Murukku", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80" },
+  { id: 70, name: "Seedai", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80" },
+  { id: 71, name: "Peanut Candy", category: "Snacks", size: "150 g Pack", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80" },
+  { id: 72, name: "Marie Biscuits", category: "Snacks", size: "250 g Pack", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80" },
+  { id: 73, name: "Cream Biscuits", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80" },
+  { id: 74, name: "Salt Biscuits", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80" },
+  { id: 75, name: "Rusk", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80" },
+  { id: 76, name: "Popcorn", category: "Snacks", size: "100 g Pack", image: "https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=80" },
+  { id: 77, name: "Salted Peanuts", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1567892737950-30c4e1c5f5b5?auto=format&fit=crop&w=700&q=80" },
+  { id: 78, name: "Cashew Nuts", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1567892737950-30c4e1c5f5b5?auto=format&fit=crop&w=700&q=80" },
+  { id: 79, name: "Almonds", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1567892737950-30c4e1c5f5b5?auto=format&fit=crop&w=700&q=80" },
+  { id: 80, name: "Raisins", category: "Snacks", size: "200 g Pack", image: "https://images.unsplash.com/photo-1567892737950-30c4e1c5f5b5?auto=format&fit=crop&w=700&q=80" },
+
+  // HOUSEHOLD — 20
+  { id: 81, name: "Garbage Bags", category: "Household", size: "1 Roll", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 82, name: "Aluminium Foil", category: "Household", size: "1 Roll", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 83, name: "Cling Film", category: "Household", size: "1 Roll", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 84, name: "Tissue Paper", category: "Household", size: "1 Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 85, name: "Kitchen Towel", category: "Household", size: "1 Roll", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 86, name: "Dishwash Bar", category: "Household", size: "200 g Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 87, name: "Dishwash Liquid", category: "Household", size: "500 ml Bottle", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 88, name: "Detergent Powder", category: "Household", size: "1 kg Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 89, name: "Detergent Bar", category: "Household", size: "250 g Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 90, name: "Floor Cleaner", category: "Household", size: "1 Litre Bottle", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 91, name: "Toilet Cleaner", category: "Household", size: "500 ml Bottle", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 92, name: "Hand Wash", category: "Household", size: "250 ml Bottle", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 93, name: "Bath Soap", category: "Household", size: "3 Soap Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 94, name: "Shampoo Sachet Pack", category: "Household", size: "1 Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 95, name: "Toothpaste", category: "Household", size: "150 g Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 96, name: "Toothbrush", category: "Household", size: "1 Piece", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 97, name: "Mosquito Coil", category: "Household", size: "10 Coils", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 98, name: "Match Box", category: "Household", size: "1 Box", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 99, name: "Agarbathi", category: "Household", size: "1 Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" },
+  { id: 100, name: "Camphor", category: "Household", size: "100 g Pack", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=80" }
+];
+
+const productsGrid = document.getElementById("productsGrid");
+const productCount = document.getElementById("productCount");
+const productsHeading = document.getElementById("productsHeading");
+const noProducts = document.getElementById("noProducts");
+const productSearch = document.getElementById("productSearch");
+const searchClear = document.getElementById("searchClear");
+const bottomSearchBtn = document.getElementById("bottomSearchBtn");
+const cartCount = document.getElementById("cartCount");
+const bottomCartCount = document.getElementById("bottomCartCount");
+const filterButtons = document.querySelectorAll(".filter-btn");
+const openMenu = document.getElementById("openMenu");
+const closeMenu = document.getElementById("closeMenu");
+const sideMenu = document.getElementById("sideMenu");
+const menuOverlay = document.getElementById("menuOverlay");
+
+let selectedCategory = "All";
+let searchTerm = "";
+
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  } catch (error) {
+    return [];
   }
+}
 
-  const DEFAULT_IMAGE =
-    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=85";
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
 
-  const products = [
-    ["Ponni Boiled Rice", "Rice & Flours", "1 kg Pack"],
-    ["Ponni Raw Rice", "Rice & Flours", "1 kg Pack"],
-    ["Basmati Rice", "Rice & Flours", "1 kg Pack"],
-    ["Jeera Samba Rice", "Rice & Flours", "1 kg Pack"],
-    ["Idli Rice", "Rice & Flours", "1 kg Pack"],
-    ["Sona Masoori Rice", "Rice & Flours", "1 kg Pack"],
-    ["Brown Rice", "Rice & Flours", "1 kg Pack"],
-    ["Red Rice", "Rice & Flours", "1 kg Pack"],
-    ["Wheat Flour", "Rice & Flours", "1 kg Pack"],
-    ["Maida Flour", "Rice & Flours", "500 g Pack"],
-    ["Ragi Flour", "Rice & Flours", "500 g Pack"],
-    ["Rice Flour", "Rice & Flours", "500 g Pack"],
-    ["Gram Flour Besan", "Rice & Flours", "500 g Pack"],
-    ["Corn Flour", "Rice & Flours", "500 g Pack"],
-    ["Appalam Flour", "Rice & Flours", "500 g Pack"],
+function totalQuantity(cart) {
+  return cart.reduce((total, item) => total + (item.quantity || 1), 0);
+}
 
-    ["Toor Dal", "Pulses & Dals", "1 kg Pack"],
-    ["Moong Dal", "Pulses & Dals", "500 g Pack"],
-    ["Urad Dal", "Pulses & Dals", "500 g Pack"],
-    ["Chana Dal", "Pulses & Dals", "500 g Pack"],
-    ["Masoor Dal", "Pulses & Dals", "500 g Pack"],
-    ["Green Gram", "Pulses & Dals", "500 g Pack"],
-    ["Black Gram", "Pulses & Dals", "500 g Pack"],
-    ["White Chana", "Pulses & Dals", "500 g Pack"],
-    ["Black Chana", "Pulses & Dals", "500 g Pack"],
-    ["Rajma", "Pulses & Dals", "500 g Pack"],
-    ["Cowpeas", "Pulses & Dals", "500 g Pack"],
-    ["Horse Gram", "Pulses & Dals", "500 g Pack"],
+function updateCartCount() {
+  const quantity = totalQuantity(getCart());
 
-    ["Sunflower Oil", "Oils & Ghee", "1 Litre Pack"],
-    ["Groundnut Oil", "Oils & Ghee", "1 Litre Pack"],
-    ["Coconut Oil", "Oils & Ghee", "500 ml Pack"],
-    ["Gingelly Oil", "Oils & Ghee", "500 ml Pack"],
-    ["Mustard Oil", "Oils & Ghee", "1 Litre Pack"],
-    ["Olive Oil", "Oils & Ghee", "500 ml Pack"],
-    ["Cow Ghee", "Oils & Ghee", "500 ml Pack"],
-    ["Desi Ghee", "Oils & Ghee", "1 Litre Pack"],
-
-    ["Turmeric Powder", "Masalas & Spices", "200 g Pack"],
-    ["Chilli Powder", "Masalas & Spices", "200 g Pack"],
-    ["Coriander Powder", "Masalas & Spices", "200 g Pack"],
-    ["Sambar Powder", "Masalas & Spices", "200 g Pack"],
-    ["Rasam Powder", "Masalas & Spices", "100 g Pack"],
-    ["Garam Masala", "Masalas & Spices", "100 g Pack"],
-    ["Chicken Masala", "Masalas & Spices", "100 g Pack"],
-    ["Mutton Masala", "Masalas & Spices", "100 g Pack"],
-    ["Biryani Masala", "Masalas & Spices", "100 g Pack"],
-    ["Black Pepper", "Masalas & Spices", "100 g Pack"],
-    ["Cumin Seeds", "Masalas & Spices", "100 g Pack"],
-    ["Mustard Seeds", "Masalas & Spices", "100 g Pack"],
-
-    ["White Sugar", "Essentials", "1 kg Pack"],
-    ["Jaggery", "Essentials", "500 g Pack"],
-    ["Iodized Salt", "Essentials", "1 kg Pack"],
-    ["Rock Salt", "Essentials", "1 kg Pack"],
-    ["Tamarind", "Essentials", "500 g Pack"],
-    ["Vermicelli", "Essentials", "400 g Pack"],
-    ["Sooji Rava", "Essentials", "500 g Pack"],
-    ["Poha Aval", "Essentials", "500 g Pack"],
-    ["Sabudana", "Essentials", "500 g Pack"],
-
-    ["Potato Chips", "Snacks", "100 g Pack"],
-    ["Banana Chips", "Snacks", "150 g Pack"],
-    ["Mixture", "Snacks", "200 g Pack"],
-    ["Murukku", "Snacks", "200 g Pack"],
-    ["Marie Biscuits", "Snacks", "250 g Pack"],
-    ["Cream Biscuits", "Snacks", "200 g Pack"],
-    ["Salt Biscuits", "Snacks", "200 g Pack"],
-    ["Peanut Candy", "Snacks", "100 g Pack"],
-    ["Roasted Peanuts", "Snacks", "200 g Pack"],
-    ["Rusk Biscuits", "Snacks", "200 g Pack"],
-
-    ["Tea Powder", "Beverages", "250 g Pack"],
-    ["Filter Coffee", "Beverages", "250 g Pack"],
-    ["Instant Coffee", "Beverages", "100 g Jar"],
-    ["Health Drink", "Beverages", "500 g Pack"],
-    ["Malted Drink", "Beverages", "500 g Pack"],
-    ["Lemon Drink Powder", "Beverages", "200 g Pack"],
-    ["Orange Drink Powder", "Beverages", "200 g Pack"],
-    ["Rose Milk Mix", "Beverages", "200 g Pack"],
-    ["Badam Drink Mix", "Beverages", "200 g Pack"],
-    ["Soft Drink", "Beverages", "1 Litre Bottle"],
-    ["Packaged Drinking Water", "Beverages", "1 Litre Bottle"],
-
-    ["Bath Soap", "Household", "Pack of 4"],
-    ["Washing Soap", "Household", "Pack of 4"],
-    ["Detergent Powder", "Household", "1 kg Pack"],
-    ["Dishwash Bar", "Household", "Pack of 3"],
-    ["Dishwash Liquid", "Household", "500 ml Bottle"],
-    ["Floor Cleaner", "Household", "1 Litre Bottle"],
-    ["Toilet Cleaner", "Household", "500 ml Bottle"],
-    ["Hand Wash", "Household", "250 ml Bottle"],
-    ["Toothpaste", "Household", "150 g Pack"],
-    ["Toothbrush", "Household", "Pack of 2"],
-    ["Match Box", "Household", "Pack of 10"],
-    ["Mosquito Coil", "Household", "Pack of 10"],
-    ["Garbage Bags", "Household", "Pack of 30"],
-    ["Aluminium Foil", "Household", "9 Metres Roll"]
-  ].map((item, index) => ({
-    id: index + 1,
-    name: item[0],
-    category: item[1],
-    size: item[2],
-    image: DEFAULT_IMAGE
-  }));
-
-  let selectedCategory = "All";
-  let searchText = "";
-
-  function getCart() {
-    try {
-      return JSON.parse(localStorage.getItem("centralStoresCart")) || [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveCart(cart) {
-    localStorage.setItem("centralStoresCart", JSON.stringify(cart));
-  }
-
-  function updateCartCount() {
-    const cart = getCart();
-    const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-
-    const topCount = document.getElementById("cartCount");
-    const bottomCount = document.getElementById("bottomCartCount");
-
-    if (topCount) topCount.textContent = total;
-    if (bottomCount) bottomCount.textContent = total;
-  }
-
-  function addToCart(productId) {
-    const product = products.find((item) => item.id === productId);
-    if (!product) return;
-
-    const cart = getCart();
-    const found = cart.find((item) => item.id === productId);
-
-    if (found) {
-      found.quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    saveCart(cart);
-    updateCartCount();
-  }
-
-  function filteredProducts() {
-    return products.filter((product) => {
-      const categoryOK =
-        selectedCategory === "All" || product.category === selectedCategory;
-
-      const searchOK = `${product.name} ${product.category} ${product.size}`
-        .toLowerCase()
-        .includes(searchText.toLowerCase());
-
-      return categoryOK && searchOK;
-    });
-  }
-
-  function createCard(product) {
-    return `
-      <article class="product-card">
-        <button class="product-wishlist-btn" type="button" aria-label="Wishlist">
-          ♡
-        </button>
-
-        <div class="product-image-wrap">
-          <img src="${product.image}" alt="${product.name}" loading="lazy">
-        </div>
-
-        <div class="product-info">
-          <span class="product-category-name">${product.category}</span>
-          <h3 class="product-name">${product.name}</h3>
-          <p class="product-size">${product.size}</p>
-
-          <div class="product-card-bottom">
-            <div class="product-price-call">
-              <span>☎</span>
-              <span>Price on<br>Call</span>
-            </div>
-
-            <button class="product-add-btn" type="button" data-id="${product.id}">
-              🛒 Add
-            </button>
-          </div>
-        </div>
-      </article>
-    `;
-  }
-
-  function renderProducts() {
-    const list = filteredProducts();
-
-    if (count) count.textContent = list.length;
-
-    if (title) {
-      if (searchText) {
-        title.textContent = "Search Results";
-      } else if (selectedCategory !== "All") {
-        title.textContent = selectedCategory;
-      } else {
-        title.textContent = "All Daily Essentials";
-      }
-    }
-
-    if (list.length === 0) {
-      grid.innerHTML = "";
-      if (noProducts) noProducts.style.display = "block";
-      return;
-    }
-
-    if (noProducts) noProducts.style.display = "none";
-
-    grid.innerHTML = list.map(createCard).join("");
-
-    document.querySelectorAll(".product-add-btn").forEach((button) => {
-      button.addEventListener("click", () => {
-        addToCart(Number(button.dataset.id));
-
-        const oldText = button.innerHTML;
-        button.innerHTML = "✓ Added";
-
-        setTimeout(() => {
-          button.innerHTML = oldText;
-        }, 900);
-      });
-    });
-
-    document.querySelectorAll(".product-wishlist-btn").forEach((button) => {
-      button.addEventListener("click", () => {
-        button.classList.toggle("active");
-        button.textContent = button.classList.contains("active") ? "♥" : "♡";
-      });
-    });
-  }
-
-  document.querySelectorAll(".category-filter-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      selectedCategory = button.dataset.category || "All";
-
-      document.querySelectorAll(".category-filter-btn").forEach((btn) => {
-        btn.classList.remove("active");
-      });
-
-      button.classList.add("active");
-      renderProducts();
-    });
-  });
-
-  const searchInput = document.getElementById("productSearch");
-  const clearSearch = document.getElementById("searchClear");
-
-  if (searchInput) {
-    searchInput.addEventListener("input", () => {
-      searchText = searchInput.value.trim();
-
-      if (clearSearch) {
-        clearSearch.classList.toggle("show", searchText.length > 0);
-      }
-
-      renderProducts();
-    });
-  }
-
-  if (clearSearch) {
-    clearSearch.addEventListener("click", () => {
-      if (!searchInput) return;
-
-      searchInput.value = "";
-      searchText = "";
-      clearSearch.classList.remove("show");
-      renderProducts();
-      searchInput.focus();
-    });
-  }
-
-  const resetButton = document.getElementById("resetProductsBtn");
-
-  if (resetButton) {
-    resetButton.addEventListener("click", () => {
-      selectedCategory = "All";
-      searchText = "";
-
-      if (searchInput) searchInput.value = "";
-
-      document.querySelectorAll(".category-filter-btn").forEach((button) => {
-        button.classList.toggle(
-          "active",
-          button.dataset.category === "All"
-        );
-      });
-
-      renderProducts();
-    });
-  }
-
-  updateCartCount();
-  renderProducts();
-});
+  if (cartCount) cartCount.textContent = quantity;
+   
