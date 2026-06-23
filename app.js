@@ -1,67 +1,64 @@
 /* =========================================================
    CENTRAL & STORES - APP.JS
-   Product Grid + Search + Category + Cart
-========================================================= */
+   Products Grid + Price + Cart + Search + Categories
+   ========================================================= */
 
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
   /* =========================================================
      SETTINGS
-  ========================================================= */
+     ========================================================= */
 
   const CART_KEY = "centralStoresCart";
 
+  const FALLBACK_IMAGE =
+    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80";
+
   /* =========================================================
-     PAGE ELEMENTS
-  ========================================================= */
+     GET PAGE ELEMENTS
+     ========================================================= */
 
   const productsGrid = document.getElementById("productsGrid");
   const productCount = document.getElementById("productCount");
   const productsTitle = document.getElementById("productsTitle");
-  const productsEmpty = document.getElementById("productsEmptyState");
+  const productsEmptyState = document.getElementById("productsEmptyState");
 
   const productSearch = document.getElementById("productSearch");
   const searchClearBtn = document.getElementById("searchClearBtn");
-
-  const categoryButtons = document.querySelectorAll(".category-btn");
   const resetProductsBtn = document.getElementById("resetProductsBtn");
 
-  const cartBadges = document.querySelectorAll(
-    "#cartCount, #bottomCartCount, .cart-badge"
-  );
+  const categoryButtons = document.querySelectorAll(".category-btn");
+
+  const cartCount = document.getElementById("cartCount");
+  const bottomCartCount = document.getElementById("bottomCartCount");
 
   /* =========================================================
-     SAFETY CHECK
-  ========================================================= */
-
-  if (!productsGrid) {
-    console.log("Products grid not found. Check id='productsGrid' in products.html");
-    return;
-  }
+     CHECK PRODUCTS.JS
+     products.js must contain:
+     const products = [ ... ];
+     ========================================================= */
 
   if (typeof products === "undefined" || !Array.isArray(products)) {
-    console.log("Products data not found. Check products.js file.");
+    console.error("products.js not loaded or products array missing.");
     return;
   }
 
-  /* =========================================================
-     STATE
-  ========================================================= */
-
-  let activeCategory = "All Products";
-  let searchText = "";
+  if (!productsGrid) {
+    console.error("productsGrid not found in products.html");
+    return;
+  }
 
   /* =========================================================
      CART FUNCTIONS
-  ========================================================= */
+     ========================================================= */
 
   function getCart() {
     try {
       const savedCart = localStorage.getItem(CART_KEY);
       return savedCart ? JSON.parse(savedCart) : [];
     } catch (error) {
-      console.log("Cart loading error:", error);
+      console.error("Cart loading error:", error);
       return [];
     }
   }
@@ -74,16 +71,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const cart = getCart();
 
     return cart.reduce(function (total, item) {
-      return total + (Number(item.quantity) || 0);
+      return total + (Number(item.quantity) || 1);
     }, 0);
   }
 
   function updateCartBadges() {
-    const totalItems = getCartTotalQuantity();
+    const totalQuantity = getCartTotalQuantity();
 
-    cartBadges.forEach(function (badge) {
-      badge.textContent = totalItems;
-    });
+    if (cartCount) {
+      cartCount.textContent = totalQuantity;
+      cartCount.style.display = totalQuantity > 0 ? "flex" : "none";
+    }
+
+    if (bottomCartCount) {
+      bottomCartCount.textContent = totalQuantity;
+      bottomCartCount.style.display = totalQuantity > 0 ? "flex" : "none";
+    }
   }
 
   function addToCart(productId, button) {
@@ -107,8 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
         name: selectedProduct.name,
         category: selectedProduct.category,
         weight: selectedProduct.weight,
-        price: selectedProduct.price,
-        image: selectedProduct.image,
+        price: Number(selectedProduct.price) || 0,
+        image: selectedProduct.image || FALLBACK_IMAGE,
         quantity: 1
       });
     }
@@ -117,21 +120,25 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCartBadges();
 
     if (button) {
-      const originalText = button.innerHTML;
+      const oldContent = button.innerHTML;
 
-      button.innerHTML = "Added";
+      button.innerHTML = `
+        <span class="add-cart-icon">✓</span>
+        <span>Added</span>
+      `;
+
       button.classList.add("added");
 
       setTimeout(function () {
-        button.innerHTML = originalText;
+        button.innerHTML = oldContent;
         button.classList.remove("added");
-      }, 1000);
+      }, 1100);
     }
   }
 
   /* =========================================================
-     PRODUCT CARD TEMPLATE
-  ========================================================= */
+     PRICE FORMAT
+     ========================================================= */
 
   function formatPrice(price) {
     return new Intl.NumberFormat("en-IN", {
@@ -141,96 +148,96 @@ document.addEventListener("DOMContentLoaded", function () {
     }).format(Number(price) || 0);
   }
 
+  /* =========================================================
+     PRODUCT CARD TEMPLATE
+     ========================================================= */
+
   function productCardTemplate(product) {
-    const safeImage =
-      product.image && product.image.trim() !== ""
-        ? product.image
-        : "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80";
+    const imageUrl = product.image && product.image.trim()
+      ? product.image
+      : FALLBACK_IMAGE;
 
     return `
       <article class="product-card">
+
         <div class="product-image">
+
           <img
-            src="${safeImage}"
+            src="${imageUrl}"
             alt="${product.name}"
             loading="lazy"
-            onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80'"
+            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
           >
 
           <button
             type="button"
             class="product-wishlist-btn"
-            aria-label="Save ${product.name}"
-          >♡</button>
+            aria-label="Add ${product.name} to wishlist"
+          >
+            ♡
+          </button>
+
         </div>
 
         <div class="product-details">
-          <span class="product-category">${product.category}</span>
+
+          <p class="product-category">
+            ${product.category || "Grocery Product"}
+          </p>
 
           <h3>${product.name}</h3>
 
-          <p class="product-weight">${product.weight}</p>
+          <p class="product-weight">
+            ${product.weight || "1 Pack"}
+          </p>
 
-          <div class="product-card-bottom">
-            <strong class="product-price">${formatPrice(product.price)}</strong>
-
-            <button
-              type="button"
-              class="add-cart-btn"
-              data-product-id="${product.id}"
-              aria-label="Add ${product.name} to cart"
-            >Add</button>
+          <div class="product-price-wrap">
+            <span class="product-price-label">PRICE</span>
+            <p class="product-price">
+              ${formatPrice(product.price)}
+            </p>
           </div>
+
+          <button
+            type="button"
+            class="add-cart-btn"
+            data-product-id="${product.id}"
+          >
+            <span class="add-cart-icon">+</span>
+            <span>Add</span>
+          </button>
+
         </div>
+
       </article>
     `;
   }
 
   /* =========================================================
-     FILTER FUNCTIONS
-  ========================================================= */
-
-  function getFilteredProducts() {
-    return products.filter(function (product) {
-      const categoryMatch =
-        activeCategory === "All Products" ||
-        product.category === activeCategory;
-
-      const searchableText = [
-        product.name,
-        product.category,
-        product.weight
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      const searchMatch = searchableText.includes(searchText.toLowerCase());
-
-      return categoryMatch && searchMatch;
-    });
-  }
+     RENDER PRODUCTS
+     ========================================================= */
 
   function renderProducts(productList) {
     productsGrid.innerHTML = "";
 
     if (!productList || productList.length === 0) {
-      if (productCount) productCount.textContent = "0";
+      if (productCount) {
+        productCount.textContent = "0";
+      }
 
-      if (productsEmpty) {
-        productsEmpty.hidden = false;
+      if (productsEmptyState) {
+        productsEmptyState.hidden = false;
       }
 
       return;
     }
 
-    if (productsEmpty) {
-      productsEmpty.hidden = true;
+    if (productsEmptyState) {
+      productsEmptyState.hidden = true;
     }
 
     productsGrid.innerHTML = productList
-      .map(function (product) {
-        return productCardTemplate(product);
-      })
+      .map(productCardTemplate)
       .join("");
 
     if (productCount) {
@@ -238,23 +245,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function refreshProducts() {
-    const filteredProducts = getFilteredProducts();
+  /* =========================================================
+     CATEGORY FILTER
+     ========================================================= */
 
-    renderProducts(filteredProducts);
+  function filterByCategory(category) {
+    if (!category || category === "All Products") {
+      if (productsTitle) {
+        productsTitle.textContent = "All Daily Essentials";
+      }
+
+      renderProducts(products);
+      return;
+    }
+
+    const filteredProducts = products.filter(function (product) {
+      return product.category === category;
+    });
 
     if (productsTitle) {
-      if (activeCategory === "All Products") {
-        productsTitle.textContent = "All Daily Essentials";
-      } else {
-        productsTitle.textContent = activeCategory;
-      }
+      productsTitle.textContent = category;
     }
+
+    renderProducts(filteredProducts);
   }
 
   /* =========================================================
-     PRODUCT GRID EVENTS
-  ========================================================= */
+     PRODUCT GRID CLICK EVENTS
+     ========================================================= */
 
   productsGrid.addEventListener("click", function (event) {
     const addButton = event.target.closest(".add-cart-btn");
@@ -269,52 +287,98 @@ document.addEventListener("DOMContentLoaded", function () {
     if (wishlistButton) {
       wishlistButton.classList.toggle("active");
 
-      if (wishlistButton.classList.contains("active")) {
-        wishlistButton.textContent = "♥";
-      } else {
-        wishlistButton.textContent = "♡";
-      }
+      wishlistButton.textContent = wishlistButton.classList.contains("active")
+        ? "♥"
+        : "♡";
     }
   });
 
   /* =========================================================
-     SEARCH EVENTS
-  ========================================================= */
+     SEARCH
+     ========================================================= */
 
   if (productSearch) {
     productSearch.addEventListener("input", function (event) {
-      searchText = event.target.value.trim();
+      const searchValue = event.target.value.trim().toLowerCase();
 
-      if (searchClearBtn) {
-        searchClearBtn.hidden = searchText.length === 0;
+      const filteredProducts = products.filter(function (product) {
+        const searchableText = [
+          product.name,
+          product.category,
+          product.weight
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return searchableText.includes(searchValue);
+      });
+
+      if (productsTitle) {
+        productsTitle.textContent = searchValue
+          ? "Search Results"
+          : "All Daily Essentials";
       }
 
-      refreshProducts();
-    });
-  }
-
-  if (searchClearBtn) {
-    searchClearBtn.addEventListener("click", function () {
-      searchText = "";
-
-      if (productSearch) {
-        productSearch.value = "";
-        productSearch.focus();
-      }
-
-      searchClearBtn.hidden = true;
-
-      refreshProducts();
+      renderProducts(filteredProducts);
     });
   }
 
   /* =========================================================
-     CATEGORY BUTTON EVENTS
-  ========================================================= */
+     SEARCH CLEAR BUTTON
+     ========================================================= */
+
+  if (searchClearBtn && productSearch) {
+    searchClearBtn.addEventListener("click", function () {
+      productSearch.value = "";
+
+      if (productsTitle) {
+        productsTitle.textContent = "All Daily Essentials";
+      }
+
+      renderProducts(products);
+      productSearch.focus();
+    });
+  }
+
+  /* =========================================================
+     RESET PRODUCTS BUTTON
+     ========================================================= */
+
+  if (resetProductsBtn) {
+    resetProductsBtn.addEventListener("click", function () {
+      if (productSearch) {
+        productSearch.value = "";
+      }
+
+      if (productsTitle) {
+        productsTitle.textContent = "All Daily Essentials";
+      }
+
+      categoryButtons.forEach(function (button) {
+        button.classList.remove("active");
+      });
+
+      const allProductsButton = document.querySelector(
+        '.category-btn[data-category="All Products"]'
+      );
+
+      if (allProductsButton) {
+        allProductsButton.classList.add("active");
+      }
+
+      renderProducts(products);
+    });
+  }
+
+  /* =========================================================
+     CATEGORY BUTTONS
+     HTML example:
+     <button class="category-btn active" data-category="All Products">
+     ========================================================= */
 
   categoryButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-      activeCategory = button.dataset.category || button.textContent.trim();
+      const selectedCategory = button.dataset.category;
 
       categoryButtons.forEach(function (item) {
         item.classList.remove("active");
@@ -322,46 +386,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
       button.classList.add("active");
 
-      refreshProducts();
-    });
-  });
-
-  /* =========================================================
-     RESET PRODUCTS BUTTON
-  ========================================================= */
-
-  if (resetProductsBtn) {
-    resetProductsBtn.addEventListener("click", function () {
-      activeCategory = "All Products";
-      searchText = "";
-
       if (productSearch) {
         productSearch.value = "";
       }
 
-      if (searchClearBtn) {
-        searchClearBtn.hidden = true;
-      }
-
-      categoryButtons.forEach(function (button) {
-        const categoryName =
-          button.dataset.category || button.textContent.trim();
-
-        button.classList.remove("active");
-
-        if (categoryName === "All Products") {
-          button.classList.add("active");
-        }
-      });
-
-      refreshProducts();
+      filterByCategory(selectedCategory);
     });
-  }
+  });
 
   /* =========================================================
      INITIAL LOAD
-  ========================================================= */
+     ========================================================= */
 
-  refreshProducts();
+  renderProducts(products);
   updateCartBadges();
-});
+}); in 
