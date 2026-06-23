@@ -755,6 +755,36 @@ svg {
   font-size: 11px;
   font-weight: 700;
 }
+     font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(245, 185, 0, 0.28);
+  cursor: pointer;
+}
+
+.add-cart-btn::before,
+.add-to-cart-btn::before {
+  content: "+";
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.add-cart-btn.added,
+.add-to-cart-btn.added {
+  background: #161616;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.add-cart-btn.added::before,
+.add-to-cart-btn.added::before {
+  content: "✓";
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/*
 
 /* =========================================================
    ORDER CONFIRMATION SECTION
