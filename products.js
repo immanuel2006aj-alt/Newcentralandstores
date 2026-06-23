@@ -1,156 +1,16 @@
-/* =====================================================
-   CENTRAL & STORES - PRODUCTS PAGE
-   104 PRODUCTS + UNIQUE PRODUCT IMAGES + CART
-   ===================================================== */
+/* =========================================================
+   CENTRAL & STORES — PRODUCTS.JS
+   Product catalogue + automatic Pexels images + cart
+   ========================================================= */
 
-/* =====================================================
-   PRODUCT IMAGE SYSTEM
-   Each product-ku separate working default image.
-   Image load fail aana category fallback image varum.
-   ===================================================== */
+const IMAGE_API_URL = "https://central-stores-image-api.onrender.com";
 
-const categoryFallbackImages = {
-  "Rice & Flours": "https://images.unsplash.com/photo-1586208958839-06c17cacdf08?auto=format&fit=crop&w=700&q=80",
-  "Pulses & Dals": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=700&q=80",
-  "Oils & Ghee": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=700&q=80",
-  "Masalas & Spices": "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80",
-  "Essentials": "https://images.unsplash.com/photo-1580915411954-282cb1b0d780?auto=format&fit=crop&w=700&q=80",
-  "Snacks": "https://images.unsplash.com/photo-1621939514649-280e2aa1d0e1?auto=format&fit=crop&w=700&q=80",
-  "Beverages": "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=700&q=80",
-  "Household": "https://images.unsplash.com/photo-1583947582886-f40ec95dd752?auto=format&fit=crop&w=700&q=80"
-};
-
-/* Product-specific image search keywords */
-const productImageKeywords = {
-  "Ponni Boiled Rice": "ponni boiled rice",
-  "Ponni Raw Rice": "raw rice",
-  "Basmati Rice": "basmati rice",
-  "Jeera Samba Rice": "jeera samba rice",
-  "Idli Rice": "idli rice",
-  "Sona Masoori Rice": "sona masoori rice",
-  "Brown Rice": "brown rice",
-  "Red Rice": "red rice",
-  "Wheat Flour": "wheat flour",
-  "Maida Flour": "maida flour",
-  "Ragi Flour": "ragi flour",
-  "Rice Flour": "rice flour",
-  "Gram Flour Besan": "besan flour",
-  "Corn Flour": "corn flour",
-  "Appalam Flour": "appalam papad",
-  "Aval Poha": "poha aval",
-
-  "Toor Dal": "toor dal",
-  "Urad Dal Whole": "urad dal",
-  "Urad Dal Split": "split urad dal",
-  "Moong Dal": "moong dal",
-  "Chana Dal": "chana dal",
-  "Masoor Dal": "masoor dal",
-  "Green Gram": "green gram",
-  "Black Chana": "black chana",
-  "White Chana": "white chickpeas",
-  "Rajma": "rajma kidney beans",
-  "Cowpeas": "cowpeas beans",
-  "Double Beans": "double beans",
-  "Horse Gram": "horse gram",
-  "Fried Gram": "fried gram dal",
-
-  "Sunflower Oil": "sunflower oil bottle",
-  "Groundnut Oil": "groundnut oil bottle",
-  "Gingelly Oil": "sesame oil bottle",
-  "Coconut Oil": "coconut oil bottle",
-  "Mustard Oil": "mustard oil bottle",
-  "Rice Bran Oil": "rice bran oil bottle",
-  "Palm Oil": "palm oil bottle",
-  "Cow Ghee": "cow ghee jar",
-  "Vanaspati Ghee": "vanaspati ghee",
-  "Butter": "butter pack",
-
-  "Turmeric Powder": "turmeric powder",
-  "Chilli Powder": "red chilli powder",
-  "Coriander Powder": "coriander powder",
-  "Garam Masala": "garam masala",
-  "Sambar Powder": "sambar powder",
-  "Rasam Powder": "rasam powder",
-  "Chicken Masala": "chicken masala powder",
-  "Mutton Masala": "mutton masala powder",
-  "Biryani Masala": "biryani masala powder",
-  "Cumin Seeds": "cumin seeds",
-  "Mustard Seeds": "mustard seeds",
-  "Fenugreek Seeds": "fenugreek seeds",
-  "Fennel Seeds": "fennel seeds",
-  "Black Pepper": "black pepper",
-  "Cardamom": "cardamom spice",
-  "Cloves": "cloves spice",
-  "Cinnamon": "cinnamon sticks",
-  "Asafoetida": "asafoetida hing",
-
-  "Iodised Salt": "iodised salt",
-  "Rock Salt": "rock salt",
-  "White Sugar": "white sugar",
-  "Brown Sugar": "brown sugar",
-  "Jaggery": "jaggery",
-  "Tamarind": "tamarind",
-  "Tea Powder": "tea powder",
-  "Coffee Powder": "coffee powder",
-  "Papad": "papad",
-  "Vermicelli": "vermicelli",
-  "Cooking Soda": "baking soda",
-  "Baking Powder": "baking powder",
-
-  "Marie Biscuits": "marie biscuits",
-  "Glucose Biscuits": "glucose biscuits",
-  "Cream Biscuits": "cream biscuits",
-  "Salt Biscuits": "salt biscuits",
-  "Mixture": "indian mixture snack",
-  "Murukku": "murukku snack",
-  "Potato Chips": "potato chips",
-  "Banana Chips": "banana chips",
-  "Peanut Candy": "peanut candy",
-  "Rusk": "rusk biscuits",
-  "Noodles": "instant noodles",
-  "Instant Pasta": "instant pasta",
-
-  "Filter Coffee": "filter coffee",
-  "Health Drink": "health drink powder",
-  "Malted Drink": "malted drink",
-  "Lemon Drink Powder": "lemon drink powder",
-  "Orange Drink Powder": "orange drink powder",
-  "Rose Milk Mix": "rose milk mix",
-  "Badam Drink Mix": "badam drink mix",
-  "Soft Drink": "soft drink bottle",
-  "Packaged Drinking Water": "drinking water bottle",
-
-  "Bath Soap": "bath soap",
-  "Washing Soap": "washing soap bar",
-  "Detergent Powder": "detergent powder",
-  "Dishwash Bar": "dishwash bar",
-  "Dishwash Liquid": "dishwash liquid",
-  "Floor Cleaner": "floor cleaner bottle",
-  "Toilet Cleaner": "toilet cleaner bottle",
-  "Hand Wash": "hand wash bottle",
-  "Toothpaste": "toothpaste",
-  "Toothbrush": "toothbrush",
-  "Match Box": "match box",
-  "Mosquito Coil": "mosquito coil",
-  "Garbage Bags": "garbage bags",
-  "Aluminium Foil": "aluminium foil roll"
-};
-
-/* Each product image URL */
-function getProductImage(productName, category, productId) {
-  const keyword = productImageKeywords[productName] || `${productName} grocery`;
-  const query = encodeURIComponent(keyword);
-
-  /* sig productId use pannradhuna each product-ku separate image request */
-  return `https://source.unsplash.com/600x600/?${query}&sig=${productId}`;
-}
-
-/* =====================================================
+/* ---------------------------------------------------------
    PRODUCT DATA
-   Product Name, Category, Pack Size
-   ===================================================== */
-
+   Format: [Product Name, Category, Pack Size]
+   --------------------------------------------------------- */
 const productData = [
+  /* Rice & Flours */
   ["Ponni Boiled Rice", "Rice & Flours", "1 kg"],
   ["Ponni Raw Rice", "Rice & Flours", "1 kg"],
   ["Basmati Rice", "Rice & Flours", "1 kg"],
@@ -165,9 +25,9 @@ const productData = [
   ["Rice Flour", "Rice & Flours", "500 g"],
   ["Gram Flour Besan", "Rice & Flours", "500 g"],
   ["Corn Flour", "Rice & Flours", "500 g"],
-  ["Appalam Flour", "Rice & Flours", "500 g"],
   ["Aval Poha", "Rice & Flours", "500 g"],
 
+  /* Pulses & Dals */
   ["Toor Dal", "Pulses & Dals", "1 kg"],
   ["Urad Dal Whole", "Pulses & Dals", "500 g"],
   ["Urad Dal Split", "Pulses & Dals", "500 g"],
@@ -179,42 +39,32 @@ const productData = [
   ["White Chana", "Pulses & Dals", "500 g"],
   ["Rajma", "Pulses & Dals", "500 g"],
   ["Cowpeas", "Pulses & Dals", "500 g"],
-  ["Double Beans", "Pulses & Dals", "500 g"],
   ["Horse Gram", "Pulses & Dals", "500 g"],
-  ["Fried Gram", "Pulses & Dals", "500 g"],
 
-  ["Sunflower Oil", "Oils & Ghee", "1 Litre"],
-  ["Groundnut Oil", "Oils & Ghee", "1 Litre"],
-  ["Gingelly Oil", "Oils & Ghee", "1 Litre"],
-  ["Coconut Oil", "Oils & Ghee", "1 Litre"],
-  ["Mustard Oil", "Oils & Ghee", "1 Litre"],
-  ["Rice Bran Oil", "Oils & Ghee", "1 Litre"],
-  ["Palm Oil", "Oils & Ghee", "1 Litre"],
+  /* Oils & Ghee */
+  ["Sunflower Oil", "Oils & Ghee", "1 L"],
+  ["Groundnut Oil", "Oils & Ghee", "1 L"],
+  ["Gingelly Oil", "Oils & Ghee", "1 L"],
+  ["Coconut Oil", "Oils & Ghee", "1 L"],
+  ["Mustard Oil", "Oils & Ghee", "1 L"],
   ["Cow Ghee", "Oils & Ghee", "500 ml"],
-  ["Vanaspati Ghee", "Oils & Ghee", "500 ml"],
-  ["Butter", "Oils & Ghee", "100 g"],
 
-  ["Turmeric Powder", "Masalas & Spices", "100 g"],
-  ["Chilli Powder", "Masalas & Spices", "100 g"],
-  ["Coriander Powder", "Masalas & Spices", "100 g"],
-  ["Garam Masala", "Masalas & Spices", "50 g"],
-  ["Sambar Powder", "Masalas & Spices", "100 g"],
+  /* Masalas & Spices */
+  ["Turmeric Powder", "Masalas & Spices", "200 g"],
+  ["Chilli Powder", "Masalas & Spices", "200 g"],
+  ["Coriander Powder", "Masalas & Spices", "200 g"],
+  ["Garam Masala", "Masalas & Spices", "100 g"],
+  ["Sambar Powder", "Masalas & Spices", "200 g"],
   ["Rasam Powder", "Masalas & Spices", "100 g"],
-  ["Chicken Masala", "Masalas & Spices", "100 g"],
-  ["Mutton Masala", "Masalas & Spices", "100 g"],
-  ["Biryani Masala", "Masalas & Spices", "100 g"],
   ["Cumin Seeds", "Masalas & Spices", "100 g"],
   ["Mustard Seeds", "Masalas & Spices", "100 g"],
-  ["Fenugreek Seeds", "Masalas & Spices", "100 g"],
-  ["Fennel Seeds", "Masalas & Spices", "100 g"],
   ["Black Pepper", "Masalas & Spices", "100 g"],
-  ["Cardamom", "Masalas & Spices", "25 g"],
-  ["Cloves", "Masalas & Spices", "25 g"],
+  ["Cardamom", "Masalas & Spices", "50 g"],
+  ["Cloves", "Masalas & Spices", "50 g"],
   ["Cinnamon", "Masalas & Spices", "50 g"],
-  ["Asafoetida", "Masalas & Spices", "50 g"],
 
+  /* Essentials */
   ["Iodised Salt", "Essentials", "1 kg"],
-  ["Rock Salt", "Essentials", "500 g"],
   ["White Sugar", "Essentials", "1 kg"],
   ["Brown Sugar", "Essentials", "500 g"],
   ["Jaggery", "Essentials", "500 g"],
@@ -222,94 +72,148 @@ const productData = [
   ["Tea Powder", "Essentials", "250 g"],
   ["Coffee Powder", "Essentials", "200 g"],
   ["Papad", "Essentials", "200 g"],
-  ["Vermicelli", "Essentials", "500 g"],
-  ["Cooking Soda", "Essentials", "100 g"],
-  ["Baking Powder", "Essentials", "100 g"],
+  ["Vermicelli", "Essentials", "400 g"],
+  ["Rava Sooji", "Essentials", "500 g"],
+  ["Oats", "Essentials", "500 g"],
+  ["Sabudana", "Essentials", "500 g"],
 
-  ["Marie Biscuits", "Snacks", "250 g"],
-  ["Glucose Biscuits", "Snacks", "250 g"],
-  ["Cream Biscuits", "Snacks", "200 g"],
+  /* Snacks */
+  ["Marie Biscuits", "Snacks", "200 g"],
+  ["Glucose Biscuits", "Snacks", "200 g"],
+  ["Cream Biscuits", "Snacks", "150 g"],
   ["Salt Biscuits", "Snacks", "200 g"],
-  ["Mixture", "Snacks", "200 g"],
+  ["Mixture", "Snacks", "250 g"],
   ["Murukku", "Snacks", "200 g"],
   ["Potato Chips", "Snacks", "100 g"],
   ["Banana Chips", "Snacks", "100 g"],
-  ["Peanut Candy", "Snacks", "100 g"],
+  ["Peanut Candy", "Snacks", "150 g"],
   ["Rusk", "Snacks", "200 g"],
   ["Noodles", "Snacks", "280 g"],
-  ["Instant Pasta", "Snacks", "200 g"],
+  ["Instant Pasta", "Snacks", "280 g"],
 
-  ["Tea Powder", "Beverages", "250 g"],
+  /* Beverages */
   ["Filter Coffee", "Beverages", "200 g"],
   ["Health Drink", "Beverages", "500 g"],
   ["Malted Drink", "Beverages", "500 g"],
-  ["Lemon Drink Powder", "Beverages", "500 g"],
-  ["Orange Drink Powder", "Beverages", "500 g"],
+  ["Lemon Drink Powder", "Beverages", "200 g"],
+  ["Orange Drink Powder", "Beverages", "200 g"],
   ["Rose Milk Mix", "Beverages", "200 g"],
   ["Badam Drink Mix", "Beverages", "200 g"],
   ["Soft Drink", "Beverages", "750 ml"],
-  ["Packaged Drinking Water", "Beverages", "1 Litre"],
+  ["Packaged Drinking Water", "Beverages", "1 L"],
+  ["Fruit Juice", "Beverages", "1 L"],
 
+  /* Household */
   ["Bath Soap", "Household", "100 g"],
   ["Washing Soap", "Household", "200 g"],
   ["Detergent Powder", "Household", "1 kg"],
   ["Dishwash Bar", "Household", "200 g"],
   ["Dishwash Liquid", "Household", "500 ml"],
-  ["Floor Cleaner", "Household", "500 ml"],
+  ["Floor Cleaner", "Household", "1 L"],
   ["Toilet Cleaner", "Household", "500 ml"],
   ["Hand Wash", "Household", "250 ml"],
-  ["Toothpaste", "Household", "100 g"],
-  ["Toothbrush", "Household", "1 Piece"],
-  ["Match Box", "Household", "1 Pack"],
-  ["Mosquito Coil", "Household", "1 Pack"],
-  ["Garbage Bags", "Household", "1 Roll"],
-  ["Aluminium Foil", "Household", "1 Roll"]
+  ["Toothpaste", "Household", "150 g"],
+  ["Toothbrush", "Household", "1 pc"],
+  ["Match Box", "Household", "1 pack"],
+  ["Mosquito Coil", "Household", "1 pack"],
+  ["Garbage Bags", "Household", "1 roll"],
+  ["Aluminium Foil", "Household", "9 m"]
 ];
 
-/* Product objects */
-const allProducts = productData.map((item, index) => {
-  const productId = index + 1001;
-
-  return {
-    id: productId,
-    name: item[0],
-    category: item[1],
-    weight: item[2],
-    image: getProductImage(item[0], item[1], productId),
-    fallbackImage: categoryFallbackImages[item[1]]
-  };
-});
+/* Convert simple product array to product objects */
+const products = productData.map((item, index) => ({
+  id: index + 1,
+  name: item[0],
+  category: item[1],
+  size: item[2]
+}));
 
 let activeCategory = "All";
-let activeSearch = "";
+let searchText = "";
 
-/* =====================================================
-   SVG ICONS FOR GENERATED PRODUCT CARDS
-   ===================================================== */
-
-function cartIconSvg() {
-  return `
+/* ---------------------------------------------------------
+   SVG ICONS — no emoji
+   --------------------------------------------------------- */
+const icons = {
+  cart: `
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.4L21 8H7"></path>
-      <circle cx="10" cy="20" r="1.4"></circle>
-      <circle cx="18" cy="20" r="1.4"></circle>
+      <path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L20 8H7"></path>
+      <circle cx="10" cy="20" r="1"></circle>
+      <circle cx="18" cy="20" r="1"></circle>
     </svg>
-  `;
+  `,
+  phone: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 2.9a2 2 0 0 1-.5 2.1L9.1 11a16 16 0 0 0 3.9 3.9l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.9.7 2.9.8a2 2 0 0 1 1.7 2z"></path>
+    </svg>
+  `,
+  search: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m20 20-4-4"></path>
+    </svg>
+  `,
+  box: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m21 8-9-5-9 5 9 5 9-5Z"></path>
+      <path d="M3 8v8l9 5 9-5V8"></path>
+      <path d="M12 13v8"></path>
+    </svg>
+  `
+};
+
+/* ---------------------------------------------------------
+   AUTO IMAGE LOADER
+   --------------------------------------------------------- */
+async function getProductImage(productName, category) {
+  const cacheKey = `centralStoreImage_${productName}`;
+
+  const savedImage = localStorage.getItem(cacheKey);
+
+  if (savedImage) {
+    return savedImage;
+  }
+
+  try {
+    const response = await fetch(
+      `${IMAGE_API_URL}/api/product-image?product=${encodeURIComponent(productName)}&category=${encodeURIComponent(category)}`
+    );
+
+    const data = await response.json();
+
+    if (data.success && data.image) {
+      localStorage.setItem(cacheKey, data.image);
+      return data.image;
+    }
+  } catch (error) {
+    console.log("Image loading failed for:", productName);
+  }
+
+  return "";
 }
 
-function phoneIconSvg() {
-  return `
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M6.6 3.5 9 3l1.7 4.3-2.1 1.4a15.3 15.3 0 0 0 6.8 6.8l1.4-2.1L21 15l-.5 2.4A3 3 0 0 1 17.6 20C10 20 4 14 4 6.4a3 3 0 0 1 2.6-2.9z"></path>
-    </svg>
-  `;
+async function loadVisibleProductImages() {
+  const imageElements = document.querySelectorAll(".product-image[data-product]");
+
+  for (const imageElement of imageElements) {
+    const productName = imageElement.dataset.product;
+    const category = imageElement.dataset.category;
+
+    const imageUrl = await getProductImage(productName, category);
+
+    if (imageUrl) {
+      imageElement.src = imageUrl;
+      imageElement.classList.add("image-loaded");
+    } else {
+      imageElement.closest(".product-card")?.classList.add("image-not-found");
+    }
+  }
 }
 
-/* =====================================================
-   CART STORAGE
-   ===================================================== */
-
-function getProductsCart() {
+/* ---------------------------------------------------------
+   CART
+   --------------------------------------------------------- */
+function getCart() {
   try {
     return JSON.parse(localStorage.getItem("centralStoresCart")) || [];
   } catch (error) {
@@ -317,259 +221,219 @@ function getProductsCart() {
   }
 }
 
-function saveProductsCart(cart) {
+function saveCart(cart) {
   localStorage.setItem("centralStoresCart", JSON.stringify(cart));
-
-  if (typeof updateCartCount === "function") {
-    updateCartCount();
-  }
+  updateCartCount();
 }
 
-function addProductToCart(product) {
-  const cart = getProductsCart();
+function addToCart(productId) {
+  const product = products.find((item) => item.id === Number(productId));
 
-  const existingProduct = cart.find((item) => {
-    return String(item.id) === String(product.id);
-  });
+  if (!product) return;
 
-  if (existingProduct) {
-    existingProduct.quantity += 1;
+  const cart = getCart();
+  const existingItem = cart.find((item) => item.id === product.id);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
   } else {
     cart.push({
       id: product.id,
       name: product.name,
-      weight: product.weight,
-      image: product.image,
+      category: product.category,
+      size: product.size,
       quantity: 1
     });
   }
 
-  saveProductsCart(cart);
+  saveCart(cart);
+  showToast(`${product.name} added to cart`);
+}
 
-  if (typeof showCartToast === "function") {
-    showCartToast(product.name);
+function updateCartCount() {
+  const count = getCart().reduce((total, item) => total + item.quantity, 0);
+
+  document.querySelectorAll("[data-cart-count]").forEach((element) => {
+    element.textContent = count;
+    element.style.display = count > 0 ? "flex" : "none";
+  });
+}
+
+function showToast(message) {
+  let toast = document.querySelector(".product-toast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "product-toast";
+    document.body.appendChild(toast);
   }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(window.centralStoresToastTimer);
+
+  window.centralStoresToastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2200);
 }
 
-/* =====================================================
-   PRODUCT CARD
-   ===================================================== */
-
-function createProductCard(product) {
-  return `
-    <article class="all-product-card">
-      <div class="all-product-image">
-        <img
-          src="${product.image}"
-          alt="${product.name}"
-          loading="lazy"
-          data-fallback="${product.fallbackImage}"
-          onerror="this.onerror=null; this.src=this.dataset.fallback;"
-        >
-        <span class="all-product-category">${product.category}</span>
-      </div>
-
-      <div class="all-product-details">
-        <h3>${product.name}</h3>
-        <p class="all-product-weight">${product.weight}</p>
-
-        <div class="all-product-bottom">
-          <div class="price-on-call">
-            ${phoneIconSvg()}
-            <span>Price on Call</span>
-          </div>
-
-          <button class="all-add-cart-btn" type="button" data-product-id="${product.id}">
-            ${cartIconSvg()}
-            <span>Add</span>
-          </button>
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-/* =====================================================
-   FILTER PRODUCTS
-   ===================================================== */
-
+/* ---------------------------------------------------------
+   FILTER + SEARCH
+   --------------------------------------------------------- */
 function getFilteredProducts() {
-  return allProducts.filter((product) => {
-    const categoryMatch =
+  return products.filter((product) => {
+    const matchCategory =
       activeCategory === "All" || product.category === activeCategory;
 
-    const searchText = activeSearch.toLowerCase();
+    const fullText =
+      `${product.name} ${product.category} ${product.size}`.toLowerCase();
 
-    const searchMatch =
-      product.name.toLowerCase().includes(searchText) ||
-      product.category.toLowerCase().includes(searchText) ||
-      product.weight.toLowerCase().includes(searchText);
+    const matchSearch = fullText.includes(searchText.toLowerCase());
 
-    return categoryMatch && searchMatch;
+    return matchCategory && matchSearch;
   });
 }
 
-/* =====================================================
+function getCategories() {
+  return ["All", ...new Set(products.map((product) => product.category))];
+}
+
+/* ---------------------------------------------------------
+   RENDER CATEGORY BUTTONS
+   HTML must contain: <div id="categoryFilters"></div>
+   --------------------------------------------------------- */
+function renderCategoryFilters() {
+  const categoryFilters = document.getElementById("categoryFilters");
+
+  if (!categoryFilters) return;
+
+  categoryFilters.innerHTML = getCategories()
+    .map(
+      (category) => `
+        <button
+          class="category-chip ${category === activeCategory ? "active" : ""}"
+          type="button"
+          data-category="${category}"
+        >
+          ${category}
+        </button>
+      `
+    )
+    .join("");
+
+  categoryFilters.querySelectorAll("[data-category]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+      renderCategoryFilters();
+      renderProducts();
+    });
+  });
+}
+
+/* ---------------------------------------------------------
    RENDER PRODUCTS
-   ===================================================== */
-
+   HTML must contain:
+   <div id="productCount"></div>
+   <div id="productGrid"></div>
+   --------------------------------------------------------- */
 function renderProducts() {
-  const grid = document.getElementById("allProductsGrid");
-  const count = document.getElementById("productsCount");
-  const title = document.getElementById("productsTitle");
-  const empty = document.getElementById("noProductsFound");
+  const productGrid = document.getElementById("productGrid");
+  const productCount = document.getElementById("productCount");
+  const productsToShow = getFilteredProducts();
 
-  if (!grid) return;
+  if (!productGrid) return;
 
-  const filteredProducts = getFilteredProducts();
-
-  grid.innerHTML = filteredProducts.map(createProductCard).join("");
-
-  if (count) {
-    count.textContent = filteredProducts.length;
+  if (productCount) {
+    productCount.textContent = `${productsToShow.length} Products`;
   }
 
-  if (title) {
-    if (activeSearch) {
-      title.textContent = "Search Results";
-    } else if (activeCategory !== "All") {
-      title.textContent = activeCategory;
-    } else {
-      title.textContent = "All Daily Essentials";
-    }
+  if (productsToShow.length === 0) {
+    productGrid.innerHTML = `
+      <div class="no-products">
+        <div class="no-products-icon">${icons.search}</div>
+        <h3>No products found</h3>
+        <p>Try another product name or category.</p>
+      </div>
+    `;
+    return;
   }
 
-  if (empty) {
-    empty.classList.toggle("show", filteredProducts.length === 0);
-  }
+  productGrid.innerHTML = productsToShow
+    .map(
+      (product) => `
+        <article class="product-card" data-product-id="${product.id}">
+          <div class="product-image-wrap">
+            <div class="product-image-loader"></div>
 
-  setupAddButtons();
-}
+            <img
+              class="product-image"
+              src=""
+              data-product="${product.name}"
+              data-category="${product.category}"
+              alt="${product.name}"
+              loading="lazy"
+            >
 
-/* =====================================================
-   ADD BUTTON EVENTS
-   ===================================================== */
+            <span class="product-category-label">${product.category}</span>
+          </div>
 
-function setupAddButtons() {
-  document.querySelectorAll(".all-add-cart-btn").forEach((button) => {
-    button.addEventListener("click", function () {
-      const productId = Number(this.dataset.productId);
-      const product = allProducts.find((item) => item.id === productId);
+          <div class="product-card-content">
+            <h3>${product.name}</h3>
+            <p class="product-size">${product.size}</p>
 
-      if (!product) return;
+            <div class="product-card-actions">
+              <span class="price-on-call">
+                ${icons.phone}
+                <span>Price on<br>Call</span>
+              </span>
 
-      addProductToCart(product);
+              <button
+                type="button"
+                class="add-product-btn"
+                data-add-product="${product.id}"
+                aria-label="Add ${product.name} to cart"
+              >
+                ${icons.cart}
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `
+    )
+    .join("");
 
-      const label = this.querySelector("span");
-
-      if (label) {
-        label.textContent = "Added";
-      }
-
-      this.classList.add("added");
-
-      setTimeout(() => {
-        if (label) {
-          label.textContent = "Add";
-        }
-
-        this.classList.remove("added");
-      }, 1000);
+  productGrid.querySelectorAll("[data-add-product]").forEach((button) => {
+    button.addEventListener("click", () => {
+      addToCart(button.dataset.addProduct);
     });
   });
+
+  loadVisibleProductImages();
 }
 
-/* =====================================================
-   CATEGORY FILTERS
-   ===================================================== */
-
-function setupCategoryFilters() {
-  const buttons = document.querySelectorAll(".category-filter-btn");
-
-  buttons.forEach((button) => {
-    button.addEventListener("click", function () {
-      activeCategory = this.dataset.category;
-      activeSearch = "";
-
-      const input = document.getElementById("productSearchInput");
-      const clear = document.getElementById("productSearchClear");
-
-      if (input) input.value = "";
-      if (clear) clear.classList.remove("show");
-
-      buttons.forEach((item) => item.classList.remove("active"));
-      this.classList.add("active");
-
-      renderProducts();
-    });
-  });
-}
-
-/* =====================================================
+/* ---------------------------------------------------------
    SEARCH
-   ===================================================== */
-
+   HTML must contain: <input id="productSearch">
+   --------------------------------------------------------- */
 function setupSearch() {
-  const input = document.getElementById("productSearchInput");
-  const clear = document.getElementById("productSearchClear");
+  const productSearch = document.getElementById("productSearch");
 
-  if (!input) return;
+  if (!productSearch) return;
 
-  input.addEventListener("input", function () {
-    activeSearch = this.value.trim();
-
-    if (clear) {
-      clear.classList.toggle("show", activeSearch.length > 0);
-    }
-
-    renderProducts();
-  });
-
-  if (clear) {
-    clear.addEventListener("click", function () {
-      input.value = "";
-      activeSearch = "";
-      clear.classList.remove("show");
-      input.focus();
-      renderProducts();
-    });
-  }
-}
-
-/* =====================================================
-   RESET PRODUCTS
-   ===================================================== */
-
-function setupResetButton() {
-  const resetButton = document.getElementById("resetProductsBtn");
-
-  if (!resetButton) return;
-
-  resetButton.addEventListener("click", function () {
-    activeCategory = "All";
-    activeSearch = "";
-
-    const input = document.getElementById("productSearchInput");
-    const clear = document.getElementById("productSearchClear");
-
-    if (input) input.value = "";
-    if (clear) clear.classList.remove("show");
-
-    document.querySelectorAll(".category-filter-btn").forEach((button) => {
-      button.classList.toggle("active", button.dataset.category === "All");
-    });
-
+  productSearch.addEventListener("input", (event) => {
+    searchText = event.target.value.trim();
     renderProducts();
   });
 }
 
-/* =====================================================
-   START PRODUCTS PAGE
-   ===================================================== */
-
-document.addEventListener("DOMContentLoaded", function () {
-  setupCategoryFilters();
-  setupSearch();
-  setupResetButton();
+/* ---------------------------------------------------------
+   PAGE START
+   --------------------------------------------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  renderCategoryFilters();
   renderProducts();
+  setupSearch();
+  updateCartCount();
 });
