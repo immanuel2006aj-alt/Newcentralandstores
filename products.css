@@ -1358,6 +1358,23 @@ img.product-image {
     font-size: 9px;
   }
 }
+.product-price {
+  margin: 4px 0 12px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #151515;
+  letter-spacing: -0.3px;
+}
+
+.product-price::before {
+  content: "PRICE ";
+  display: block;
+  margin-bottom: 2px;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #b78900;
+}
 
 /* =========================================================
    ORDER CONFIRMATION SECTION
