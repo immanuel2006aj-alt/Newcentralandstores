@@ -1,3 +1,8 @@
+/* =========================================================
+   CENTRAL & STORES — PREMIUM MINI PRODUCT GRID
+   File: products-grid.js
+========================================================= */
+
 const products = [
   {
     id: "rice-001",
@@ -32,6 +37,14 @@ const products = [
     image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80"
   },
   {
+    id: "dal-001",
+    name: "Toor Dal Premium",
+    category: "Pulses & Dals",
+    weight: "1 kg",
+    price: 156,
+    image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e5?auto=format&fit=crop&w=800&q=80"
+  },
+  {
     id: "oil-001",
     name: "Fortune Sunflower Oil",
     category: "Oils & Ghee",
@@ -40,141 +53,231 @@ const products = [
     image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80"
   },
   {
-    id: "dal-001",
-    name: "Toor Dal Premium",
-    category: "Pulses & Dals",
-    weight: "1 kg",
-    price: 156,
-    image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e2?auto=format&fit=crop&w=800&q=80"
+    id: "masala-001",
+    name: "Aachi Chicken Masala",
+    category: "Masalas",
+    weight: "100 g",
+    price: 58,
+    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=800&q=80"
   },
   {
-    id: "snack-001",
-    name: "Sunfeast Marie Light",
-    category: "Biscuits",
-    weight: "250 g",
-    price: 45,
-    image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "drink-001",
+    id: "beverage-001",
     name: "Bru Instant Coffee",
     category: "Beverages",
     weight: "100 g",
-    price: 98,
+    price: 112,
     image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
-let cart = JSON.parse(localStorage.getItem("centralCart")) || [];
+/* =========================================================
+   CART STORAGE
+========================================================= */
 
-function saveCart() {
-  localStorage.setItem("centralCart", JSON.stringify(cart));
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem("centralStoresCart")) || [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem("centralStoresCart", JSON.stringify(cart));
 }
 
 function updateCartCount() {
-  const totalItems = cart.reduce((total, item) => total + item.qty, 0);
+  const cart = getCart();
 
-  const bottomCartCount = document.getElementById("bottomCartCount");
-  const headerCartCount = document.getElementById("headerCartCount");
+  const totalItems = cart.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
 
-  if (bottomCartCount) bottomCartCount.textContent = totalItems;
-  if (headerCartCount) headerCartCount.textContent = totalItems;
+  const cartCountElements = document.querySelectorAll(
+    "#bottomCartCount, #cartCount, .cart-count"
+  );
+
+  cartCountElements.forEach((element) => {
+    element.textContent = totalItems;
+  });
 }
 
-function addToCart(productId) {
-  const product = products.find((item) => item.id === productId);
+/* =========================================================
+   ADD TO CART
+========================================================= */
 
-  if (!product) return;
+function addToCart(productId, button) {
+  const selectedProduct = products.find((product) => product.id === productId);
 
-  const existingItem = cart.find((item) => item.id === productId);
+  if (!selectedProduct) return;
 
-  if (existingItem) {
-    existingItem.qty += 1;
+  const cart = getCart();
+
+  const existingProduct = cart.find((item) => item.id === productId);
+
+  if (existingProduct) {
+    existingProduct.quantity += 1;
   } else {
     cart.push({
-      ...product,
-      qty: 1
+      id: selectedProduct.id,
+      name: selectedProduct.name,
+      category: selectedProduct.category,
+      weight: selectedProduct.weight,
+      price: selectedProduct.price,
+      image: selectedProduct.image,
+      quantity: 1
     });
   }
 
-  saveCart();
+  saveCart(cart);
   updateCartCount();
 
-  const button = document.querySelector(`[data-product-id="${productId}"]`);
+  button.classList.add("added");
+  button.textContent = "Added";
 
-  if (button) {
-    const oldText = button.innerHTML;
-
-    button.classList.add("added");
-    button.innerHTML = "✓ Added";
-
-    setTimeout(() => {
-      button.classList.remove("added");
-      button.innerHTML = oldText;
-    }, 1200);
-  }
+  setTimeout(() => {
+    button.classList.remove("added");
+    button.textContent = "Add";
+  }, 1000);
 }
 
-function renderProducts() {
+/* =========================================================
+   WISHLIST BUTTON
+========================================================= */
+
+function toggleWishlist(button) {
+  const isActive = button.classList.toggle("active");
+
+  button.textContent = isActive ? "♥" : "♡";
+}
+
+/* =========================================================
+   PRODUCT CARD TEMPLATE
+========================================================= */
+
+function createProductCard(product) {
+  return `
+    <article class="mini-product-card">
+      <div class="mini-product-image">
+        <img
+          src="${product.image}"
+          alt="${product.name}"
+          loading="lazy"
+          onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80'"
+        >
+
+        <button
+          class="mini-wishlist-btn"
+          type="button"
+          aria-label="Add ${product.name} to wishlist"
+        >
+          ♡
+        </button>
+      </div>
+
+      <div class="mini-product-details">
+        <span class="mini-product-category">${product.category}</span>
+
+        <h3 class="mini-product-name">${product.name}</h3>
+
+        <span class="mini-product-weight">${product.weight}</span>
+
+        <div class="mini-product-bottom">
+          <strong class="mini-product-price">₹${product.price}</strong>
+
+          <button
+            class="mini-add-btn"
+            type="button"
+            data-id="${product.id}"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProducts(productList = products) {
   const productsGrid = document.getElementById("productsGrid");
   const productCount = document.getElementById("productCount");
 
-  if (!productsGrid) return;
-
-  if (productCount) {
-    productCount.textContent = `${products.length} PRODUCTS`;
+  if (!productsGrid) {
+    console.error("productsGrid element not found.");
+    return;
   }
 
-  productsGrid.innerHTML = products
-    .map(
-      (product) => `
-        <article class="mini-product-card">
+  if (productCount) {
+    productCount.textContent = `${productList.length} PRODUCTS`;
+  }
 
-          <div class="mini-product-image">
-            <img src="${product.image}" alt="${product.name}" loading="lazy">
-            <button class="mini-wishlist" type="button" aria-label="Add ${product.name} to wishlist">♡</button>
-          </div>
-
-          <div class="mini-product-info">
-            <span class="mini-product-category">${product.category}</span>
-
-            <h3>${product.name}</h3>
-
-            <p class="mini-product-weight">${product.weight}</p>
-
-            <div class="mini-product-bottom">
-              <span class="mini-product-price">₹${product.price}</span>
-
-              <button
-                class="mini-add-btn"
-                type="button"
-                data-product-id="${product.id}"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-
-        </article>
-      `
-    )
+  productsGrid.innerHTML = productList
+    .map((product) => createProductCard(product))
     .join("");
 
-  document.querySelectorAll(".mini-add-btn").forEach((button) => {
+  const addButtons = productsGrid.querySelectorAll(".mini-add-btn");
+
+  addButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      addToCart(button.dataset.productId);
+      addToCart(button.dataset.id, button);
     });
   });
 
-  document.querySelectorAll(".mini-wishlist").forEach((button) => {
+  const wishlistButtons = productsGrid.querySelectorAll(".mini-wishlist-btn");
+
+  wishlistButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      button.classList.toggle("active");
-      button.textContent = button.classList.contains("active") ? "♥" : "♡";
+      toggleWishlist(button);
     });
   });
 }
+
+/* =========================================================
+   CATEGORY FILTER
+   Works with buttons having data-category=""
+========================================================= */
+
+function setupCategoryFilter() {
+  const categoryButtons = document.querySelectorAll("[data-category]");
+
+  categoryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedCategory = button.dataset.category;
+
+      categoryButtons.forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      if (
+        selectedCategory === "All Products" ||
+        selectedCategory === "all" ||
+        selectedCategory === ""
+      ) {
+        renderProducts(products);
+        return;
+      }
+
+      const filteredProducts = products.filter((product) => {
+        return product.category === selectedCategory;
+      });
+
+      renderProducts(filteredProducts);
+    });
+  });
+}
+
+/* =========================================================
+   PAGE LOAD
+========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   updateCartCount();
+  setupCategoryFilter();
 });
