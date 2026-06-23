@@ -2397,4 +2397,49 @@ body.menu-open {
     font-size: 13px;
   }
 }
+/* PRICE NUMBER FORCE SHOW FIX */
 
+.product-price-wrap {
+  display: block !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+.product-price-label {
+  display: block !important;
+  margin: 0 0 4px !important;
+  color: #b58500 !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+}
+
+.product-price {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #151515 !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  overflow: visible !important;
+}
+
+/* Remove accidental old CSS that hides price */
+.product-details .product-price {
+  color: #151515 !important;
+  font-size: 22px !important;
+}
+
+/* Correct single + Add button */
+.add-cart-btn .add-cart-icon {
+  display: inline-block !important;
+  font-size: 25px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+}
