@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Central & Stores order enquiry cart">
+  <title>My Cart | Central & Stores</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --black:#111111;
+      --black-soft:#1d1d1d;
+      --gold:#f2bd24;
+      --gold-dark:#bc8700;
+      --gold-light:#fff7dc;
+      --white:#ffffff;
+      --text:#1c1c1c;
+      --muted:#747474;
+      --border:#e8e8e8;
+      --bg:#fafafa;
+      --danger:#d83b3b;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      min-width:320px;
+      background:var(--bg);
+      color:var(--text);
+      font-family:"Poppins",sans-serif;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button,input,textarea{font:inherit}
+    button{border:0;cursor:pointer}
+    svg{
+      width:22px;
+      height:22px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.9;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .app-shell{
+      width:100%;
+      max-width:900px;
+      min-height:100vh;
+      margin:0 auto;
+      background:var(--white);
+    }
+
+    /* HEADER */
+    .cart-header{
+      background:var(--black);
+      color:var(--white);
+    }
+
+    .top-header{
+      display:grid;
+      grid-template-columns:44px 1fr 44px;
+      align-items:center;
+      gap:8px;
+      min-height:78px;
+      padding:14px 16px;
+    }
+
+    .header-back-btn,
+    .header-cart{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      border-radius:10px;
+      color:var(--gold);
+    }
+
+    .header-back-btn:hover,
+    .header-cart:hover{
+      background:rgba(255,255,255,.08);
+    }
+
+    .header-back-btn svg{transform:rotate(180deg)}
+
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brand-logo{
+      display:flex;
+      flex:0 0 42px;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      border:1px solid rgba(242,189,36,.55);
+      border-radius:11px;
+      background:#1d1d1d;
+      color:var(--gold);
+    }
+
+    .brand-text{min-width:0}
+    .brand-text h1{
+      overflow:hidden;
+      color:var(--white);
+      font-size:16px;
+      font-weight:800;
+      line-height:1.2;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .brand-text p{
+      margin-top:3px;
+      color:#cfcfcf;
+      font-size:9px;
+      font-weight:500;
+    }
+
+    /* MAIN */
+    .cart-main{
+      padding:0 16px 42px;
+      background:var(--bg);
+    }
+
+    .cart-page-title{
+      padding:31px 3px 24px;
+    }
+
+    .cart-page-title > span{
+      display:block;
+      margin-bottom:5px;
+      color:var(--gold-dark);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:1px;
+    }
+
+    .cart-page-title h2{
+      color:var(--black);
+      font-size:29px;
+      font-weight:800;
+      letter-spacing:-.8px;
+    }
+
+    .cart-page-title p{
+      max-width:600px;
+      margin-top:9px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.7;
+    }
+
+    /* CART ITEMS */
+    .cart-items-section,
+    .customer-form-section,
+    .cart-info-banner{
+      margin-bottom:18px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:var(--white);
+    }
+
+    .cart-items-section{padding:16px}
+
+    .cart-items-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .cart-items-top h3{
+      color:var(--black);
+      font-size:16px;
+      font-weight:800;
+    }
+
+    .cart-items-top span{
+      padding:5px 9px;
+      border-radius:50px;
+      background:var(--gold-light);
+      color:var(--gold-dark);
+      font-size:9px;
+      font-weight:800;
+    }
+
+    .cart-items-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding-top:14px;
+    }
+
+    .cart-item{
+      display:grid;
+      grid-template-columns:74px 1fr;
+      gap:12px;
+      padding-bottom:13px;
+      border-bottom:1px solid #eeeeee;
+    }
+
+    .cart-item:last-child{
+      padding-bottom:0;
+      border-bottom:0;
+    }
+
+    .cart-item-image{
+      width:74px;
+      height:74px;
+      overflow:hidden;
+      border-radius:11px;
+      background:#f2f2f2;
+    }
+
+    .cart-item-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .cart-item-content{min-width:0}
+
+    .cart-item-category{
+      display:block;
+      margin-bottom:3px;
+      color:var(--gold-dark);
+      font-size:8px;
+      font-weight:800;
+      letter-spacing:.6px;
+    }
+
+    .cart-item-name{
+      overflow:hidden;
+      color:var(--black);
+      font-size:13px;
+      font-weight:800;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .cart-item-size{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:9px;
+    }
+
+    .cart-item-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .quantity-control{
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      border:1px solid #e3e3e3;
+      border-radius:8px;
+    }
+
+    .quantity-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:30px;
+      height:30px;
+      background:#fafafa;
+      color:var(--black);
+    }
+
+    .quantity-btn:hover{
+      background:var(--gold-light);
+      color:var(--gold-dark);
+    }
+
+    .quantity-btn svg{
+      width:16px;
+      height:16px;
+    }
+
+    .quantity-value{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-width:30px;
+      color:var(--black);
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .remove-item-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:7px 8px;
+      border-radius:7px;
+      background:#fff2f2;
+      color:var(--danger);
+      font-size:9px;
+      font-weight:700;
+    }
+
+    .remove-item-btn svg{
+      width:15px;
+      height:15px;
+    }
+
+    /* EMPTY CART */
+    .empty-cart{
+      display:none;
+      padding:37px 15px 24px;
+      text-align:center;
+    }
+
+    .empty-cart.show{display:block}
+
+    .empty-cart-icon{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:62px;
+      height:62px;
+      margin:0 auto 14px;
+      border-radius:50%;
+      background:var(--gold-light);
+      color:var(--gold-dark);
+    }
+
+    .empty-cart-icon svg{
+      width:30px;
+      height:30px;
+    }
+
+    .empty-cart h3{
+      color:var(--black);
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .empty-cart p{
+      max-width:300px;
+      margin:8px auto 17px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.7;
+    }
+
+    .continue-shopping-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:11px 14px;
+      border-radius:8px;
+      background:var(--black);
+      color:var(--gold);
+      font-size:10px;
+      font-weight:800;
+    }
+
+    .continue-shopping-btn svg{
+      width:16px;
+      height:16px;
+    }
+
+    /* CUSTOMER FORM */
+    .customer-form-section{padding:18px 16px}
+
+    .form-heading{
+      padding-bottom:14px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .form-heading span{
+      display:block;
+      margin-bottom:4px;
+      color:var(--gold-dark);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.8px;
+    }
+
+    .form-heading h3{
+      color:var(--black);
+      font-size:17px;
+      font-weight:800;
+    }
+
+    .form-heading p{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.55;
+    }
+
+    .customer-form{
+      display:grid;
+      gap:13px;
+      padding-top:16px;
+    }
+
+    .form-group{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .form-group label{
+      color:#414141;
+      font-size:10px;
+      font-weight:700;
+    }
+
+    .form-group label span{
+      color:var(--danger);
+    }
+
+    .form-group input,
+    .form-group textarea{
+      width:100%;
+      border:1px solid #dfdfdf;
+      border-radius:9px;
+      outline:0;
+      background:#fff;
+      color:var(--black);
+      font-size:12px;
+      transition:.2s ease;
+    }
+
+    .form-group input{
+      min-height:46px;
+      padding:0 12px;
+    }
+
+    .form-group textarea{
+      min-height:82px;
+      padding:12px;
+      resize:vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus{
+      border-color:var(--gold-dark);
+      box-shadow:0 0 0 3px rgba(242,189,36,.15);
+    }
+
+    /* INFO */
+    .cart-info-banner{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:16px;
+      background:
+        linear-gradient(125deg,rgba(242,189,36,.1),transparent 60%),
+        var(--black);
+      color:var(--white);
+    }
+
+    .cart-info-icon{
+      display:flex;
+      flex:0 0 39px;
+      align-items:center;
+      justify-content:center;
+      width:39px;
+      height:39px;
+      border:1px solid rgba(242,189,36,.4);
+      border-radius:10px;
+      color:var(--gold);
+    }
+
+    .cart-info-icon svg{
+      width:21px;
+      height:21px;
+    }
+
+    .cart-info-text span{
+      display:block;
+      margin-bottom:3px;
+      color:var(--gold);
+      font-size:8px;
+      font-weight:800;
+      letter-spacing:.8px;
+    }
+
+    .cart-info-text h3{
+      color:var(--white);
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .cart-info-text p{
+      margin-top:5px;
+      color:#d0d0d0;
+      font-size:10px;
+      line-height:1.65;
+    }
+
+    /* SEND BUTTON */
+    .send-order-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      width:100%;
+      min-height:54px;
+      border-radius:10px;
+      background:var(--black);
+      color:var(--gold);
+      font-size:12px;
+      font-weight:800;
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+
+    .send-order-btn:hover{
+      background:var(--gold);
+      color:var(--black);
+    }
+
+    .send-order-btn:disabled{
+      cursor:not-allowed;
+      opacity:.45;
+    }
+
+    .send-order-btn svg{
+      width:22px;
+      height:22px;
+    }
+
+    .form-note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:9px;
+      line-height:1.6;
+      text-align:center;
+    }
+
+    /* FOOTER */
+    .cart-footer{
+      padding:29px 20px;
+      background:var(--black);
+      color:var(--white);
+      text-align:center;
+    }
+
+    .cart-footer h3{
+      color:var(--white);
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .cart-footer p{
+      margin-top:6px;
+      color:#bcbcbc;
+      font-size:10px;
+    }
+
+    .cart-footer a{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      margin-top:14px;
+      color:var(--gold);
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .cart-footer a svg{
+      width:17px;
+      height:17px;
+    }
+
+    @media(min-width:768px){
+      .app-shell{max-width:980px}
+      .top-header{padding:16px 35px}
+      .cart-main{padding:0 35px 55px}
+      .cart-page-title{padding-top:45px}
+      .cart-page-title h2{font-size:36px}
+      .cart-page-title p{font-size:13px}
+      .cart-items-section,
+      .customer-form-section{padding:22px}
+      .cart-item{grid-template-columns:95px 1fr}
+      .cart-item-image{width:95px;height:95px}
+      .cart-item-name{font-size:15px}
+      .cart-item-size{font-size:11px}
+      .customer-form{
+        grid-template-columns:repeat(2,1fr);
+      }
+      .form-group.full-width{grid-column:1/-1}
+      .send-order-wrap{grid-column:1/-1}
+      .cart-footer{padding:38px}
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="icon-cart" viewBox="0 0 24 24">
+      <path d="M3 3h2l2.2 11.2a2 2 0 0 0 2 1.6h8.9a2 2 0 0 0 1.9-1.5L21 7H6"></path>
+      <circle cx="10" cy="20" r="1"></circle>
+      <circle cx="18" cy="20" r="1"></circle>
+    </symbol>
+
+    <symbol id="icon-grid" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6" rx="1"></rect>
+      <rect x="14" y="4" width="6" height="6" rx="1"></rect>
+      <rect x="4" y="14" width="6" height="6" rx="1"></rect>
+      <rect x="14" y="14" width="6" height="6" rx="1"></rect>
+    </symbol>
+
+    <symbol id="icon-arrow" viewBox="0 0 24 24">
+      <path d="M5 12h14"></path>
+      <path d="m13 6 6 6-6 6"></path>
+    </symbol>
+
+    <symbol id="icon-minus" viewBox="0 0 24 24">
+      <path d="M5 12h14"></path>
+    </symbol>
+
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14"></path>
+      <path d="M5 12h14"></path>
+    </symbol>
+
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+      <path d="M3 6h18"></path>
+      <path d="M8 6V4h8v2"></path>
+      <path d="M19 6l-1 14H6L5 6"></path>
+      <path d="M10 11v5"></path>
+      <path d="M14 11v5"></path>
+    </symbol>
+
+    <symbol id="icon-phone" viewBox="0 0 24 24">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.9.7 2.9.8a2 2 0 0 1 1.6 1.9Z"></path>
+    </symbol>
+
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+      <path d="M20.5 11.7a8.3 8.3 0 0 1-12.3 7.2L3 20.5l1.7-5a8.3 8.3 0 1 1 15.8-3.8Z"></path>
+      <path d="M8.4 7.9c.2-.5.4-.5.7-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.5.6c-.1.1-.2.3-.1.5.5 1 1.3 1.8 2.3 2.3.2.1.4.1.5-.1l.6-.7c.2-.2.4-.2.7-.1l1.5.7c.3.1.4.3.4.5v.5c0 .3-.2.6-.5.7-.5.2-1.2.3-2 .1-1.1-.3-2.4-1-3.6-2.2-1.2-1.2-1.9-2.5-2.2-3.6-.2-.8-.1-1.5.1-2Z"></path>
+    </symbol>
+  </svg>
+
+  <div class="app-shell">
+
+    <header class="cart-header">
+      <div class="top-header">
+        <a href="products.html" class="header-back-btn" aria-label="Back to products">
+          <svg><use href="#icon-arrow"></use></svg>
+        </a>
+
+        <a href="index.html" class="brand">
+          <div class="brand-logo">
+            <svg><use href="#icon-cart"></use></svg>
+          </div>
+
+          <div class="brand-text">
+            <h1>Central & Stores</h1>
+            <p>Order Enquiry Cart</p>
+          </div>
+        </a>
+
+        <a href="products.html" class="header-cart" aria-label="Continue shopping">
+          <svg><use href="#icon-grid"></use></svg>
+        </a>
+      </div>
+    </header>
+
+    <main class="cart-main">
+
+      <section class="cart-page-title">
+        <span>YOUR ORDER ENQUIRY</span>
+        <h2>My Cart</h2>
+        <p>Final product availability and price will be confirmed by our store owner through a call.</p>
+      </section>
+
+      <section class="cart-items-section">
+        <div class="cart-items-top">
+          <h3>Selected Products</h3>
+          <span id="cartItemCount">0 Items</span>
+        </div>
+
+        <div id="cartItemsList" class="cart-items-list"></div>
+
+        <div class="empty-cart" id="emptyCart">
+          <div class="empty-cart-icon">
+            <svg><use href="#icon-cart"></use></svg>
+          </div>
+
+          <h3>Your cart is empty</h3>
+          <p>Browse our grocery collection and add products for enquiry.</p>
+
+          <a href="products.html" class="continue-shopping-btn">
+            Browse Products
+            <svg><use href="#icon-arrow"></use></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="customer-form-section">
+        <div class="form-heading">
+          <span>CUSTOMER DETAILS</span>
+          <h3>Send Order Enquiry</h3>
+          <p>Your order list will open in WhatsApp. Store owner will call to confirm price and availability.</p>
+        </div>
+
+        <form class="customer-form" id="orderForm">
+          <div class="form-group">
+            <label for="customerName">Your Name <span>*</span></label>
+            <input id="customerName" type="text" placeholder="Enter your name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="customerPhone">Mobile Number <span>*</span></label>
+            <input id="customerPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digit mobile number" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="customerAddress">Delivery Address / Area <span>*</span></label>
+            <textarea id="customerAddress" placeholder="House number, street, area, landmark..." required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="customerNote">Extra Note <small>(optional)</small></label>
+            <textarea id="customerNote" placeholder="Example: Call before delivery, preferred delivery time..."></textarea>
+          </div>
+
+          <div class="send-order-wrap">
+            <button type="submit" class="send-order-btn" id="sendOrderBtn">
+              <svg><use href="#icon-whatsapp"></use></svg>
+              Send Order Enquiry on WhatsApp
+            </button>
+
+            <p class="form-note">No online payment here. Final price will be confirmed by shop owner call.</p>
+          </div>
+        </form>
+      </section>
+
+      <section class="cart-info-banner">
+        <div class="cart-info-icon">
+          <svg><use href="#icon-phone"></use></svg>
+        </div>
+
+        <div class="cart-info-text">
+          <span>PRICE ON CALL</span>
+          <h3>Shop owner confirms final price</h3>
+          <p>After receiving your enquiry, the store team will check stock, confirm final total and delivery details by phone call.</p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="cart-footer">
+      <h3>Central & Stores</h3>
+      <p>Fresh groceries · Trusted local service</p>
+
+      <a href="products.html">
+        Continue Shopping
+        <svg><use href="#icon-arrow"></use></svg>
+      </a>
+    </footer>
+
+  </div>
+
+  <script>
+    const STORE_WHATSAPP = "919543128730";
+    const CART_KEY = "centralStoresCart";
+    const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=85";
+
+    const cartItemsList = document.getElementById("cartItemsList");
+    const emptyCart = document.getElementById("emptyCart");
+    const cartItemCount = document.getElementById("cartItemCount");
+    const orderForm = document.getElementById("orderForm");
+    const sendOrderBtn = document.getElementById("sendOrderBtn");
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function totalQuantity(cart) {
+      return cart.reduce((total, item) => total + (item.quantity || 1), 0);
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const quantity = totalQuantity(cart);
+      cartItemCount.textContent = quantity + (quantity === 1 ? " Item" : " Items");
+      sendOrderBtn.disabled = cart.length === 0;
+    }
+
+    function cartItemHTML(item) {
+      return `
+        <article class="cart-item">
+          <div class="cart-item-image">
+            <img src="${item.image || DEFAULT_IMAGE}" alt="${item.name}" onerror="this.src='${DEFAULT_IMAGE}'">
+          </div>
+
+          <div class="cart-item-content">
+            <span class="cart-item-category">${item.category || "Grocery Product"}</span>
+            <h4 class="cart-item-name">${item.name}</h4>
+            <p class="cart-item-size">${item.size || ""}</p>
+
+            <div class="cart-item-actions">
+              <div class="quantity-control">
+                <butt
