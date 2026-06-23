@@ -1,10 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const productsGrid = document.getElementById("productsGrid");
-  const productCount = document.getElementById("productCount");
-  const productsEmpty = document.getElementById("productsEmptyState");
-
-  const CART_KEY = "centralStoresCart";
+document.addEventListener("DOMContentLoaded", function () {
   const products = Array.isArray(window.products) ? window.products : [];
+
+  const grid = document.getElementById("productsGrid");
+  const count = document.getElementById("productCount");
+  const emptyState = document.getElementById("productsEmptyState");
+  const CART_KEY = "centralStoresCart";
+
+  if (!grid) {
+    console.log("productsGrid not found");
+    return;
+  }
 
   function getCart() {
     try {
@@ -21,101 +26,115 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateCartCount() {
     const cart = getCart();
 
-    const totalItems = cart.reduce((total, item) => {
-      return total + (Number(item.quantity) || 1);
+    const total = cart.reduce(function (sum, item) {
+      return sum + (Number(item.quantity) || 1);
     }, 0);
 
-    const cartCount = document.getElementById("bottomCartCount");
+    const bottomCartCount = document.getElementById("bottomCartCount");
 
-    if (cartCount) {
-      cartCount.textContent = totalItems;
+    if (bottomCartCount) {
+      bottomCartCount.textContent = total;
     }
   }
 
-  function productCardTemplate(product) {
-    const price = Number(product.price);
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function createProductCard(product) {
+    const safeName = escapeHtml(product.name);
+    const safeCategory = escapeHtml(product.category);
+    const safeWeight = escapeHtml(product.weight);
+    const safeImage = escapeHtml(product.image);
 
     return `
-      <article class="product-card">
-        <div class="product-image">
-          <img
-            src="${product.image}"
-            alt="${product.name}"
-            loading="lazy"
-          >
+      <article class="premium-product-card">
+        <div class="premium-product-image">
+          <img src="${safeImage}" alt="${safeName}" loading="lazy">
 
           <button
             type="button"
-            class="product-wishlist-btn"
-            aria-label="Wishlist"
+            class="premium-wishlist-btn"
+            aria-label="Add ${safeName} to wishlist"
           >♡</button>
         </div>
 
-        <div class="product-details">
-          <p class="product-category">${product.category}</p>
+        <div class="premium-product-content">
+          <p class="premium-product-category">${safeCategory}</p>
 
-          <h3>${product.name}</h3>
+          <h3 class="premium-product-name">${safeName}</h3>
 
-          <p class="product-weight">${product.weight}</p>
+          <p class="premium-product-weight">${safeWeight}</p>
 
-          <div class="product-price-wrap">
-            <span class="product-price-label">PRICE</span>
-            <p class="product-price">₹${isNaN(price) ? "0" : price}</p>
+          <div class="premium-product-price">
+            ₹${product.price}
           </div>
 
           <button
             type="button"
-            class="add-cart-btn"
+            class="premium-add-btn"
             data-product-id="${product.id}"
           >
-            <span class="add-cart-icon">+</span>
-            <span>Add</span>
+            <span class="premium-add-icon">+</span>
+            <span>Add to Cart</span>
           </button>
         </div>
       </article>
     `;
   }
 
-  function renderProducts(productList) {
-    if (!productsGrid) return;
+  function renderProducts(list) {
+    const productList = Array.isArray(list) ? list : [];
 
-    productsGrid.innerHTML = "";
+    if (count) {
+      count.textContent = productList.length;
+    }
 
-    if (!productList || productList.length === 0) {
-      if (productCount) productCount.textContent = "0";
-      if (productsEmpty) productsEmpty.hidden = false;
+    if (productList.length === 0) {
+      grid.innerHTML = "";
+
+      if (emptyState) {
+        emptyState.hidden = false;
+      }
+
       return;
     }
 
-    if (productsEmpty) productsEmpty.hidden = true;
-
-    productsGrid.innerHTML = productList
-      .map(productCardTemplate)
-      .join("");
-
-    if (productCount) {
-      productCount.textContent = productList.length;
+    if (emptyState) {
+      emptyState.hidden = true;
     }
+
+    grid.innerHTML = productList.map(createProductCard).join("");
   }
 
   function addToCart(productId, button) {
-    const selectedProduct = products.find(
-      (product) => product.id === productId
-    );
+    const product = products.find(function (item) {
+      return item.id === productId;
+    });
 
-    if (!selectedProduct) return;
+    if (!product) return;
 
     const cart = getCart();
 
-    const existingItem = cart.find(
-      (item) => item.id === selectedProduct.id
-    );
+    const existing = cart.find(function (item) {
+      return item.id === product.id;
+    });
 
-    if (existingItem) {
-      existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
+    if (existing) {
+      existing.quantity = (Number(existing.quantity) || 1) + 1;
     } else {
       cart.push({
-        ...selectedProduct,
+        id: product.id,
+        name: product.name,
+        category: product.category,
+        weight: product.weight,
+        price: product.price,
+        image: product.image,
         quantity: 1
       });
     }
@@ -124,41 +143,40 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCount();
 
     if (button) {
-      const oldText = button.innerHTML;
+      const original = button.innerHTML;
 
       button.innerHTML = `
-        <span class="add-cart-icon">✓</span>
+        <span class="premium-add-icon">✓</span>
         <span>Added</span>
       `;
 
-      button.classList.add("added");
+      button.classList.add("is-added");
 
-      setTimeout(() => {
-        button.innerHTML = oldText;
-        button.classList.remove("added");
+      setTimeout(function () {
+        button.innerHTML = original;
+        button.classList.remove("is-added");
       }, 900);
     }
   }
 
-  if (productsGrid) {
-    productsGrid.addEventListener("click", (event) => {
-      const addButton = event.target.closest(".add-cart-btn");
+  grid.addEventListener("click", function (event) {
+    const addButton = event.target.closest(".premium-add-btn");
 
-      if (addButton) {
-        addToCart(addButton.dataset.productId, addButton);
-        return;
-      }
+    if (addButton) {
+      addToCart(addButton.dataset.productId, addButton);
+      return;
+    }
 
-      const wishlistButton = event.target.closest(".product-wishlist-btn");
+    const wishlistButton = event.target.closest(".premium-wishlist-btn");
 
-      if (wishlistButton) {
-        wishlistButton.classList.toggle("active");
+    if (wishlistButton) {
+      wishlistButton.classList.toggle("is-active");
 
-        wishlistButton.textContent =
-          wishlistButton.classList.contains("active") ? "♥" : "♡";
-      }
-    });
-  }
+      wishlistButton.textContent = wishlistButton.classList.contains("is-active")
+        ? "♥"
+        : "♡";
+    }
+  });
 
   renderProducts(products);
   updateCartCount();
