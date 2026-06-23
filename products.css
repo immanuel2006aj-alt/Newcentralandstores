@@ -1821,4 +1821,255 @@ svg {
     height: 21px;
   }
 }
+/* =========================================================
+   PREMIUM SIDE MENU
+========================================================= */
+
+.menu-overlay {
+  position: fixed;
+  z-index: 500;
+  inset: 0;
+  visibility: hidden;
+  background: rgba(0, 0, 0, 0.68);
+  opacity: 0;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+  backdrop-filter: blur(3px);
+}
+
+.menu-overlay.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.side-menu {
+  position: fixed;
+  z-index: 501;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(88vw, 360px);
+  padding: 22px 18px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 95% 10%, rgba(255, 189, 0, 0.17), transparent 27%),
+    radial-gradient(circle at 5% 72%, rgba(255, 189, 0, 0.08), transparent 25%),
+    #101010;
+  box-shadow: 18px 0 45px rgba(0, 0, 0, 0.38);
+  transform: translateX(-105%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.side-menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.side-menu-logo {
+  display: grid;
+  width: 47px;
+  height: 47px;
+  place-items: center;
+  border: 1px solid rgba(255, 189, 0, 0.72);
+  border-radius: 13px;
+  background: rgba(255, 189, 0, 0.06);
+  color: #ffbd00;
+}
+
+.side-menu-logo svg {
+  width: 25px;
+  height: 25px;
+}
+
+.side-menu-brand h3 {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.side-menu-brand p {
+  margin-top: 4px;
+  color: #b7b7b7;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.side-menu-close {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  place-items: center;
+  border: 1px solid rgba(255, 189, 0, 0.35);
+  border-radius: 10px;
+  background: transparent;
+  color: #ffbd00;
+}
+
+.side-menu-close svg {
+  width: 21px;
+  height: 21px;
+}
+
+.side-menu-owner-card {
+  margin-top: 23px;
+  padding: 19px 17px;
+  border: 1px solid rgba(255, 189, 0, 0.42);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(255, 189, 0, 0.16), transparent 70%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.side-menu-label,
+.side-menu-detail span {
+  display: block;
+  color: #ffbd00;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+}
+
+.side-menu-owner-card h2 {
+  margin-top: 8px;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.side-menu-owner-card p {
+  margin-top: 5px;
+  color: #c4c4c4;
+  font-size: 11px;
+}
+
+.side-menu-details {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.side-menu-detail {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 11px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.side-menu-link {
+  color: inherit;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.side-menu-link:hover {
+  background: rgba(255, 189, 0, 0.1);
+  transform: translateX(3px);
+}
+
+.side-menu-detail-icon {
+  display: grid;
+  flex: 0 0 41px;
+  width: 41px;
+  height: 41px;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(255, 189, 0, 0.12);
+  color: #ffbd00;
+}
+
+.side-menu-detail-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.side-menu-detail strong {
+  display: block;
+  margin-top: 4px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.side-menu-detail p {
+  margin-top: 3px;
+  color: #a8a8a8;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.side-menu-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 49px;
+  margin-top: 3px;
+  border-radius: 12px;
+  background: #ffbd00;
+  color: #111111;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.side-menu-whatsapp svg {
+  width: 20px;
+  height: 20px;
+}
+
+.side-menu-bottom {
+  margin-top: auto;
+  padding-top: 24px;
+  color: #a4a4a4;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.side-menu-bottom small {
+  display: block;
+  margin-top: 7px;
+  color: #666666;
+  font-size: 9px;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .side-menu {
+    width: 390px;
+    padding: 28px 26px;
+  }
+
+  .side-menu-brand h3 {
+    font-size: 19px;
+  }
+
+  .side-menu-owner-card h2 {
+    font-size: 30px;
+  }
+
+  .side-menu-detail strong {
+    font-size: 13px;
+  }
+}
 
