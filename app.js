@@ -1,55 +1,10 @@
-/* =========================================================
-   CENTRAL & STORES - APP.JS
-   ========================================================= */
-
-"use strict";
-
-document.addEventListener("DOMContentLoaded", function () {
-  const CART_KEY = "centralStoresCart";
-
+document.addEventListener("DOMContentLoaded", () => {
   const productsGrid = document.getElementById("productsGrid");
   const productCount = document.getElementById("productCount");
   const productsEmpty = document.getElementById("productsEmptyState");
-  const productSearch = document.getElementById("productSearch");
-  const productsTitle = document.getElementById("productsTitle");
-  const resetProductsBtn = document.getElementById("resetProductsBtn");
-  const categoryButtons = document.querySelectorAll(".category-btn");
 
-  /* ---------------------------------------------------------
-     IMPORTANT:
-     products.js must load before app.js
-     --------------------------------------------------------- */
-
-  const productData =
-    typeof window.products !== "undefined" && Array.isArray(window.products)
-      ? window.products
-      : [];
-
-  if (!productsGrid) {
-    console.error("productsGrid ID missing in products.html");
-    return;
-  }
-
-  if (productData.length === 0) {
-    productsGrid.innerHTML = `
-      <div style="
-        grid-column:1/-1;
-        background:#fff;
-        border:1px solid #e9e4d9;
-        border-radius:16px;
-        padding:25px;
-        text-align:center;
-      ">
-        <h3 style="margin:0 0 10px;">Products not loading</h3>
-        <p style="margin:0;color:#777;">
-          Check products.js and script order.
-        </p>
-      </div>
-    `;
-
-    if (productCount) productCount.textContent = "0";
-    return;
-  }
+  const CART_KEY = "centralStoresCart";
+  const products = Array.isArray(window.products) ? window.products : [];
 
   function getCart() {
     try {
@@ -63,129 +18,113 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
   }
 
-  function formatPrice(price) {
-    const amount = Number(price) || 0;
-
-    return "₹" + amount.toLocaleString("en-IN");
-  }
-
-  function updateCartBadges() {
+  function updateCartCount() {
     const cart = getCart();
 
-    const totalItems = cart.reduce(function (total, item) {
+    const totalItems = cart.reduce((total, item) => {
       return total + (Number(item.quantity) || 1);
     }, 0);
 
-    const badges = document.querySelectorAll(
-      "#cartCount, #bottomCartCount, .cart-badge"
-    );
+    const cartCount = document.getElementById("bottomCartCount");
 
-    badges.forEach(function (badge) {
-      badge.textContent = totalItems;
-      badge.style.display = totalItems > 0 ? "flex" : "none";
-    });
+    if (cartCount) {
+      cartCount.textContent = totalItems;
+    }
   }
 
   function productCardTemplate(product) {
-  const price = Number(product.price || 0);
+    const price = Number(product.price);
 
-  return `
-    <article class="product-card">
-      <div class="product-image">
-        <img
-          src="${product.image}"
-          alt="${product.name}"
-          loading="lazy"
-        >
+    return `
+      <article class="product-card">
+        <div class="product-image">
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+            loading="lazy"
+          >
 
-        <button
-          type="button"
-          class="product-wishlist-btn"
-          aria-label="Add ${product.name} to wishlist"
-        >♡</button>
-      </div>
-
-      <div class="product-details">
-        <p class="product-category">${product.category}</p>
-
-        <h3>${product.name}</h3>
-
-        <p class="product-weight">${product.weight}</p>
-
-        <div class="product-price-wrap">
-          <span class="product-price-label">PRICE</span>
-          <p class="product-price">₹${price}</p>
+          <button
+            type="button"
+            class="product-wishlist-btn"
+            aria-label="Wishlist"
+          >♡</button>
         </div>
 
-        <button
-          type="button"
-          class="add-cart-btn"
-          data-product-id="${product.id}"
-        >
-          <span class="add-cart-icon">+</span>
-          <span>Add</span>
-        </button>
-      </div>
-    </article>
-  `;
+        <div class="product-details">
+          <p class="product-category">${product.category}</p>
+
+          <h3>${product.name}</h3>
+
+          <p class="product-weight">${product.weight}</p>
+
+          <div class="product-price-wrap">
+            <span class="product-price-label">PRICE</span>
+            <p class="product-price">₹${isNaN(price) ? "0" : price}</p>
+          </div>
+
+          <button
+            type="button"
+            class="add-cart-btn"
+            data-product-id="${product.id}"
+          >
+            <span class="add-cart-icon">+</span>
+            <span>Add</span>
+          </button>
+        </div>
+      </article>
+    `;
   }
 
-  function renderProducts(list) {
+  function renderProducts(productList) {
+    if (!productsGrid) return;
+
     productsGrid.innerHTML = "";
 
-    if (!list || list.length === 0) {
+    if (!productList || productList.length === 0) {
       if (productCount) productCount.textContent = "0";
-
-      if (productsEmpty) {
-        productsEmpty.hidden = false;
-      }
-
+      if (productsEmpty) productsEmpty.hidden = false;
       return;
     }
 
-    if (productsEmpty) {
-      productsEmpty.hidden = true;
-    }
+    if (productsEmpty) productsEmpty.hidden = true;
 
-    productsGrid.innerHTML = list.map(productCardTemplate).join("");
+    productsGrid.innerHTML = productList
+      .map(productCardTemplate)
+      .join("");
 
     if (productCount) {
-      productCount.textContent = list.length;
+      productCount.textContent = productList.length;
     }
   }
 
   function addToCart(productId, button) {
-    const selectedProduct = productData.find(function (product) {
-      return String(product.id) === String(productId);
-    });
+    const selectedProduct = products.find(
+      (product) => product.id === productId
+    );
 
     if (!selectedProduct) return;
 
     const cart = getCart();
 
-    const existingItem = cart.find(function (item) {
-      return String(item.id) === String(selectedProduct.id);
-    });
+    const existingItem = cart.find(
+      (item) => item.id === selectedProduct.id
+    );
 
     if (existingItem) {
       existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
     } else {
       cart.push({
-        id: selectedProduct.id,
-        name: selectedProduct.name,
-        category: selectedProduct.category,
-        weight: selectedProduct.weight,
-        price: Number(selectedProduct.price) || 0,
-        image: selectedProduct.image,
+        ...selectedProduct,
         quantity: 1
       });
     }
 
     saveCart(cart);
-    updateCartBadges();
+    updateCartCount();
 
     if (button) {
-      const oldHTML = button.innerHTML;
+      const oldText = button.innerHTML;
 
       button.innerHTML = `
         <span class="add-cart-icon">✓</span>
@@ -194,107 +133,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
       button.classList.add("added");
 
-      setTimeout(function () {
-        button.innerHTML = oldHTML;
+      setTimeout(() => {
+        button.innerHTML = oldText;
         button.classList.remove("added");
-      }, 1000);
+      }, 900);
     }
   }
 
-  productsGrid.addEventListener("click", function (event) {
-    const addButton = event.target.closest(".add-cart-btn");
+  if (productsGrid) {
+    productsGrid.addEventListener("click", (event) => {
+      const addButton = event.target.closest(".add-cart-btn");
 
-    if (addButton) {
-      addToCart(addButton.dataset.productId, addButton);
-      return;
-    }
-
-    const wishlistButton = event.target.closest(".product-wishlist-btn");
-
-    if (wishlistButton) {
-      wishlistButton.classList.toggle("active");
-
-      wishlistButton.textContent = wishlistButton.classList.contains("active")
-        ? "♥"
-        : "♡";
-    }
-  });
-
-  if (productSearch) {
-    productSearch.addEventListener("input", function (event) {
-      const value = event.target.value.trim().toLowerCase();
-
-      const filtered = productData.filter(function (product) {
-        const text = [
-          product.name,
-          product.category,
-          product.weight
-        ]
-          .join(" ")
-          .toLowerCase();
-
-        return text.includes(value);
-      });
-
-      if (productsTitle) {
-        productsTitle.textContent = value
-          ? "Search Results"
-          : "All Daily Essentials";
-      }
-
-      renderProducts(filtered);
-    });
-  }
-
-  categoryButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      const category = button.dataset.category || "All Products";
-
-      categoryButtons.forEach(function (item) {
-        item.classList.remove("active");
-      });
-
-      button.classList.add("active");
-
-      if (productSearch) {
-        productSearch.value = "";
-      }
-
-      if (category === "All Products") {
-        if (productsTitle) {
-          productsTitle.textContent = "All Daily Essentials";
-        }
-
-        renderProducts(productData);
+      if (addButton) {
+        addToCart(addButton.dataset.productId, addButton);
         return;
       }
 
-      const filtered = productData.filter(function (product) {
-        return product.category === category;
-      });
+      const wishlistButton = event.target.closest(".product-wishlist-btn");
 
-      if (productsTitle) {
-        productsTitle.textContent = category;
+      if (wishlistButton) {
+        wishlistButton.classList.toggle("active");
+
+        wishlistButton.textContent =
+          wishlistButton.classList.contains("active") ? "♥" : "♡";
       }
-
-      renderProducts(filtered);
-    });
-  });
-
-  if (resetProductsBtn) {
-    resetProductsBtn.addEventListener("click", function () {
-      if (productSearch) {
-        productSearch.value = "";
-      }
-
-      if (productsTitle) {
-        productsTitle.textContent = "All Daily Essentials";
-      }
-
-      renderProducts(productData);
     });
   }
 
-  renderProducts(productData);
-  updateCartBadges();
+  renderProducts(products);
+  updateCartCount();
 });
