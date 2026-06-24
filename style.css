@@ -255,6 +255,25 @@ svg {
   opacity: 1;
   visibility: visible;
 }
+/* Remove blue tap / focus box */
+.header-icon-btn,
+.header-cart,
+.menu-toggle,
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-icon-btn:focus,
+.header-icon-btn:active,
+.header-cart:focus,
+.header-cart:active,
+.menu-toggle:focus,
+.menu-toggle:active {
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
 
 /* =====================================================
    HEADER
@@ -1241,3 +1260,13 @@ svg {
   }
 
   .category-imag
+/* Remove blue touch box only for cart */
+.header-cart,
+.header-cart:focus,
+.header-cart:active,
+.header-cart:visited {
+  -webkit-tap-highlight-color: transparent;
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+     }
