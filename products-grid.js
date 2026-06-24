@@ -80,7 +80,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   renderProducts(productsData);
+const categoryButtons = document.querySelectorAll(".category-btn");
 
+categoryButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const selectedCategory = button.dataset.category;
+
+    // Active button change
+    categoryButtons.forEach((btn) => btn.classList.remove("active"));
+    button.classList.add("active");
+
+    // Filter products
+    if (selectedCategory === "All Products") {
+      renderProducts(productsData);
+    } else {
+      const filteredProducts = productsData.filter((product) => {
+        return product.category === selectedCategory;
+      });
+
+      renderProducts(filteredProducts);
+    }
+  });
+});
   document.addEventListener("click", (event) => {
     const button = event.target.closest(".add-cart-btn");
 
