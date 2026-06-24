@@ -26,7 +26,8 @@
   >
 
   <!-- Products page stylesheet -->
-  <link rel="stylesheet" href="products.css">
+  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="product-grid.css">
 </head>
 
 <body>
@@ -455,49 +456,18 @@
       <!-- =========================================================
            PRODUCT LIST TITLE
       ========================================================== -->
-      <section class="products-list-section">
+      <section class="product-grid-section" id="productsSection">
+  <div class="product-grid-heading">
+    <span class="grid-eyebrow">AVAILABLE ITEMS</span>
 
-        <div class="products-list-heading">
+    <h2>All Daily Essentials</h2>
 
-          <div>
-            <span class="section-eyebrow">
-              AVAILABLE ITEMS
-            </span>
+    <span class="product-count">
+      <strong id="productCount">0</strong> PRODUCTS
+    </span>
+  </div>
 
-            <h2 id="productsTitle">All Daily Essentials</h2>
-          </div>
-
-          <div class="products-count-box">
-            <strong id="productsCount">0</strong>
-            <span>PRODUCTS</span>
-          </div>
-
-        </div>
-
-        <!-- Products.js will insert all product cards here -->
-        <div class="products-grid" id="productsGrid"></div>
-
-        <!-- Search / category empty result -->
-        <div class="products-empty-state" id="productsEmptyState">
-
-          <div class="empty-icon">
-            <svg>
-              <use href="#icon-search"></use>
-            </svg>
-          </div>
-
-          <h3>No products found</h3>
-
-          <p>
-            Try another product name or select a different category.
-          </p>
-
-          <button type="button" id="resetProductsBtn">
-            View All Products
-          </button>
-
-        </div>
-
+  <div class="products-grid" id="productsGrid"></div>
       </section>
       <!-- =========================================================
            ORDER CONFIRMATION SECTION
@@ -702,8 +672,12 @@
        PRODUCTS JAVASCRIPT
        Keep products.js in the same GitHub folder.
   ========================================================== -->
-  <script src="products.js"></script>
-
+  <script src="app.js"></script>
+<script src="products-name.js"></script>
+<script src="price.js"></script>
+<script src="products-grid.js"></script>
+</body>
+</html>
 </body>
 </html>
     
