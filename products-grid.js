@@ -42,9 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
       productsGrid.innerHTML += `
         <article class="product-card">
           <div class="product-image-wrap">
-            <div class="no-image-placeholder">
-              <span>NO IMAGE</span>
-            </div>
+  ${
+    typeof productImages !== "undefined" && productImages[product.id]
+      ? `<img src="${productImages[product.id]}" alt="${product.name}" loading="lazy">`
+      : `<div class="product-image-placeholder"><span>NO IMAGE</span></div>`
+  }
+</div>
 
             <button
               class="product-wishlist-btn"
