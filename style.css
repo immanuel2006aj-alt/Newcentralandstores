@@ -224,6 +224,37 @@ svg {
   font-size: 12px;
   font-weight: 700;
 }
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(84vw, 340px);
+  height: 100dvh;
+  background: #111;
+  color: #fff;
+  transform: translateX(-105%);
+  transition: transform 0.28s ease;
+  z-index: 9999;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.25s ease;
+  z-index: 9998;
+}
+
+.menu-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
 
 /* =====================================================
    HEADER
