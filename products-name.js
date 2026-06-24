@@ -118,4 +118,41 @@ const productsData = [
   { id: 98, name: "Good Knight Refill", category: "Home Care", weight: "45 ml" },
   { id: 99, name: "Odonil Room Freshener", category: "Home Care", weight: "75 g" },
   { id: 100, name: "Scotch Brite Scrub Pad", category: "Home Care", weight: "1 pack" }
+  /* ===============================
+   BISCUITS
+================================ */
+{ id: 101, name: "Britannia Good Day Cashew", category: "Biscuits", weight: "200 g" },
+{ id: 102, name: "Britannia Marie Gold", category: "Biscuits", weight: "250 g" },
+{ id: 103, name: "Parle-G Original", category: "Biscuits", weight: "800 g" },
+{ id: 104, name: "Parle Hide & Seek", category: "Biscuits", weight: "100 g" },
+{ id: 105, name: "Sunfeast Marie Light", category: "Biscuits", weight: "250 g" },
+{ id: 106, name: "Sunfeast Dark Fantasy", category: "Biscuits", weight: "75 g" },
+{ id: 107, name: "Sunfeast Mom's Magic", category: "Biscuits", weight: "200 g" },
+{ id: 108, name: "Britannia 50-50 Maska Chaska", category: "Biscuits", weight: "100 g" },
+{ id: 109, name: "Oreo Original Biscuits", category: "Biscuits", weight: "120 g" },
+{ id: 110, name: "Milk Bikis Classic", category: "Biscuits", weight: "200 g" },
+{ id: 111, name: "Britannia Bourbon", category: "Biscuits", weight: "150 g" },
+{ id: 112, name: "Parle KrackJack", category: "Biscuits", weight: "200 g" },
+{ id: 113, name: "Britannia NutriChoice Digestive", category: "Biscuits", weight: "200 g" },
+{ id: 114, name: "Sunfeast Nice Sugar Sprinkle", category: "Biscuits", weight: "150 g" },
+{ id: 115, name: "Britannia Little Hearts", category: "Biscuits", weight: "75 g" },
+
+/* ===============================
+   TAMIL NADU SNACKS
+================================ */
+{ id: 116, name: "Mixture", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 117, name: "Kara Boondi", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 118, name: "Omapodi", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 119, name: "Kai Murukku", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 120, name: "Butter Murukku", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 121, name: "Thattai", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 122, name: "Ribbon Pakoda", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 123, name: "Kara Sev", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 124, name: "Garlic Murukku", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 125, name: "Nendran Banana Chips", category: "Tamil Nadu Snacks", weight: "150 g" },
+{ id: 126, name: "Potato Chips Salted", category: "Tamil Nadu Snacks", weight: "150 g" },
+{ id: 127, name: "Spicy Tapioca Chips", category: "Tamil Nadu Snacks", weight: "150 g" },
+{ id: 128, name: "Masala Groundnut", category: "Tamil Nadu Snacks", weight: "200 g" },
+{ id: 129, name: "Pori Urundai", category: "Tamil Nadu Snacks", weight: "150 g" },
+{ id: 130, name: "Kadalai Mittai", category: "Tamil Nadu Snacks", weight: "150 g" }
 ];
