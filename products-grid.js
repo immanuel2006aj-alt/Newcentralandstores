@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   renderProducts(productsData);
-const categoryButtons = document.querySelectorAll(".category-btn");
+const categoryButtons = document.querySelectorAll(".category-pill");
 
 categoryButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -91,7 +91,7 @@ categoryButtons.forEach((button) => {
     button.classList.add("active");
 
     // Filter products
-    if (selectedCategory === "All Products") {
+    if (selectedCategory === "All") {
       renderProducts(productsData);
     } else {
       const filteredProducts = productsData.filter((product) => {
