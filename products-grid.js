@@ -36,11 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    items.forEach((product) => {const price = Number(
-  (typeof productPrices !== "undefined" && productPrices[product.id]) ||
-  product.price ||
-  0
-);
+    items.forEach((product) => {
+  const price = productPrices[product.id] ?? 0;
 
       productsGrid.innerHTML += `
         <article class="product-card">
@@ -97,12 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!product) return;
 
-    const price = Number(
-  (typeof productPrices !== "undefined" && productPrices[product.id]) ||
-  product.price ||
-  0
-);
-
+    const price = productPrices[product.id] ?? 0;
+  
     if (typeof addProductToCart === "function") {
       addProductToCart({
         id: product.id,
