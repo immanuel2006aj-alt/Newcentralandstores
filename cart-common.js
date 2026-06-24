@@ -1,50 +1,55 @@
-const CART_KEY = "centralStoreCart";
+const CART_KEY = "centralStoresCart";
 
-function getCart() {
-  return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+function getCentralCart() {
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  } catch (error) {
+    return [];
+  }
 }
 
-function saveCart(cart) {
+function saveCentralCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
-}
-
-function getCartCount() {
-  return getCart().reduce((total, item) => {
-    return total + Number(item.quantity || 0);
-  }, 0);
+  updateAllCartBadges();
 }
 
 function updateAllCartBadges() {
-  const count = getCartCount();
+  const cart = getCentralCart();
+
+  const total = cart.reduce((sum, item) => {
+    return sum + (Number(item.quantity) || 1);
+  }, 0);
 
   document.querySelectorAll(
-    "#cartCount, .cart-count, .cart-badge, [data-cart-count]"
+    ".cart-count, .cart-badge, [data-cart-count]"
   ).forEach((badge) => {
-    badge.textContent = count;
-    badge.style.display = count > 0 ? "flex" : "none";
+    badge.textContent = total;
   });
 }
 
 function addProductToCart(product) {
-  const cart = getCart();
+  const cart = getCentralCart();
 
-  const existing = cart.find((item) => item.id === product.id);
+  const existingItem = cart.find(
+    (item) => String(item.id) === String(product.id)
+  );
 
-  if (existing) {
-    existing.quantity += 1;
+  if (existingItem) {
+    existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
   } else {
     cart.push({
       id: product.id,
       name: product.name,
       category: product.category || "",
       weight: product.weight || "",
-      price: product.price || "₹0",
+      price: Number(product.price) || 0,
       quantity: 1
     });
   }
 
-  saveCart(cart);
-  updateAllCartBadges();
+  saveCentralCart(cart);
 }
 
-document.addEventListener("DOMContentLoaded", updateAllCartBadges);
+document.addEventListener("DOMContentLoaded", () => {
+  updateAllCartBadges();
+});
