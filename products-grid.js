@@ -5,27 +5,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!productsGrid) return;
 
-  /* =========================================================
-     PRODUCTS + PRICES MERGE
-     productsData -> products-name.js
+  /* =====================================================
+     PRODUCTS DATA MERGE
+     productsData  -> products-name.js
      productPrices -> price.js
-  ========================================================= */
-  const products = productsData.map((product) => ({
-    ...product,
-    price: productPrices[product.id] || 0
-  }));
+  ===================================================== */
 
-  /* =========================================================
-     RENDER PREMIUM 2 COLUMN PRODUCT GRID
-  ========================================================= */
+  const products = (typeof productsData !== "undefined" ? productsData : []).map((product) => {
+    return {
+      ...product,
+      price:
+        typeof productPrices !== "undefined" && productPrices[product.id]
+          ? productPrices[product.id]
+          : product.price || 0,
+    };
+  });
+
+  /* =====================================================
+     CART STORAGE
+  ===================================================== */
+
+  let cart = JSON.parse(localStorage.getItem("centralStoreCart")) || [];
+
+  function saveCart() {
+    localStorage.setItem("centralStoreCart", JSON.stringify(cart));
+  }
+
+  function updateCartBadge() {
+    const totalItems = cart.reduce((total, item) => total + item.qty, 0);
+
+    if (cartBadge) {
+      cartBadge.textContent = totalItems;
+    }
+  }
+
+  /* =====================================================
+     RENDER PRODUCTS
+  ===================================================== */
+
   function renderProducts(items) {
     productsGrid.innerHTML = "";
 
-    if (!items.length) {
+    if (!items || items.length === 0) {
       productsGrid.innerHTML = `
-        <div class="mini-empty-state">
-          <strong>No products found</strong>
-          <span>Try another category or search word.</span>
+        <div class="products-empty-state show">
+          <div class="empty-icon">⌕</div>
+          <h3>No products found</h3>
+          <p>Try another category or search word.</p>
         </div>
       `;
 
@@ -37,15 +63,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     items.forEach((product) => {
+      const price = Number(product.price || 0);
+
       productsGrid.innerHTML += `
-        <article class="mini-product-card">
-          <div class="mini-product-image">
-            <div class="mini-no-image">
+        <article class="product-card">
+          
+          <div class="product-image-wrap">
+            <div class="no-image-placeholder">
               <span>NO IMAGE</span>
             </div>
 
             <button
-              class="mini-wishlist-btn"
+              class="product-wishlist-btn"
               type="button"
               data-id="${product.id}"
               aria-label="Add ${product.name} to wishlist"
@@ -54,33 +83,34 @@ document.addEventListener("DOMContentLoaded", () => {
             </button>
           </div>
 
-          <div class="mini-product-details">
-            <span class="mini-product-category">
-              ${product.category}
+          <div class="product-details">
+            <span class="product-category">
+              ${product.category || "Daily Essentials"}
             </span>
 
-            <h3 class="mini-product-name">
+            <h3 class="product-name">
               ${product.name}
             </h3>
 
-            <span class="mini-product-weight">
+            <span class="product-weight">
               ${product.weight || ""}
             </span>
 
-            <div class="mini-product-bottom">
-              <strong class="mini-product-price">
-                ₹${product.price}
+            <div class="product-footer">
+              <strong class="product-price">
+                ₹${price}
               </strong>
 
               <button
-                class="mini-add-btn"
+                class="add-cart-btn"
                 type="button"
                 data-id="${product.id}"
               >
-                + Add
+                <span>+</span> Add
               </button>
             </div>
           </div>
+
         </article>
       `;
     });
@@ -93,129 +123,131 @@ document.addEventListener("DOMContentLoaded", () => {
     bindWishlistButtons();
   }
 
-  /* =========================================================
+  /* =====================================================
      ADD TO CART
-  ========================================================= */
+  ===================================================== */
+
   function bindCartButtons() {
-    const addButtons = document.querySelectorAll(".mini-add-btn");
+    const addButtons = document.querySelectorAll(".add-cart-btn");
 
     addButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const productId = button.dataset.id;
-        addToCart(productId);
+
+        const product = products.find(
+          (item) => String(item.id) === String(productId)
+        );
+
+        if (!product) return;
+
+        const alreadyInCart = cart.find(
+          (item) => String(item.id) === String(productId)
+        );
+
+        if (alreadyInCart) {
+          alreadyInCart.qty += 1;
+        } else {
+          cart.push({
+            id: product.id,
+            name: product.name,
+            category: product.category,
+            weight: product.weight,
+            price: Number(product.price || 0),
+            qty: 1,
+          });
+        }
+
+        saveCart();
+        updateCartBadge();
 
         button.classList.add("added");
         button.innerHTML = "✓ Added";
 
         setTimeout(() => {
           button.classList.remove("added");
-          button.innerHTML = "+ Add";
-        }, 1200);
+          button.innerHTML = "<span>+</span> Add";
+        }, 900);
       });
     });
   }
 
-  /* =========================================================
-     CART STORAGE
-  ========================================================= */
-  function addToCart(productId) {
-    const selectedProduct = products.find(
-      (product) => String(product.id) === String(productId)
-    );
+  /* =====================================================
+     WISHLIST BUTTON
+  ===================================================== */
 
-    if (!selectedProduct) return;
-
-    let cart = JSON.parse(localStorage.getItem("centralStoreCart")) || [];
-
-    const existingItem = cart.find(
-      (item) => String(item.id) === String(productId)
-    );
-
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({
-        ...selectedProduct,
-        quantity: 1
-      });
-    }
-
-    localStorage.setItem("centralStoreCart", JSON.stringify(cart));
-
-    updateCartBadge();
-  }
-
-  /* =========================================================
-     WISHLIST
-  ========================================================= */
   function bindWishlistButtons() {
-    const wishlistButtons = document.querySelectorAll(".mini-wishlist-btn");
+    const wishlistButtons = document.querySelectorAll(".product-wishlist-btn");
 
     wishlistButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        const productId = button.dataset.id;
-
         button.classList.toggle("active");
 
         if (button.classList.contains("active")) {
           button.innerHTML = "♥";
-          saveWishlist(productId);
         } else {
           button.innerHTML = "♡";
-          removeWishlist(productId);
         }
       });
     });
   }
 
-  function saveWishlist(productId) {
-    let wishlist = JSON.parse(
-      localStorage.getItem("centralStoreWishlist")
-    ) || [];
+  /* =====================================================
+     SEARCH SUPPORT
+     If products.html has search input with id="productSearch"
+  ===================================================== */
 
-    if (!wishlist.includes(String(productId))) {
-      wishlist.push(String(productId));
-    }
+  const productSearch = document.getElementById("productSearch");
 
-    localStorage.setItem(
-      "centralStoreWishlist",
-      JSON.stringify(wishlist)
-    );
+  if (productSearch) {
+    productSearch.addEventListener("input", (event) => {
+      const searchText = event.target.value.toLowerCase().trim();
+
+      const filteredProducts = products.filter((product) => {
+        const name = (product.name || "").toLowerCase();
+        const category = (product.category || "").toLowerCase();
+
+        return name.includes(searchText) || category.includes(searchText);
+      });
+
+      renderProducts(filteredProducts);
+    });
   }
 
-  function removeWishlist(productId) {
-    let wishlist = JSON.parse(
-      localStorage.getItem("centralStoreWishlist")
-    ) || [];
+  /* =====================================================
+     CATEGORY FILTER SUPPORT
+     If buttons have class="category-filter"
+     Example: data-category="Rice & Flours"
+  ===================================================== */
 
-    wishlist = wishlist.filter(
-      (id) => String(id) !== String(productId)
-    );
+  const categoryButtons = document.querySelectorAll(".category-filter");
 
-    localStorage.setItem(
-      "centralStoreWishlist",
-      JSON.stringify(wishlist)
-    );
-  }
+  categoryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedCategory = button.dataset.category;
 
-  /* =========================================================
-     CART BADGE UPDATE
-  ========================================================= */
-  function updateCartBadge() {
-    if (!cartBadge) return;
+      categoryButtons.forEach((item) => {
+        item.classList.remove("active");
+      });
 
-    const cart = JSON.parse(localStorage.getItem("centralStoreCart")) || [];
+      button.classList.add("active");
 
-    const totalItems = cart.reduce((total, item) => {
-      return total + (item.quantity || 0);
-    }, 0);
+      if (!selectedCategory || selectedCategory === "All") {
+        renderProducts(products);
+        return;
+      }
 
-    cartBadge.textContent = totalItems;
-  }
+      const filteredProducts = products.filter((product) => {
+        return product.category === selectedCategory;
+      });
 
-  /* =========================================================
-     INITIAL LOAD
-  ========================================================= */
+      renderProducts(filteredProducts);
+    });
+  });
+
+  /* =====================================================
+     FIRST LOAD
+  ===================================================== */
+
   renderProducts(products);
   updateCartBadge();
 });
