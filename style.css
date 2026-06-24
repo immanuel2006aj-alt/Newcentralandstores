@@ -1260,13 +1260,33 @@ a {
   }
 
   .category-imag
-/* Remove blue touch box only for cart */
-.header-cart,
-.header-cart:focus,
-.header-cart:active,
-.header-cart:visited {
+/* REMOVE BLUE TAP / FOCUS BOX FROM WHOLE WEBSITE */
+* {
   -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button,
+input,
+select,
+textarea,
+[role="button"] {
   outline: none !important;
-  background: transparent !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+a:focus,
+a:active,
+a:focus-visible,
+button:focus,
+button:active,
+button:focus-visible,
+input:focus,
+select:focus,
+textarea:focus,
+[role="button"]:focus,
+[role="button"]:active,
+[role="button"]:focus-visible {
+  outline: none !important;
   box-shadow: none !important;
-     }
+}
