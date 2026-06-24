@@ -181,11 +181,42 @@ document.addEventListener("DOMContentLoaded", function () {
   renderProducts(products);
   updateCartCount();
 });
-// MENU TEST
-const openMenuBtn = document.getElementById("openMenu");
+/* THEME SWITCH */
+const themeSwitch = document.getElementById("themeSwitch");
+const themeModeText = document.getElementById("themeModeText");
 
-if (openMenuBtn) {
-  openMenuBtn.addEventListener("click", () => {
-    alert("MENU BUTTON WORKING");
+function applyTheme(mode) {
+  const isLight = mode === "light";
+
+  document.body.classList.toggle("light-mode", isLight);
+
+  if (themeSwitch) {
+    themeSwitch.classList.toggle("active", isLight);
+
+    const iconUse = themeSwitch.querySelector("use");
+    if (iconUse) {
+      iconUse.setAttribute(
+        "href",
+        isLight ? "#icon-sun" : "#icon-moon"
+      );
+    }
+  }
+
+  if (themeModeText) {
+    themeModeText.textContent = isLight ? "Light Mode" : "Dark Mode";
+  }
+}
+
+const savedTheme = localStorage.getItem("centralStoresTheme") || "dark";
+applyTheme(savedTheme);
+
+if (themeSwitch) {
+  themeSwitch.addEventListener("click", function () {
+    const nextTheme = document.body.classList.contains("light-mode")
+      ? "dark"
+      : "light";
+
+    localStorage.setItem("centralStoresTheme", nextTheme);
+    applyTheme(nextTheme);
   });
 }
