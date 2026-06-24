@@ -148,7 +148,39 @@
           <svg><use href="#icon-whatsapp"></use></svg>
           WhatsApp Store
         </a>
-      </div>
+        <div class="theme-switch-row">
+  <div class="theme-switch-text">
+    <svg class="theme-switch-icon" aria-hidden="true">
+      <use href="#icon-moon"></use>
+    </svg>
+    <span id="themeModeText">Dark Mode</span>
+  </div>
+<button
+    class="theme-switch"
+    id="themeSwitch"
+    type="button"
+    aria-label="Toggle dark mode"
+    onclick="
+      document.body.classList.toggle('light-mode');
+      this.classList.toggle('active');
+
+      const isLight = document.body.classList.contains('light-mode');
+      document.getElementById('themeModeText').textContent = isLight ? 'Light Mode' : 'Dark Mode';
+
+      this.querySelector('use').setAttribute(
+        'href',
+        isLight ? '#icon-sun' : '#icon-moon'
+      );
+    "
+  >
+    <span class="theme-switch-knob">
+      <svg aria-hidden="true">
+        <use href="#icon-moon"></use>
+      </svg>
+    </span>
+  </button>
+</div>
+</div>
     </aside>
 
     <!-- =========================
