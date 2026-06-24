@@ -2,58 +2,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const productsGrid = document.getElementById("productsGrid");
   const productCount = document.getElementById("productCount");
   const cartBadge = document.getElementById("cartCount");
+  const emptyState = document.getElementById("productsEmptyState");
 
-  if (!productsGrid) return;
+  if (!productsGrid) {
+    console.error("productsGrid not found in products.html");
+    return;
+  }
 
-  /* =====================================================
-     PRODUCTS DATA MERGE
-     productsData  -> products-name.js
-     productPrices -> price.js
-  ===================================================== */
+  /* =========================================================
+     PRODUCT DATA
+     productsData + productPrices should be available
+     from your products-data.js file
+  ========================================================= */
 
-  const products = (typeof productsData !== "undefined" ? productsData : []).map((product) => {
-    return {
+  const products = (typeof productsData !== "undefined" ? productsData : []).map(
+    (product) => ({
       ...product,
       price:
         typeof productPrices !== "undefined" && productPrices[product.id]
           ? productPrices[product.id]
-          : product.price || 0,
-    };
-  });
-
-  /* =====================================================
-     CART STORAGE
-  ===================================================== */
+          : product.price || 0
+    })
+  );
 
   let cart = JSON.parse(localStorage.getItem("centralStoreCart")) || [];
+  let wishlist =
+    JSON.parse(localStorage.getItem("centralStoreWishlist")) || [];
 
-  function saveCart() {
-    localStorage.setItem("centralStoreCart", JSON.stringify(cart));
-  }
-
-  function updateCartBadge() {
-    const totalItems = cart.reduce((total, item) => total + item.qty, 0);
-
-    if (cartBadge) {
-      cartBadge.textContent = totalItems;
-    }
-  }
-
-  /* =====================================================
+  /* =========================================================
      RENDER PRODUCTS
-  ===================================================== */
+  ========================================================= */
 
   function renderProducts(items) {
     productsGrid.innerHTML = "";
 
     if (!items || items.length === 0) {
-      productsGrid.innerHTML = `
-        <div class="products-empty-state show">
-          <div class="empty-icon">⌕</div>
-          <h3>No products found</h3>
-          <p>Try another category or search word.</p>
-        </div>
-      `;
+      if (emptyState) {
+        emptyState.classList.add("show");
+      }
 
       if (productCount) {
         productCount.textContent = "0";
@@ -62,21 +48,28 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (emptyState) {
+      emptyState.classList.remove("show");
+    }
+
     items.forEach((product) => {
-      const price = Number(product.price || 0);
+      const isWishlisted = wishlist.includes(product.id);
+      const imageHtml = product.image
+        ? `<img src="${product.image}" alt="${product.name}" class="product-image">`
+        : `<div class="no-image-placeholder"><span>NO IMAGE</span></div>`;
+
+      const isAdded = cart.some((item) => item.id === product.id);
 
       productsGrid.innerHTML += `
         <article class="product-card">
           
           <div class="product-image-wrap">
-            <div class="no-image-placeholder">
-              <span>NO IMAGE</span>
-            </div>
+            ${imageHtml}
 
             <button
-              class="product-wishlist-btn"
+              class="product-wishlist-btn ${isWishlisted ? "active" : ""}"
               type="button"
-              data-id="${product.id}"
+              data-wishlist-id="${product.id}"
               aria-label="Add ${product.name} to wishlist"
             >
               ♡
@@ -98,19 +91,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="product-footer">
               <strong class="product-price">
-                ₹${price}
+                ₹${product.price}
               </strong>
 
               <button
-                class="add-cart-btn"
+                class="add-cart-btn ${isAdded ? "added" : ""}"
                 type="button"
-                data-id="${product.id}"
+                data-product-id="${product.id}"
               >
-                <span>+</span> Add
+                ${isAdded ? "✓ Added" : "+ Add"}
               </button>
             </div>
           </div>
-
         </article>
       `;
     });
@@ -123,131 +115,122 @@ document.addEventListener("DOMContentLoaded", () => {
     bindWishlistButtons();
   }
 
-  /* =====================================================
+  /* =========================================================
      ADD TO CART
-  ===================================================== */
+  ========================================================= */
 
   function bindCartButtons() {
-    const addButtons = document.querySelectorAll(".add-cart-btn");
+    const buttons = document.querySelectorAll(".add-cart-btn");
 
-    addButtons.forEach((button) => {
+    buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        const productId = button.dataset.id;
-
+        const productId = button.dataset.productId;
         const product = products.find(
           (item) => String(item.id) === String(productId)
         );
 
         if (!product) return;
 
-        const alreadyInCart = cart.find(
+        const existingItem = cart.find(
           (item) => String(item.id) === String(productId)
         );
 
-        if (alreadyInCart) {
-          alreadyInCart.qty += 1;
+        if (existingItem) {
+          existingItem.quantity += 1;
         } else {
           cart.push({
             id: product.id,
             name: product.name,
-            category: product.category,
-            weight: product.weight,
-            price: Number(product.price || 0),
-            qty: 1,
+            price: product.price,
+            weight: product.weight || "",
+            image: product.image || "",
+            quantity: 1
           });
         }
 
-        saveCart();
-        updateCartBadge();
+        localStorage.setItem("centralStoreCart", JSON.stringify(cart));
 
         button.classList.add("added");
-        button.innerHTML = "✓ Added";
+        button.textContent = "✓ Added";
 
-        setTimeout(() => {
-          button.classList.remove("added");
-          button.innerHTML = "<span>+</span> Add";
-        }, 900);
+        updateCartBadge();
       });
     });
   }
 
-  /* =====================================================
-     WISHLIST BUTTON
-  ===================================================== */
+  /* =========================================================
+     WISHLIST
+  ========================================================= */
 
   function bindWishlistButtons() {
-    const wishlistButtons = document.querySelectorAll(".product-wishlist-btn");
+    const buttons = document.querySelectorAll(".product-wishlist-btn");
 
-    wishlistButtons.forEach((button) => {
+    buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        button.classList.toggle("active");
+        const productId = button.dataset.wishlistId;
 
-        if (button.classList.contains("active")) {
-          button.innerHTML = "♥";
+        if (wishlist.includes(productId)) {
+          wishlist = wishlist.filter((id) => id !== productId);
+          button.classList.remove("active");
+          button.textContent = "♡";
         } else {
-          button.innerHTML = "♡";
+          wishlist.push(productId);
+          button.classList.add("active");
+          button.textContent = "♥";
         }
+
+        localStorage.setItem(
+          "centralStoreWishlist",
+          JSON.stringify(wishlist)
+        );
       });
     });
   }
 
-  /* =====================================================
+  /* =========================================================
+     CART BADGE
+  ========================================================= */
+
+  function updateCartBadge() {
+    if (!cartBadge) return;
+
+    const totalItems = cart.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0
+    );
+
+    cartBadge.textContent = totalItems;
+    cartBadge.style.display = totalItems > 0 ? "flex" : "none";
+  }
+
+  /* =========================================================
      SEARCH SUPPORT
-     If products.html has search input with id="productSearch"
-  ===================================================== */
+     If search page sends ?search=rice
+  ========================================================= */
 
-  const productSearch = document.getElementById("productSearch");
+  function getSearchResults() {
+    const params = new URLSearchParams(window.location.search);
+    const searchTerm = params.get("search");
 
-  if (productSearch) {
-    productSearch.addEventListener("input", (event) => {
-      const searchText = event.target.value.toLowerCase().trim();
+    if (!searchTerm) return products;
 
-      const filteredProducts = products.filter((product) => {
-        const name = (product.name || "").toLowerCase();
-        const category = (product.category || "").toLowerCase();
+    const keyword = searchTerm.toLowerCase().trim();
 
-        return name.includes(searchText) || category.includes(searchText);
-      });
-
-      renderProducts(filteredProducts);
+    return products.filter((product) => {
+      return (
+        product.name.toLowerCase().includes(keyword) ||
+        (product.category || "").toLowerCase().includes(keyword) ||
+        (product.weight || "").toLowerCase().includes(keyword)
+      );
     });
   }
 
-  /* =====================================================
-     CATEGORY FILTER SUPPORT
-     If buttons have class="category-filter"
-     Example: data-category="Rice & Flours"
-  ===================================================== */
+  /* =========================================================
+     START
+  ========================================================= */
 
-  const categoryButtons = document.querySelectorAll(".category-filter");
+  const filteredProducts = getSearchResults();
 
-  categoryButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const selectedCategory = button.dataset.category;
-
-      categoryButtons.forEach((item) => {
-        item.classList.remove("active");
-      });
-
-      button.classList.add("active");
-
-      if (!selectedCategory || selectedCategory === "All") {
-        renderProducts(products);
-        return;
-      }
-
-      const filteredProducts = products.filter((product) => {
-        return product.category === selectedCategory;
-      });
-
-      renderProducts(filteredProducts);
-    });
-  });
-
-  /* =====================================================
-     FIRST LOAD
-  ===================================================== */
-
-  renderProducts(products);
+  renderProducts(filteredProducts);
   updateCartBadge();
 });
