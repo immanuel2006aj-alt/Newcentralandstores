@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "centralStoresCart";
 
-  const cartItemsContainer = document.getElementById("cartItems");
   const emptyCart = document.getElementById("emptyCart");
-  const cartContent = document.getElementById("cartContent");
-  const cartCount = document.getElementById("cartCount");
-  const cartTotal = document.getElementById("cartTotal");
+  const cartProductsCard = document.getElementById("cartProductsCard");
+  const cartItemCount = document.getElementById("cartItemCount");
+  const cartItemsList = document.getElementById("cartItemsList");
+  const customerDetailsCard = document.getElementById("customerDetailsCard");
 
   function getCart() {
     try {
@@ -19,45 +19,47 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
   }
 
-  function updateAllBadges(cart) {
-    const totalQuantity = cart.reduce((total, item) => {
-      return total + (Number(item.quantity) || 1);
+  function updateBadges(cart) {
+    const total = cart.reduce((sum, item) => {
+      return sum + (Number(item.quantity) || 1);
     }, 0);
 
     document.querySelectorAll(
       "#cartCount, .cart-count, .cart-badge, [data-cart-count]"
     ).forEach((badge) => {
-      badge.textContent = totalQuantity;
+      badge.textContent = total;
     });
   }
 
   function renderCart() {
     const cart = getCart();
 
-    updateAllBadges(cart);
+    updateBadges(cart);
 
     if (!cart.length) {
-      if (emptyCart) emptyCart.style.display = "block";
-      if (cartContent) cartContent.style.display = "none";
+      if (emptyCart) emptyCart.hidden = false;
+      if (cartProductsCard) cartProductsCard.hidden = true;
+      if (customerDetailsCard) customerDetailsCard.hidden = true;
       return;
     }
 
-    if (emptyCart) emptyCart.style.display = "none";
-    if (cartContent) cartContent.style.display = "block";
+    if (emptyCart) emptyCart.hidden = true;
+    if (cartProductsCard) cartProductsCard.hidden = false;
+    if (customerDetailsCard) customerDetailsCard.hidden = false;
 
-    if (!cartItemsContainer) {
-      console.log("cartItems id missing in cart.html");
-      return;
+    if (!cartItemsList) return;
+
+    const totalQuantity = cart.reduce((sum, item) => {
+      return sum + (Number(item.quantity) || 1);
+    }, 0);
+
+    if (cartItemCount) {
+      cartItemCount.textContent = totalQuantity;
     }
 
-    let total = 0;
-
-    cartItemsContainer.innerHTML = cart.map((item) => {
+    cartItemsList.innerHTML = cart.map((item) => {
       const quantity = Number(item.quantity) || 1;
       const price = Number(item.price) || 0;
-      const itemTotal = price * quantity;
-
-      total += itemTotal;
 
       return `
         <article class="cart-item" data-id="${item.id}">
@@ -65,59 +67,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div class="cart-item-info">
             <span class="cart-item-category">${item.category || "Grocery"}</span>
-            <h3>${item.name}</h3>
+
+            <h3 class="cart-item-name">${item.name}</h3>
+
             <span class="cart-item-weight">${item.weight || ""}</span>
 
             <strong class="cart-item-price">₹${price}</strong>
 
-            <div class="cart-quantity">
-              <button type="button" class="qty-btn" data-action="minus" data-id="${item.id}">−</button>
-              <span>${quantity}</span>
-              <button type="button" class="qty-btn" data-action="plus" data-id="${item.id}">+</button>
+            <div class="cart-quantity-control">
+              <button type="button" class="quantity-btn" data-action="minus" data-id="${item.id}">−</button>
+              <span class="quantity-value">${quantity}</span>
+              <button type="button" class="quantity-btn" data-action="plus" data-id="${item.id}">+</button>
             </div>
           </div>
 
-          <button type="button" class="remove-cart-item" data-id="${item.id}">
+          <button type="button" class="remove-item-btn" data-id="${item.id}">
             Remove
           </button>
         </article>
       `;
     }).join("");
-
-    if (cartTotal) {
-      cartTotal.textContent = `₹${total}`;
-    }
   }
 
   document.addEventListener("click", (event) => {
-    const qtyButton = event.target.closest(".qty-btn");
-    const removeButton = event.target.closest(".remove-cart-item");
+    const quantityButton = event.target.closest(".quantity-btn");
+    const removeButton = event.target.closest(".remove-item-btn");
 
-    if (!qtyButton && !removeButton) return;
+    if (!quantityButton && !removeButton) return;
 
-    const id = (qtyButton || removeButton).dataset.id;
+    const clickedButton = quantityButton || removeButton;
+    const id = clickedButton.dataset.id;
+
     let cart = getCart();
 
     if (removeButton) {
       cart = cart.filter((item) => String(item.id) !== String(id));
     }
 
-    if (qtyButton) {
-      const item = cart.find((product) => String(product.id) === String(id));
+    if (quantityButton) {
+      const product = cart.find((item) => String(item.id) === String(id));
 
-      if (item) {
-        item.quantity = Number(item.quantity) || 1;
+      if (product) {
+        product.quantity = Number(product.quantity) || 1;
 
-        if (qtyButton.dataset.action === "plus") {
-          item.quantity += 1;
+        if (quantityButton.dataset.action === "plus") {
+          product.quantity += 1;
+        } else {
+          product.quantity -= 1;
         }
 
-        if (qtyButton.dataset.action === "minus") {
-          item.quantity -= 1;
-        }
-
-        if (item.quantity <= 0) {
-          cart = cart.filter((product) => String(product.id) !== String(id));
+        if (product.quantity <= 0) {
+          cart = cart.filter((item) => String(item.id) !== String(id));
         }
       }
     }
