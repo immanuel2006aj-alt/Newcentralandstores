@@ -36,8 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    items.forEach((product) => {
-      const price = productPrices?.[product.id] || product.price || 0;
+    items.forEach((product) => {const price = Number(
+  (typeof productPrices !== "undefined" && productPrices[product.id]) ||
+  product.price ||
+  0
+);
 
       productsGrid.innerHTML += `
         <article class="product-card">
