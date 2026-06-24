@@ -1,33 +1,112 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const productsGrid = document.getElementById("productsGrid");
+  const productCount = document.getElementById("productCount");
+
+  if (!productsGrid) {
+    console.log("productsGrid not found");
+    return;
+  }
+
+  // productsData not loaded na page crash aagama iruka
+  if (typeof productsData === "undefined" || !Array.isArray(productsData)) {
+    console.log("productsData missing. Check products-data.js file.");
+    productsGrid.innerHTML = `
+      <div class="products-empty-state show">
+        <div class="empty-icon">!</div>
+        <h3>Products loading issue</h3>
+        <p>products-data.js file load aagala.</p>
+      </div>
+    `;
+    if (productCount) productCount.textContent = "0 PRODUCTS";
+    return;
+  }
+
+  function renderProducts(items) {
+    productsGrid.innerHTML = "";
+
+    if (!items.length) {
+      productsGrid.innerHTML = `
+        <div class="products-empty-state show">
+          <div class="empty-icon">⌕</div>
+          <h3>No products found</h3>
+          <p>Try another category or search word.</p>
+        </div>
+      `;
+      if (productCount) productCount.textContent = "0 PRODUCTS";
+      return;
+    }
+
+    items.forEach((product) => {
+      const price = productPrices?.[product.id] || product.price || 0;
+
+      productsGrid.innerHTML += `
+        <article class="product-card">
+          <div class="product-image-wrap">
+            <div class="no-image-placeholder">
+              <span>NO IMAGE</span>
+            </div>
+
+            <button
+              class="product-wishlist-btn"
+              type="button"
+              aria-label="Add ${product.name} to wishlist"
+            >♡</button>
+          </div>
+
+          <div class="product-details">
+            <span class="product-category">${product.category}</span>
+
+            <h3 class="product-name">${product.name}</h3>
+
+            <span class="product-weight">${product.weight}</span>
+
+            <div class="product-footer">
+              <strong class="product-price">₹${price}</strong>
+
+              <button
+                class="add-cart-btn"
+                type="button"
+                data-id="${product.id}"
+              >+ Add</button>
+            </div>
+          </div>
+        </article>
+      `;
+    });
+
+    if (productCount) {
+      productCount.textContent = `${items.length} PRODUCTS`;
+    }
+  }
+
+  renderProducts(productsData);
 
   document.addEventListener("click", (event) => {
-    const button = event.target.closest(".add-btn, .add-cart-btn");
+    const button = event.target.closest(".add-cart-btn");
 
     if (!button) return;
 
-    const card = button.closest(".product-card");
+    const id = button.dataset.id;
 
-    if (!card) return;
+    const product = productsData.find(
+      (item) => String(item.id) === String(id)
+    );
 
-    const name = card.querySelector(".product-name")?.textContent.trim();
-    const category = card.querySelector(".product-category")?.textContent.trim();
-    const weight = card.querySelector(".product-weight")?.textContent.trim();
-    const price = card.querySelector(".product-price")?.textContent.trim();
+    if (!product) return;
 
-    if (!name) return;
+    const price = productPrices?.[product.id] || product.price || 0;
 
-    const id = name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
-
-    addProductToCart({
-      id,
-      name,
-      category,
-      weight,
-      price
-    });
+    if (typeof addProductToCart === "function") {
+      addProductToCart({
+        id: product.id,
+        name: product.name,
+        category: product.category,
+        weight: product.weight,
+        price: price
+      });
+    } else {
+      console.log("addProductToCart missing. cart-common.js check pannu.");
+    }
 
     const oldText = button.innerHTML;
 
@@ -37,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       button.classList.remove("added");
       button.innerHTML = oldText;
-    }, 800);
+    }, 900);
   });
-
 });
