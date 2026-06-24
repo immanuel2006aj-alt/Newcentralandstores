@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const menuToggle = document.getElementById("openMenu");
   const products = Array.isArray(window.products) ? window.products : [];
 
   const grid = document.getElementById("productsGrid");
@@ -181,4 +180,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderProducts(products);
   updateCartCount();
+});
+// ===============================
+// SIDE MENU
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  const openMenuBtn = document.getElementById("openMenu");
+  const sideMenu = document.getElementById("sideMenu");
+  const menuOverlay = document.getElementById("menuOverlay");
+  const menuClose = document.getElementById("menuClose");
+
+  function openSideMenu() {
+    if (!sideMenu || !menuOverlay) return;
+
+    sideMenu.classList.add("open");
+    menuOverlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeSideMenu() {
+    if (!sideMenu || !menuOverlay) return;
+
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  if (openMenuBtn) {
+    openMenuBtn.addEventListener("click", openSideMenu);
+  }
+
+  if (menuClose) {
+    menuClose.addEventListener("click", closeSideMenu);
+  }
+
+  if (menuOverlay) {
+    menuOverlay.addEventListener("click", closeSideMenu);
+  }
 });
