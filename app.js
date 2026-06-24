@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const menuToggle = document.getElementById("openMenu");
   const products = Array.isArray(window.products) ? window.products : [];
 
   const grid = document.getElementById("productsGrid");
