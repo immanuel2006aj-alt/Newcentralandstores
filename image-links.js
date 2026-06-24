@@ -1,5 +1,5 @@
 const productImages = {
-  1: "images/india-gate-basmati-rice.jpg",
+  1: "india-gate-basmati-rice.jpg",
   2: "images/daawat-basmati-rice.jpg",
   3: "images/fortune-biryani-rice.jpg",
   4: "images/ponni-boiled-rice.jpg",
