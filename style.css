@@ -1258,6 +1258,75 @@ a {
   .category-card {
     flex: 0 0 125px;
   }
+   /* PREMIUM MINI THEME SWITCH */
+.theme-switch-row {
+  margin-top: 28px;
+  padding: 13px 14px;
+  border: 1px solid rgba(255, 190, 0, 0.22);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.theme-switch-text {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #f4f4f4;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.theme-switch-icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #ffbd00;
+  stroke-width: 2;
+}
+
+.theme-switch {
+  width: 48px;
+  height: 27px;
+  border: 0;
+  border-radius: 999px;
+  background: #303030;
+  padding: 3px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.theme-switch-knob {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #ffbd00;
+  color: #151515;
+  display: grid;
+  place-items: center;
+  transform: translateX(0);
+  transition: transform 0.25s ease;
+}
+
+.theme-switch-knob svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+}
+
+.theme-switch.active {
+  background: #ffbd00;
+}
+
+.theme-switch.active .theme-switch-knob {
+  background: #151515;
+  color: #ffbd00;
+  transform: translateX(21px);
+}
 
   .category-imag
 /* REMOVE BLUE TAP / FOCUS BOX FROM WHOLE WEBSITE */
