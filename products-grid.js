@@ -94,7 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!product) return;
 
-    const price = productPrices?.[product.id] || product.price || 0;
+    const price = Number(
+  (typeof productPrices !== "undefined" && productPrices[product.id]) ||
+  product.price ||
+  0
+);
 
     if (typeof addProductToCart === "function") {
       addProductToCart({
