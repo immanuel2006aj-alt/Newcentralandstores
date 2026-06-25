@@ -118,20 +118,20 @@ categoryButtons.forEach((button) => {
 
     if (!product) return;
 
-    const price = productPrices[product.id] ?? 0;
-  
-    if (typeof addProductToCart === "function") {
-      addProductToCart({
-        id: product.id,
-        name: product.name,
-        category: product.category,
-        weight: product.weight,
-        price: price
-        image: productImages[product.id] || "",
-      });
-    } else {
-      console.log("addProductToCart missing. cart-common.js check pannu.");
-    }
+const price = productPrices[product.id] ?? 0;
+
+if (typeof addProductToCart === "function") {
+  addProductToCart({
+    id: product.id,
+    name: product.name,
+    category: product.category,
+    weight: product.weight,
+    price: price,
+    image: productImages[product.id] || "",
+  });
+} else {
+  console.log("addProductToCart missing. cart-common.js check pannu.");
+          }
 
     const oldText = button.innerHTML;
 
