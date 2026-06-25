@@ -1,8 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "centralStoresCart";
+
   const cartImageLinks = {
     "India Gate Basmati Rice": "india-gate-basmati-rice.jpg",
-    "Daawat Basmati Rice": "daawat-basmati-rice.jpg"
+    "Daawat Basmati Rice": "daawat-basmati-rice.jpg",
+    "Fortune Biryani Special Rice": "fortune-biryani-rice.jpg",
+    "Ponni Boiled Rice": "ponni-boiled-rice.jpg",
+    "Aashirvaad Atta": "aashirvaad-atta.jpg",
+    "Naga Maida": "naga-maida.jpg",
+    "Naga Rava": "naga-rava.jpg",
+    "Anil Semiya": "anil-semiya.jpg",
+    "Idiyappam Flour": "idiyappam-flour.jpg",
+    "Rice Flour": "rice-flour.jpg"
   };
 
   const emptyCart = document.getElementById("emptyCart");
@@ -65,14 +74,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const quantity = Number(item.quantity) || 1;
       const price = Number(item.price) || 0;
 
+      /* First item.image use pannum. Old cart product-na name link use pannum */
+      const imagePath = item.image || cartImageLinks[item.name] || "";
+
       return `
         <article class="cart-item" data-id="${item.id}">
-<div class="cart-product-image">
-  ${
-    (productImages && productImages[item.id])
-  ? `<img src="${productImages[item.id]}" alt="${item.name}">`
-  : `<span>NO IMAGE</span>`
-</div>
+          <div class="cart-product-image">
+            ${
+              imagePath
+                ? `<img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>NO IMAGE</span>';">`
+                : `<span>NO IMAGE</span>`
+            }
+          </div>
+
           <div class="cart-item-info">
             <span class="cart-item-category">${item.category || "Grocery"}</span>
 
