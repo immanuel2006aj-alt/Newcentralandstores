@@ -2,7 +2,7 @@ const productImages = {
   1: "india-gate-basmati-rice.jpg",
   2: "daawat-basmati-rice.jpg",
   3: "fortune-biryani-rice.jpg",
-  4: "ponni-boiled-rice.jpg",
+  4: "ponni-rice.jpg",
   5: "aashirvaad-atta.jpg",
   6: "naga-maida.jpg",
   7: "naga-rava.jpg",
