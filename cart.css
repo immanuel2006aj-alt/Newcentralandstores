@@ -1399,3 +1399,28 @@ svg {
   display: block;
   padding: 12px;
 }
+/* FINAL MOBILE CART ALIGNMENT */
+@media (max-width: 767px) {
+  .cart-item {
+    display: grid !important;
+    grid-template-columns: 140px minmax(0, 1fr) !important;
+    gap: 16px !important;
+    align-items: start !important;
+  }
+
+  .cart-item-info {
+    min-width: 0 !important;
+    padding-top: 4px !important;
+  }
+
+  .cart-item-name {
+    font-size: 21px !important;
+    line-height: 1.15 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .remove-item-btn {
+    grid-column: 1 / -1 !important;
+    justify-self: start !important;
+  }
+}
