@@ -126,6 +126,7 @@ categoryButtons.forEach((button) => {
         name: product.name,
         category: product.category,
         weight: product.weight,
+        image: productImages[product.id] || "",
         price: price
       });
     } else {
