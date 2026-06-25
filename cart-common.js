@@ -57,39 +57,42 @@ function updateAllCartBadges() {
    ADD PRODUCT TO CART
 ================================ */
 function addProductToCart(product) {
-  if (!product || !product.id) {
-    console.log("Invalid product:", product);
-    return;
+function addProductToCart(product) {
+  const CART_KEY = "centralStoresCart";
+
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+  } catch (error) {
+    cart = [];
   }
 
-  const cart = getCentralCart();
+  const existingItem = cart.find(
+    (item) => String(item.id) === String(product.id)
+  );
 
-  const existingProduct = cart.find((item) => {
-    return String(item.id) === String(product.id);
-  });
+  if (existingItem) {
+    existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
 
-  if (existingProduct) {
-    existingProduct.quantity =
-      (Number(existingProduct.quantity) || 1) + 1;
+    // force image update for old cart item
+    existingItem.image = product.image || "";
+    existingItem.name = product.name;
+    existingItem.category = product.category;
+    existingItem.weight = product.weight;
+    existingItem.price = product.price;
   } else {
     cart.push({
       id: product.id,
-      name: product.name || "Product",
-      category: product.category || "",
-      weight: product.weight || "",
-      price: Number(product.price) || 0,
+      name: product.name,
+      category: product.category,
+      weight: product.weight,
+      price: product.price,
+      image: product.image || "",
       quantity: 1
     });
   }
 
-  saveCentralCart(cart);
-
-  /* Cart page open-a irundha immediate refresh */
-  document.dispatchEvent(
-    new CustomEvent("centralCartUpdated", {
-      detail: { cart }
-    })
-  );
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
 /* ===============================
