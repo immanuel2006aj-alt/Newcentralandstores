@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY = "centralStoresCart";
+  const cartImageLinks = {
+    "India Gate Basmati Rice": "india-gate-basmati-rice.jpg",
+    "Daawat Basmati Rice": "daawat-basmati-rice.jpg"
+  };
 
   const emptyCart = document.getElementById("emptyCart");
   const cartProductsCard = document.getElementById("cartProductsCard");
