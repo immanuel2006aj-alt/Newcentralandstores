@@ -44,12 +44,7 @@ function updateAllCartBadges() {
 
   badges.forEach((badge) => {
     badge.textContent = total;
-
-    if (total > 0) {
-      badge.style.display = "flex";
-    } else {
-      badge.style.display = "none";
-    }
+    badge.style.display = total > 0 ? "flex" : "none";
   });
 }
 
@@ -57,15 +52,7 @@ function updateAllCartBadges() {
    ADD PRODUCT TO CART
 ================================ */
 function addProductToCart(product) {
-function addProductToCart(product) {
-  const CART_KEY = "centralStoresCart";
-
-  let cart = [];
-  try {
-    cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-  } catch (error) {
-    cart = [];
-  }
+  const cart = getCentralCart();
 
   const existingItem = cart.find(
     (item) => String(item.id) === String(product.id)
@@ -74,25 +61,31 @@ function addProductToCart(product) {
   if (existingItem) {
     existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
 
-    // force image update for old cart item
-    existingItem.image = product.image || "";
-    existingItem.name = product.name;
-    existingItem.category = product.category;
-    existingItem.weight = product.weight;
-    existingItem.price = product.price;
+    /* Update image/details too */
+    existingItem.image = product.image || existingItem.image || "";
+    existingItem.name = product.name || existingItem.name;
+    existingItem.category = product.category || existingItem.category;
+    existingItem.weight = product.weight || existingItem.weight;
+    existingItem.price = product.price ?? existingItem.price;
   } else {
     cart.push({
       id: product.id,
       name: product.name,
       category: product.category,
       weight: product.weight,
-      price: product.price,
+      price: product.price ?? 0,
       image: product.image || "",
       quantity: 1
     });
   }
 
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  saveCentralCart(cart);
+
+  document.dispatchEvent(
+    new CustomEvent("centralCartUpdated", {
+      detail: { cart }
+    })
+  );
 }
 
 /* ===============================
