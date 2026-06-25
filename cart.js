@@ -69,10 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <article class="cart-item" data-id="${item.id}">
 <div class="cart-product-image">
   ${
-    item.image
-      ? `<img src="${item.image}" alt="${item.name}">`
-      : `<span>NO IMAGE</span>`
-  }
+    (productImages && productImages[item.id])
+  ? `<img src="${productImages[item.id]}" alt="${item.name}">`
+  : `<span>NO IMAGE</span>`
 </div>
           <div class="cart-item-info">
             <span class="cart-item-category">${item.category || "Grocery"}</span>
