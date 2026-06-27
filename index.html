@@ -373,15 +373,19 @@
 
     <div class="special-offer-banner">
 
-        <a href="products.html?category=Special">
-            <img
-                src="images/special-product-mobile.webp"
-                alt="Central Stores Special Product"
-                loading="lazy">
-        </a>
+    <a href="products.html?category=Special">
+
+        <picture>
+            <source media="(min-width:1024px)" srcset="images/special-product-desktop.webp">
+            <source media="(min-width:768px)" srcset="images/special-product-tablet.webp">
+            <img src="images/special-product-mobile.webp"
+                 alt="Central Stores Special Product"
+                 loading="lazy">
+        </picture>
+
+    </a>
 
     </div>
-
 </section> 
    <!-- =========================
            BULK ORDER BANNER
