@@ -1347,5 +1347,69 @@ a {
         aspect-ratio:16/9;
     }
    }
+   /* FAQ */
+
+.faq-list{
+display:flex;
+flex-direction:column;
+gap:18px;
+margin-top:30px;
+}
+
+.faq-item{
+background:#fff;
+border:1px solid #ead9a1;
+border-radius:22px;
+overflow:hidden;
+}
+
+.faq-item summary{
+list-style:none;
+cursor:pointer;
+padding:22px 24px;
+font-size:18px;
+font-weight:700;
+color:#111;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.faq-item summary::-webkit-details-marker{
+display:none;
+}
+
+.faq-item summary::after{
+content:"+";
+font-size:28px;
+font-weight:600;
+color:#c79a00;
+transition:.25s;
+}
+
+.faq-item[open] summary::after{
+content:"−";
+}
+
+.faq-item p{
+padding:0 24px 20px;
+line-height:1.8;
+font-size:15px;
+color:#666;
+}
+
+@media(max-width:768px){
+
+.faq-item summary{
+font-size:16px;
+padding:18px;
+}
+
+.faq-item p{
+padding:0 18px 18px;
+font-size:14px;
+}
+
+}
 /* REMOVE BLUE TAP / FOCUS BOX FROM WHOLE WEBSITE */
    
