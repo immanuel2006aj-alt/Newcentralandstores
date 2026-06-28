@@ -182,7 +182,7 @@ if (note) {
 }
 
 const whatsappUrl =
-    "https://wa.me/919934462164?text=" + encodeURIComponent(message);
+    "https://wa.me/+919344621645?text=" + encodeURIComponent(message);
 
 window.open(whatsappUrl, "_blank");
   });
