@@ -224,4 +224,3 @@ const whatsappUrl =
 window.open(whatsappUrl, "_blank");
 renderCart();
 });
-}
