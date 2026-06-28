@@ -181,7 +181,7 @@ if (orderForm) {
     });
 
     window.open(
-      "https://wa.me/919934462164?text=" + message,
+      "https://wa.me/+919344621645?text=" + message,
       "_blank"
     );
   });
