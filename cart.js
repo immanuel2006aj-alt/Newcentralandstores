@@ -147,6 +147,45 @@ document.addEventListener("DOMContentLoaded", () => {
     saveCart(cart);
     renderCart();
   });
+  const orderForm = document.getElementById("orderForm");
+
+if (orderForm) {
+  orderForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const address = document.getElementById("customerAddress").value.trim();
+    const note = document.getElementById("customerNote").value.trim();
+
+    const cart = getCart();
+
+    if (!cart.length) {
+      alert("Cart is empty.");
+      return;
+    }
+
+    let message = "🛒 *Central & Stores Order*%0A%0A";
+    message += "*Customer:* " + name + "%0A";
+    message += "*Phone:* " + phone + "%0A";
+    message += "*Address:* " + address + "%0A";
+
+    if (note) {
+      message += "*Note:* " + note + "%0A";
+    }
+
+    message += "%0A*Products:*%0A";
+
+    cart.forEach(item => {
+      message += "• " + item.name + " x " + item.quantity + "%0A";
+    });
+
+    window.open(
+      "https://wa.me/919934462164?text=" + message,
+      "_blank"
+    );
+  });
+}
 
   renderCart();
 });
