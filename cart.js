@@ -152,42 +152,75 @@ const orderForm = document.getElementById("orderForm");
 if (orderForm) {
     orderForm.addEventListener("submit", function (e) {
         e.preventDefault();
+const name = document.getElementById("customerName").value.trim();
+const phone = document.getElementById("customerPhone").value.trim();
+const address = document.getElementById("customerAddress").value.trim();
+const note = document.getElementById("customerNote").value.trim();
 
-        const name = document.getElementById("customerName").value.trim();
-        const phone = document.getElementById("customerPhone").value.trim();
-        const address = document.getElementById("customerAddress").value.trim();
-        const note = document.getElementById("customerNote").value.trim();
+const cart = getCart();
 
-        const cart = getCart();
-
-        if (!cart.length) {
-            alert("Cart is empty.");
-            return;
-        }
-
-        let message = `🛒 *Central & Stores Order*
-
-Customer: ${name}
-Phone: ${phone}
-Address: ${address}
-
-Products:
-`;
-
-        cart.forEach(item => {
-            message += `• ${item.name} × ${item.quantity}\n`;
-        });
-
-        if (note) {
-            message += `\nNote: ${note}`;
-        }
-
-        const whatsappUrl =
-            "https://wa.me/919344621645?text=" + encodeURIComponent(message);
-
-        window.open(whatsappUrl, "_blank");
-    });
+if (!cart.length) {
+    alert("Your cart is empty.");
+    return;
 }
 
+let message = `🛒 *CENTRAL & STORES*
+━━━━━━━━━━━━━━━━━━
+
+👤 *Customer Details*
+━━━━━━━━━━━━━━━━━━
+Name      : ${name}
+Phone     : ${phone}
+Address   : ${address}`;
+
+if (note) {
+    message += `
+
+📝 *Additional Note*
+${note}`;
+}
+
+message += `
+
+🛍️ *Order Items*
+━━━━━━━━━━━━━━━━━━`;
+
+let totalQty = 0;
+
+cart.forEach(item => {
+    const qty = Number(item.quantity) || 1;
+    totalQty += qty;
+
+    message += `
+• ${item.name}
+   Qty : ${qty}`;
+
+    if (item.weight) {
+        message += `
+   Size : ${item.weight}`;
+    }
+
+    if (item.price) {
+        message += `
+   Price : ₹${item.price}`;
+    }
+
+    message += `
+
+`;
+});
+
+message += `━━━━━━━━━━━━━━━━━━
+📦 Total Items : ${totalQty}
+
+📞 Please confirm availability, final price and delivery time.
+
+Thank you ❤️
+Central & Stores`;
+
+const whatsappUrl =
+    "https://wa.me/919344621645?text=" + encodeURIComponent(message);
+
+window.open(whatsappUrl, "_blank");
 renderCart();
 });
