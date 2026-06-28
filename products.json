@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "name": "India Gate Basmati Rice",
+    "tamil": "இந்தியா கேட் பாஸ்மதி அரிசி",
+    "tanglish": "india gate basmati arisi",
+    "brand": "India Gate",
+    "category": "Rice & Flours",
+    "size": "1 kg",
+    "image": "images/india-gate-basmati.webp",
+    "page": "products.html"
+  },
+  {
+    "id": 2,
+    "name": "Daawat Basmati Rice",
+    "tamil": "தாவத் பாஸ்மதி அரிசி",
+    "tanglish": "daawat basmati arisi",
+    "brand": "Daawat",
+    "category": "Rice & Flours",
+    "size": "1 kg",
+    "image": "images/daawat-basmati.webp",
+    "page": "products.html"
+  },
+  {
+    "id": 3,
+    "name": "Fortune Biryani Rice",
+    "tamil": "பார்ச்சூன் பிரியாணி அரிசி",
+    "tanglish": "fortune biryani arisi",
+    "brand": "Fortune",
+    "category": "Rice & Flours",
+    "size": "1 kg",
+    "image": "images/fortune-biryani.webp",
+    "page": "products.html"
+  }
+]
