@@ -117,8 +117,11 @@ categoryButtons.forEach((button) => {
     );
 
     if (!product) return;
-
-const price = productPrices[product.id] ?? 0;
+const price = productPrices?.[product.id] ?? 0;
+const image =
+  typeof productImages !== "undefined"
+    ? (productImages[product.id] || "")
+    : "";
 
 if (typeof addProductToCart === "function") {
   addProductToCart({
@@ -127,11 +130,11 @@ if (typeof addProductToCart === "function") {
     category: product.category,
     weight: product.weight,
     price: price,
-    image: productImages[product.id] || "",
+    image: image
   });
 } else {
-  console.log("addProductToCart missing. cart-common.js check pannu.");
-          }
+  console.error("cart-common.js not loaded");
+}
 
     const oldText = button.innerHTML;
 
