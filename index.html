@@ -191,24 +191,44 @@
     <!-- =========================
          SEARCH
     ========================== -->
-    <section class="search-section">
-      <div class="search-box">
-        <svg class="search-icon"><use href="#icon-search"></use></svg>
+    <!-- =========================
+     SEARCH
+========================= -->
+
+<section class="search-section">
+
+    <div class="search-box">
+
+        <svg class="search-icon">
+            <use href="#icon-search"></use>
+        </svg>
 
         <input
-          type="search"
-          id="homeSearch"
-          placeholder="Search groceries, rice, oil, snacks..."
-          autocomplete="off"
-        >
+            type="search"
+            id="homeSearch"
+            placeholder="Search groceries, rice, oil, snacks..."
+            autocomplete="off">
 
-        <button class="search-clear" id="searchClear" type="button" aria-label="Clear search">
-          <svg><use href="#icon-close"></use></svg>
+        <button
+            class="search-clear"
+            id="searchClear"
+            type="button"
+            aria-label="Clear search">
+
+            <svg>
+                <use href="#icon-close"></use>
+            </svg>
+
         </button>
-      </div>
-    </section>
 
-    <main id="home">
+    </div>
+
+    <!-- Live Search Results -->
+    <div id="searchResults" class="search-results"></div>
+
+</section>
+
+<main id="home">
 
       <!-- =========================
            HERO BANNER
