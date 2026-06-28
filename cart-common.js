@@ -97,8 +97,7 @@ function changeCartQuantity(productId, change) {
   const product = cart.find((item) => {
     return String(item.id) === String(productId);
   });
-
-  if (!product) return;
+if (!product) return;
 
   product.quantity = (Number(product.quantity) || 1) + change;
 
