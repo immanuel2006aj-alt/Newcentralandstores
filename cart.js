@@ -164,26 +164,27 @@ if (orderForm) {
       alert("Cart is empty.");
       return;
     }
+let message = `🛒 *Central & Stores Order*
 
-    let message = "🛒 *Central & Stores Order*%0A%0A";
-    message += "*Customer:* " + name + "%0A";
-    message += "*Phone:* " + phone + "%0A";
-    message += "*Address:* " + address + "%0A";
+Customer: ${name}
+Phone: ${phone}
+Address: ${address}
 
-    if (note) {
-      message += "*Note:* " + note + "%0A";
-    }
+Products:
+`;
 
-    message += "%0A*Products:*%0A";
+cart.forEach(item => {
+    message += `• ${item.name} × ${item.quantity}\n`;
+});
 
-    cart.forEach(item => {
-      message += "• " + item.name + " x " + item.quantity + "%0A";
-    });
+if (note) {
+    message += `\nNote: ${note}`;
+}
 
-    window.open(
-      "https://wa.me/+919344621645?text=" + message,
-      "_blank"
-    );
+const whatsappUrl =
+    "https://wa.me/919934462164?text=" + encodeURIComponent(message);
+
+window.open(whatsappUrl, "_blank");
   });
 }
 
