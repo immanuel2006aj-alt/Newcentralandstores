@@ -2,7 +2,9 @@
 // Central & Stores Search
 // ===============================
 
-const searchInput = document.getElementById("homeSearch");
+const searchInput =
+    document.getElementById("homeSearch") ||
+    document.getElementById("productSearch");
 const searchResults = document.getElementById("searchResults");
 
 if (searchInput && searchResults) {
