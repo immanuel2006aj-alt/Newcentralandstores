@@ -147,24 +147,25 @@ document.addEventListener("DOMContentLoaded", () => {
     saveCart(cart);
     renderCart();
   });
-  const orderForm = document.getElementById("orderForm");
+const orderForm = document.getElementById("orderForm");
 
 if (orderForm) {
-  orderForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+    orderForm.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    const name = document.getElementById("customerName").value.trim();
-    const phone = document.getElementById("customerPhone").value.trim();
-    const address = document.getElementById("customerAddress").value.trim();
-    const note = document.getElementById("customerNote").value.trim();
+        const name = document.getElementById("customerName").value.trim();
+        const phone = document.getElementById("customerPhone").value.trim();
+        const address = document.getElementById("customerAddress").value.trim();
+        const note = document.getElementById("customerNote").value.trim();
 
-    const cart = getCart();
+        const cart = getCart();
 
-    if (!cart.length) {
-      alert("Cart is empty.");
-      return;
-    }
-let message = `🛒 *Central & Stores Order*
+        if (!cart.length) {
+            alert("Cart is empty.");
+            return;
+        }
+
+        let message = `🛒 *Central & Stores Order*
 
 Customer: ${name}
 Phone: ${phone}
@@ -173,20 +174,19 @@ Address: ${address}
 Products:
 `;
 
-cart.forEach(item => {
-    message += `• ${item.name} × ${item.quantity}\n`;
-});
+        cart.forEach(item => {
+            message += `• ${item.name} × ${item.quantity}\n`;
+        });
 
-if (note) {
-    message += `\nNote: ${note}`;
+        if (note) {
+            message += `\nNote: ${note}`;
+        }
+
+        const whatsappUrl =
+            "https://wa.me/919344621645?text=" + encodeURIComponent(message);
+
+        window.open(whatsappUrl, "_blank");
+    });
 }
 
-const whatsappUrl =
-    "https://wa.me/+919344621645?text=" + encodeURIComponent(message);
-
-window.open(whatsappUrl, "_blank");
-  });
-}
-
-  renderCart();
-});
+renderCart();
