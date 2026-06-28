@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const price = productPrices[product.id] ?? 0;
 
       productsGrid.innerHTML += `
-        <article class="product-card">
+        <article class="product-card" id="product-${product.id}">
           <div class="product-image-wrap">
   ${
     typeof productImages !== "undefined" && productImages[product.id]
