@@ -1911,3 +1911,49 @@ svg {
     text-align:center;
     color:#888;
 }
+.products-search-box{
+    position:relative;
+}
+.search-results{
+    position:absolute;
+    top:calc(100% + 8px);
+    left:0;
+    width:100%;
+    background:#ffffff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    overflow:hidden;
+    display:none;
+    z-index:9999;
+    max-height:350px;
+    overflow-y:auto;
+}
+
+.search-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+    border-bottom:1px solid #eee;
+    cursor:pointer;
+    background:#fff;
+}
+
+.search-item:hover{
+    background:#f8f8f8;
+}
+
+.search-item strong{
+    color:#111;
+    display:block;
+}
+
+.search-item small{
+    color:#777;
+}
+
+.search-empty{
+    padding:16px;
+    text-align:center;
+    color:#888;
+}
