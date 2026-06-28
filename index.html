@@ -197,38 +197,46 @@
      SEARCH
 ========================= -->
 
-<section class="search-section">
+<div class="store-status-banner">
 
-    <div class="search-box">
+    <div class="store-status-left">
 
-        <svg class="search-icon">
-            <use href="#icon-search"></use>
-        </svg>
+        <div class="store-status-icon">
 
-        <input
-            type="search"
-            id="homeSearch"
-            placeholder="Search groceries, rice, oil, snacks..."
-            autocomplete="off">
-
-        <button
-            class="search-clear"
-            id="searchClear"
-            type="button"
-            aria-label="Clear search">
-
-            <svg>
-                <use href="#icon-close"></use>
+            <svg viewBox="0 0 24 24">
+                <path d="M4 7h16"/>
+                <path d="M7 7V5h10v2"/>
+                <path d="M5 7l1 12h12l1-12"/>
+                <path d="M9 12h6"/>
             </svg>
 
-        </button>
+        </div>
+
+        <div class="store-status-text">
+
+            <div class="store-status-title">
+                Central &amp; Stores
+            </div>
+
+            <div class="store-status-subtitle">
+                Browse • Add to Cart • Order Anytime
+            </div>
+
+        </div>
 
     </div>
 
-    <!-- Live Search Results -->
-    <div id="searchResults" class="search-results"></div>
+    <div class="store-status-pill">
 
-</section>
+        <span class="store-status-dot"></span>
+
+        <span class="store-status-online">
+            ONLINE
+        </span>
+
+    </div>
+
+</div>
 
 <main id="home">
 
