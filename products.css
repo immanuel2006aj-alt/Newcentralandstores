@@ -1957,3 +1957,37 @@ svg {
     text-align:center;
     color:#888;
 }
+/* Remove blue tap highlight on mobile */
+
+*{
+    -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button,
+input,
+textarea,
+select,
+label{
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+img{
+    -webkit-user-drag: none;
+    user-select: none;
+}
