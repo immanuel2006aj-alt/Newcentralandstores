@@ -569,31 +569,40 @@ svg {
   font-weight: 800;
 }
 
-.remove-cart-item {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  min-height: 34px;
-  padding: 0 9px;
-  border: 1px solid #ffd5d5;
-  border-radius: 8px;
-  background: var(--danger-light);
-  color: var(--danger);
-  font-size: 9px;
-  font-weight: 800;
-  transition: background 0.2s ease, transform 0.2s ease;
+.remove-cart-item{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+
+    min-height:38px;
+    padding:0 16px;
+
+    border:none;
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#ff4d4f,#d62828);
+    color:#fff;
+
+    font-size:13px;
+    font-weight:700;
+
+    cursor:pointer;
+    transition:all .25s ease;
+
+    box-shadow:0 8px 18px rgba(214,40,40,.25);
 }
 
-.remove-cart-item:hover {
-  background: #ffe1e1;
-  transform: translateY(-1px);
+.remove-cart-item:hover{
+    background:linear-gradient(135deg,#ff6666,#b71c1c);
+    transform:translateY(-2px);
+    box-shadow:0 12px 24px rgba(214,40,40,.35);
 }
 
-.remove-cart-item svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 2.2;
+.remove-cart-item svg{
+    width:16px;
+    height:16px;
+    stroke-width:2.2;
 }
 
 /* =========================================================
