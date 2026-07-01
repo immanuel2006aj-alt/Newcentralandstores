@@ -214,90 +214,56 @@
          Later products.js will open / close this menu.
     ========================================================== -->
     <div class="menu-overlay" id="menuOverlay"></div>
-
-    <aside class="side-menu" id="sideMenu">
-
-      <div class="side-menu-top">
-
-        <div class="side-menu-brand">
-          <div class="side-menu-logo">
-            <svg>
-              <use href="#icon-cart"></use>
-            </svg>
+<aside class="side-menu" id="sideMenu">
+      <div class="menu-top">
+        <div class="menu-brand">
+          <div class="menu-logo">
+            <svg><use href="#icon-cart"></use></svg>
           </div>
 
           <div>
-            <strong>Central &amp; Stores</strong>
-            <span>Premium Grocery Store</span>
+            <h3>Central & Stores</h3>
+            <p>Premium Grocery Store</p>
           </div>
         </div>
 
-        <button
-          type="button"
-          class="side-menu-close"
-          id="closeMenuBtn"
-          aria-label="Close menu"
-        >
-          <svg>
-            <use href="#icon-close"></use>
-          </svg>
+        <button class="menu-close" id="menuClose" type="button" aria-label="Close menu">
+  <svg><use href="#icon-close"></use></svg>
         </button>
-
       </div>
 
-      <nav class="side-menu-links">
-
-        <a href="index.html">
-          <svg>
-            <use href="#icon-home"></use>
-          </svg>
-          <span>Home</span>
+      <nav class="menu-links">
+        <a href="#home">
+          <svg><use href="#icon-home"></use></svg>
+          Home
         </a>
 
-        <a href="index.html#categories">
-    <svg><use href="#icon-grid"></use></svg>
-    <span>Categories</span>
+        <a href="#categories">
+          <svg><use href="#icon-grid"></use></svg>
+          Categories
         </a>
 
-        <a href="products.html" class="active">
-          <svg>
-            <use href="#icon-grid"></use>
-          </svg>
-          <span>All Products</span>
+        <a href="products.html">
+          <svg><use href="#icon-cart"></use></svg>
+          All Products
         </a>
 
-        <a href="cart.html">
-          <svg>
-            <use href="#icon-cart"></use>
-          </svg>
-          <span>My Cart</span>
+        <a href="#contact">
+          <svg><use href="#icon-phone"></use></svg>
+          Contact Store
         </a>
-
-        <a
-          href="https://wa.me/+919344621645?text=Hello%20Central%20%26%20Stores"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg>
-            <use href="#icon-whatsapp"></use>
-          </svg>
-          <span>WhatsApp Us</span>
-        </a>
-
       </nav>
 
-      <div class="side-menu-contact">
-        <p>Need any grocery item?</p>
+      <div class="menu-support">
+        <p>Need help with your grocery order?</p>
 
-        <a href="tel:+9199543128730">
-          <svg>
-            <use href="#icon-phone"></use>
-          </svg>
-          Call Store
+        <a href="https://wa.me/+919344621645"target="_blank" rel="noopener">
+          <svg><use href="#icon-whatsapp"></use></svg>
+          WhatsApp Store
         </a>
-      </div>
+</div>
+    </aside>
 
-  </aside>
     <!-- =========================================================
          PRODUCTS HERO SECTION
     ========================================================== -->
