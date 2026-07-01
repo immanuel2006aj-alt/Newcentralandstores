@@ -82,7 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  renderProducts(productsData);
+const visibleProducts = productsData.filter(product => product.id <= 100);
+renderProducts(visibleProducts);
 const categoryButtons = document.querySelectorAll(".category-pill");
 
 categoryButtons.forEach((button) => {
@@ -95,13 +96,13 @@ categoryButtons.forEach((button) => {
 
     // Filter products
     if (selectedCategory === "All") {
-      renderProducts(productsData);
-    } else {
-      const filteredProducts = productsData.filter((product) => {
+    renderProducts(visibleProducts);
+} else {
+    const filteredProducts = visibleProducts.filter((product) => {
         return product.category === selectedCategory;
-      });
+    });
 
-      renderProducts(filteredProducts);
+    renderProducts(filteredProducts);
     }
   });
 });
