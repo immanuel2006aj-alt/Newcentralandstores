@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://central-and-stores.ct.ws/sitemap.xml
+Sitemap: https://www.central-and-stores.ct.ws/sitemap.xml
