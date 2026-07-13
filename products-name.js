@@ -1,8 +1,8 @@
 const productsData = [
-  { id: 1, name: "India Gate Basmati Rice", category: "Rice & Flours", weight: "1 kg" },
-  { id: 2, name: "Daawat Basmati Rice", category: "Rice & Flours", weight: "1 kg" },
-  { id: 3, name: "Fortune Biryani Special Rice", category: "Rice & Flours", weight: "1 kg" },
-  { id: 4, name: "Ponni Boiled Rice", category: "Rice & Flours", weight: "1 kg" },
+  { id: 1, name: "Raw Rice", category: "Rice & Flours", weight: "1 kg" },
+  { id: 2, name: "Basmati Rice", category: "Rice & Flours", weight: "1 kg" },
+  { id: 3, name: "Varagu Rice", category: "Rice & Flours", weight: "1 kg" },
+  { id: 4, name: "Sadam Rice", category: "Rice & Flours", weight: "1 kg" },
   { id: 5, name: "Aashirvaad Atta", category: "Rice & Flours", weight: "1 kg" },
   { id: 6, name: "Naga Maida", category: "Rice & Flours", weight: "1 kg" },
   { id: 7, name: "Naga Rava", category: "Rice & Flours", weight: "1 kg" },
